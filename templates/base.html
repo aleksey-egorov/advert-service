@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <title>Advert</title>
+        <meta http-equiv=Content-Type content="text/html; charset=utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+        <link rel="stylesheet" href="/static/css/base.css" rel="stylesheet" type="text/css" />
+         <script src="/static/js/jquery-1.11.3.js" type="text/javascript"></script>
+
+    </head>
+    <body>
+        <header class="black_line">
+            <div id="main_header">
+                <div class="heading">
+                    <div class="head"><a href="/">Advert</a></div>
+                </div>
+
+                <div class="search">
+                    <form method="get" action="/search/" id="main_search_form">
+                        <input type="text" id="main_search" name="q" placeholder="Search" value="{{ query }}"/>
+                    </form>
+                </div>
+
+                <div class="add">
+                    <a href="/add-lot/"><button>Опубликовать</button></a>
+                </div>
+
+                <ul>
+                {% if user.is_authenticated %}
+                    <li class="avatar">
+                        <a href="/user/profile/"><div style="background-image:url('/media/{{ user.avatar }}');background-size:cover;background-repeat:no-repeat;background-position:center center;" class="avatar_img"></div></a>
+                    </li>
+                    <li class="logout">
+                        <a href="/logout/">Выйти</a>
+                    </li>
+                    <li class="username">
+                        <a href="/user/profile/">{{ user.username }}</a>
+                    </li>
+                {% else %}
+                    <li class="login">
+                        <a href="/login/">Войти</a>
+                    </li>
+                    <li class="register">
+                        <a href="/register/">Регистрация</a>
+                    </li>
+                    <li class="region">
+                        <a href="#">Москва</a>
+                    </li>
+                {% endif %}
+                </ul>
+            </div>
+        </header>
+
+        <div id="menu_header">
+            <div class="wrap">
+                    <ul class="menu">
+                        <li><a class="menu_a" href="/catalog/">Грузоперевозки</a>
+                            <div class="submenu">
+                                <ul>
+                                    <li><a href="/">Грузовые автомобили</a></li>
+                                    <li><a href="/">Тягачи</a></li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li><a class="menu_a" href="/catalog/">Пассажироперевозки</a>
+                            <div class="submenu">
+                                <ul>
+                                    <li><a href="/">Автобусы</a></li>
+                                    <li><a href="/">Автобусы</a></li>
+                                </ul>
+                            </div>
+                        </li>
+                    </ul>
+            </div>
+        </div>
+
+
+        <div id="main-container">
+            <div class="inline">
+                {% block content %}
+
+                {% endblock content %}
+
+                <div id="trending" class="right w25">
+                        <div class="content">
+                            {% if user.is_authenticated %}
+                                <div class="ask_wrap">
+                                <a href="/ask/"><button >Ask!</button></a>
+                                </div>
+                            {% endif %}
+                            <h1 class="head">Trending</h1>
+                            {% for trend in trends %}
+                                    <div class="trend">
+                                        <div class="inline">
+                                            <div class="digit">{{ trend.votes }}</div>
+                                            <div class="vote">{{ trend.heading }}</div>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                        </div>
+                </div>
+            </div>
+        </div>
+     <script src="/static/js/base.js" type="text/javascript"></script>
+    {{ debug }}
+    </body>
+</html>
