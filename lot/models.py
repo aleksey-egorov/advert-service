@@ -15,9 +15,17 @@ class Lot(models.Model):
     short_description = models.TextField('Краткое описание', default=None)
     tech_description = models.TextField('Техническое описание', default=None)
     alias = models.CharField('Слаг', max_length=255, default=None)
-    active = models.BooleanField('Активность', default=False)
-    new_prod_state = models.BooleanField('Продукт новый или б/у', default=None)
+    active = models.BooleanField('Активность', default=False, null=True, blank=True)
+    new_prod_state = models.BooleanField('Продукт новый или б/у', default=False, null=True, blank=True)
+    best = models.BooleanField('Рекомендованное предложение', default=False, null=True, blank=True)
     pub_date = models.DateTimeField('Дата публикации', default=None)
     upd_date = models.DateTimeField('Дата последнего обновления', default=None)
     active_date = models.DateTimeField('Дата окончания активности', default=None)
     main_image = models.ImageField('Главное фото', null=True, blank=True, upload_to='lots/')
+    manuf_year = models.IntegerField('Год выпуска', null=True, blank=True)
+
+    def state_name(self):
+        return "Новый" if self.new_prod_state == True else "б/у"
+
+    def price_formatted(self):
+        return "{:,}".format(self.price).replace(",", " ") + " " + self.currency.name

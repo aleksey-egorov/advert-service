@@ -58,11 +58,11 @@ class RegisterDoneView(View):
         })
 
 
-class UserSettingsView(View):
+class ProfileView(View):
 
     def get(self, request):
-        return render(request, "index/settings.html", {
-            "trends": Trend.get_trends()
+        return render(request, "user/profile.html", {
+            #"trends": Trend.get_trends()
         })
 
     def post(self, request):
@@ -70,11 +70,11 @@ class UserSettingsView(View):
         if user_form.is_valid():
             with transaction.atomic():
                 user_form.save()
-            message = 'User settings successfully updated'
+            message = 'Профиль пользователя обновлен'
         else:
-            message = 'Error while updating user'
-        return render(request, "index/settings.html", {
+            message = 'Ошибка при обновлении профиля'
+
+        return render(request, "user/profile.html", {
             "user_form": user_form,
-            "message": message,
-            "trends": Trend.get_trends()
+            "message": message
         })

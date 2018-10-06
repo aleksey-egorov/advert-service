@@ -3,17 +3,17 @@
 {% block content %}
 
 {% load static %}
-<link rel="stylesheet" type="text/css" href="{% static 'css/index/user_settings.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'css/user/profile.css' %}" />
 
 <div id="left_container" class="left w75">
     <div id="login_container" class="">
         <h1>User settings</h1>
-            <form method="post" class="common" action="/settings/" enctype="multipart/form-data">
+            <form method="post" class="common" action="/user/profile/" enctype="multipart/form-data">
                 <div class="cont">
                     {% csrf_token %}
                     <ul class="form_ul" id="user_settings_ul">
                         <li>
-                            <label>Login:</label>
+                            <label>Логин:</label>
                             <div class="rcon">{{ user.username }}</div>
                         </li>
 
@@ -22,7 +22,7 @@
                             <input name="email" id="id_email" maxlength="200" required="" type="email" value="{{ user.email }}">
                         </li>
                           <li>
-                            <label for="id_avatar">Avatar:</label>
+                            <label for="id_avatar">Аватар:</label>
                             <div class="rcon">
                                 <div class="avatar_check"><input name="avatar-clear" id="avatar-clear_id" type="checkbox"><span>Clear</span></div>
                                 <div class="avatar" style="background-image:url('/media/{{ user.avatar }}');background-size:cover;background-repeat:no-repeat;background-position:center center;" ></div>
@@ -33,7 +33,7 @@
 
 
                     </ul>
-                    <div class="btn"><button type="submit">Save</button></div>
+                    <div class="btn"><button type="submit">Обновить</button></div>
                 </div>
             </form>
     </div>

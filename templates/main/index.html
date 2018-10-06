@@ -3,75 +3,101 @@
 {% block content %}
 
 {% load static %}
-<link rel="stylesheet" type="text/css" href="{% static 'css/question/list.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'css/main/index.css' %}" />
 
 
-    <div id="left_container" class="left w75">
+    <div id="best_lot_list">
+        {% if best_lots %}
+            <h1>Лучшие предложения</h1>
 
-        <div id="">
-        {% if lots %}
 
-            <ul id="questions_ul">
-                {% for lot in lots %}
-                    <li class="main">
-                        <ul class="list_content">
-                            <li class="w10">
-                                <div class="digit">{{ question.votes }}</div>
-                                <div class="signa">Votes</div>
-                            </li>
-                            <li class="w10">
-                                <div class="digit">{{ question.answers }}</div>
-                                <div class="signa">Answers</div>
-                            </li>
-                            <li class="w60">
-                                <div class="quest_cnt">
-                                    <a class="head" href="/question/{{ question.id }}/">
-                                        {{ question.heading }}
-                                    </a>
-                                    <div class="tags">
-                                        {% for tag in question.tags.all %}
-                                            <a href="/tag/{{ tag.name }}/">{{ tag.name }}</a>
-                                        {% endfor %}
+            <div id="slides">
+                    <ul class="slides">
+                        {% for lot in best_lots %}
+                        <li class="best_lot_li">
+                            <a href="/lot/{{ lot.alias }}/">
+                                <div class="slide-image" style="background-image:url('/media/{{ lot.main_image }}');background-repeat:no-repeat;background-position:center center;background-size:cover;"></div>
+                                <div class="slide-info">
+                                    <h3>{{ lot.name }}</h3>
+                                    <span class="state-tag">{{ lot.state_name }}</span>
+                                    <span class="price-tag">{{ lot.price_formatted }}</span>
+                                    <span class="year-tag">{{ lot.manuf_year }} г.в.</span>
+                                </div>
+                            </a>
+                        </li>
+                        {% endfor %}
+                    </ul>
+            </div>
+
+        {% endif %}
+    </div>
+
+    <div class="new_lot_list">
+
+         {% if new_lots %}
+            <h1>Новые лоты</h1>
+
+            <ul class="lots_list">
+                {% for lot in new_lots %}
+                    <li class="lot_li col5">
+                            <a href="/lot/{{ lot.alias }}/">
+                                <div class="lot_image" style="background-image:url('/media/{{ lot.main_image }}');background-repeat:no-repeat;background-position:center center;background-size:cover;"></div>
+                                <div class="lot_info">
+                                    <div class="lot_title">{{ lot.name }}</div>
+                                    <div class="lot_price_wrap">
+                                        <span class="price_tag"><b>{{ lot.state_name }}</b> {{ lot.price_formatted }}</span>
                                     </div>
                                 </div>
-                            </li>
-                            <li class="w20">
-                                <a href="/user/">{{ question.author_name }}</a>
-                                <div class="sign">
-                                    Added {{ question.published }} ago
-                                </div>
-
-                            </li>
-                        </ul>
+                            </a>
                     </li>
                 {% endfor %}
             </ul>
+        {% endif %}
+    </div>
 
-            <div class="pagination">
-                <span class="step-links">
-                    {% if questions.has_previous %}
-                        <a href="?page=1">&laquo; first</a>
-                        <a href="?page={{ questions.previous_page_number }}">previous</a>
-                    {% endif %}
+    <div class="info_block">
+        <div class="inline">
 
-                    <span class="current">
-                        Page {{ questions.number }} of {{ questions.paginator.num_pages }}
-                    </span>
-
-                    {% if questions.has_next %}
-                        <a href="?page={{ questions.next_page_number }}">next</a>
-                        <a href="?page={{ questions.paginator.num_pages }}">last &raquo;</a>
-                    {% endif %}
-                </span>
+            <div class="col">
+                <h3>Популярные статьи</h3>
+                    <ul class="articles_ul">
+                        {% for article in articles %}
+                            <li>
+                                <div class="article_image" style="background-image:url('/media/{{ article.small_image }}');background-position:center center;background-size:cover;background-repeat:no-repeat;" alt="Article"></div>
+                                <div class="article_info">
+                                    <p class="preview">{{ article.title }}</p>
+                                    <a href="/article/{{ article.alias }}/" class="more-link">Подробнее</a>
+                                </div>
+                            </li>
+                        {% endfor %}
+                    </ul>
             </div>
 
+            <div class="col">
+                <h3>Популярные бренды</h3>
+                <ul class="popular_ul">
+                    {% for brand in brands %}
+                        <li>
+                            <a href="/brand/{{ brand.alias }}/" class="brand-name">{{ brand.name }}</a>
+                            <span class="amount-offers">{{ brand.lots }}</span>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
 
-        {% else %}
-            <p>No questions are available right now.</p>
-        {% endif %}
+            <div class="col">
+                <h3>Популярные поставщики</h3>
+                <ul class="popular_ul">
+                    {% for supplier in suppliers %}
+                        <li>
+                            <a href="/supplier/{{ supplier.alias }}/" class="brand-name">{{ supplier.name }}</a>
+                            <span class="amount-offers">{{ supplier.lots }}</span>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
 
         </div>
-
     </div>
 
 

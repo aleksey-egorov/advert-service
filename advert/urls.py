@@ -18,7 +18,7 @@ from django.urls import path
 
 from django.contrib.auth import views as auth_views
 
-from user.views import RegisterView, RegisterDoneView
+from user.views import RegisterView, RegisterDoneView, ProfileView
 from main.views import MainView
 
 urlpatterns = [
@@ -28,6 +28,7 @@ urlpatterns = [
     path('logout/', auth_views.LogoutView.as_view()),
     path('register/done/', RegisterDoneView.as_view()),
     path('register/', RegisterView.as_view()),
+    path('user/profile/', ProfileView.as_view()),
     path('admin/', admin.site.urls),
     path('', MainView.as_view()),
 ]
