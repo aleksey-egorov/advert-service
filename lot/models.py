@@ -14,7 +14,7 @@ class Lot(models.Model):
     main_description = models.TextField('Основное описание', default=None)
     short_description = models.TextField('Краткое описание', default=None)
     tech_description = models.TextField('Техническое описание', default=None)
-    alias = models.CharField('Слаг', max_length=255, default=None)
+    alias = models.CharField('Алиас', max_length=255, default=None)
     active = models.BooleanField('Активность', default=False, null=True, blank=True)
     new_prod_state = models.BooleanField('Продукт новый или б/у', default=False, null=True, blank=True)
     best = models.BooleanField('Рекомендованное предложение', default=False, null=True, blank=True)

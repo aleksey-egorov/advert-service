@@ -58,22 +58,19 @@
         <div id="menu_header">
             <div class="container">
                     <ul class="menu">
-                        <li><a class="menu_a" href="/catalog/">Грузоперевозки</a>
-                            <div class="submenu">
-                                <ul>
-                                    <li><a href="/">Грузовые автомобили</a></li>
-                                    <li><a href="/">Тягачи</a></li>
-                                </ul>
-                            </div>
-                        </li>
-                        <li><a class="menu_a" href="/catalog/">Пассажироперевозки</a>
-                            <div class="submenu">
-                                <ul>
-                                    <li><a href="/">Автобусы</a></li>
-                                    <li><a href="/">Автобусы</a></li>
-                                </ul>
-                            </div>
-                        </li>
+
+                        {% for menu_item in menu %}
+                            <li><a class="menu_a" href="/{{ menu_item.alias }}/">{{ menu_item.short_name }}</a>
+                                <div class="submenu">
+                                    <ul>
+                                        {% for group in menu_item.groups %}
+                                            <li><a href="/{{ group.url }}">{{ group.name }}</a></li>
+                                        {% endfor %}
+                                    </ul>
+                                </div>
+                            </li>
+                        {% endfor %}
+
                     </ul>
             </div>
         </div>

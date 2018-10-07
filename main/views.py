@@ -6,6 +6,7 @@ from lot.models import Lot
 from article.models import Article
 from brand.models import Brand
 from supplier.models import Supplier
+from main.models import Menu
 
 # Create your views here.
 
@@ -23,6 +24,7 @@ class MainView(View):
             "new_lots": new_lots,
             "articles": articles,
             "brands": brands,
-            "suppliers": suppliers
+            "suppliers": suppliers,
+            "menu": Menu().get_main_menu()
         })
 

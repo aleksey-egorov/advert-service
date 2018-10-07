@@ -125,9 +125,9 @@ button {
     background: #1fbd61;
     color: #fff;
     padding: 10px 20px;
-    -webkit-transition: background .2s;
-    -o-transition: background .2s;
-    transition: background .2s;
+    -webkit-transition: background .1s;
+    -o-transition: background .1s;
+    transition: background .1s;
     font-size: 14px;
     border: none;
     cursor: pointer;
@@ -139,6 +139,9 @@ button:hover {
 
 .w90 {
     width: 90%;
+}
+.w80 {
+    width: 80%;
 }
 .w75 {
     width: 75%;

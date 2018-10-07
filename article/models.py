@@ -7,7 +7,7 @@ class Article(models.Model):
     content = models.TextField('Текст')
     date = models.DateField('Дата')
     preview = models.TextField('Аннотация')
-    alias = models.CharField('Алиас', max_length=255)
+    alias = models.CharField('Алиас', max_length=255, unique=True)
     small_image = models.ImageField(null=True, blank=True, upload_to='articles/')
     big_image = models.ImageField(null=True, blank=True, upload_to='articles/')
     active = models.BooleanField('Активность', default=False, null=True, blank=True)
