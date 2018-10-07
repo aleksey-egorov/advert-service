@@ -20,7 +20,7 @@ from django.contrib.auth import views as auth_views
 
 from user.views import RegisterView, RegisterDoneView, ProfileView
 from main.views import MainView
-from lot.views import CatalogLotsView
+from lot.views import CatalogLotsView, CatalogLotsListView
 
 urlpatterns = [
     path('login/', auth_views.LoginView.as_view(
@@ -30,6 +30,7 @@ urlpatterns = [
     path('register/done/', RegisterDoneView.as_view()),
     path('register/', RegisterView.as_view()),
     path('user/profile/', ProfileView.as_view()),
+    path('catalog/lots/list/', CatalogLotsListView.as_view()),
     path('catalog/lots/', CatalogLotsView.as_view()),
     path('admin/', admin.site.urls),
     path('', MainView.as_view()),

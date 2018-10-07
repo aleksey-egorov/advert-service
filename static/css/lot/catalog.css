@@ -1,12 +1,12 @@
 #filter_wrap {
-    width:100%;
+    width:246px;
 }
 
 #filter_wrap button {
     background-color: #efefef;
     color:#666;
-    margin-right:5px;
-    padding: 10px 26px;
+    margin-right:4px;
+    padding: 10px 24px;
 }
 
 #filter_wrap button:nth-child(3) {
@@ -23,4 +23,29 @@
     width:100%;
     min-height:500px;
     background-color: #efefef;
+}
+
+#filter #filter_ul {
+    list-style:none;
+    padding:20px 10px;
+    font-size:0.8em;
+}
+
+#filter select {
+    width:100%;
+}
+
+
+
+#lots_content {
+    width:98.2%;
+    min-height:700px;
+    margin-left:19px;
+}
+
+#lots_content .lot_li {
+    margin-right:19px;
+}
+#lots_content .lot_li.col4:nth-child(4n){
+	margin-right:0px;
 }

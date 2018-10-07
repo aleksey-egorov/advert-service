@@ -29,3 +29,17 @@ class Lot(models.Model):
 
     def price_formatted(self):
         return "{:,}".format(self.price).replace(",", " ") + " " + self.currency.name
+
+    def make_search(self, params):
+        prod_state_map = {
+            'all': None,
+            'new': True,
+            'used': False
+        }
+        filter_map = {}
+        if not prod_state_map[params['prod_state']] == None:
+            filter_map = {
+                'new_prod_state': prod_state_map[params['prod_state']]
+            }
+        lot_list = Lot.objects.filter(**filter_map).order_by('-pub_date')
+        return lot_list
