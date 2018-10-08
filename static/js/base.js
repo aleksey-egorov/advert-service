@@ -48,7 +48,7 @@ function planMenuHide() {
 
 //
 
-$("select.select2").select2({
+$("#filter_wrap select").select2({
         minimumResultsForSearch: Infinity,
         placeholder: "Все"
     });

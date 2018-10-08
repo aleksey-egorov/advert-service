@@ -1,6 +1,7 @@
 from django.db import models
 
 from product.models import Product, Category, Group
+from brand.models import Brand
 
 # Create your models here.
 
@@ -28,6 +29,7 @@ class Lot(models.Model):
     manuf_year = models.IntegerField('Год выпуска', null=True, blank=True)
     defined_category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, blank=True) # Значения полей defined_* определяются автоматически из поля product
     defined_group = models.ManyToManyField(Group)                                                    # и нужны для облегчения поиска лотов
+    defined_brand = models.ManyToManyField(Brand)
 
     def state_name(self):
         return "Новый" if self.new_prod_state == True else "б/у"
@@ -44,6 +46,7 @@ class Lot(models.Model):
             }
         }
         filter_map = {}
+        st = ''
 
         for key in params.keys():
             value = params[key]
@@ -51,12 +54,16 @@ class Lot(models.Model):
                 value = param_map[key][params[key]]
             except:
                 pass
+            st += "KEY={} VAL={} {}".format(key, value, type(value))
             if isinstance(value, str):
-                if not int(value) == -1:
-                    filter_map[key] = value
+                if not value == '-1':
+                    filter_map[key] = int(value)
+            elif isinstance(value, list):
+                if not '-1' in value and len(value) > 0:
+                    filter_map[key + '__in'] = value
             elif isinstance(value, bool):
                 filter_map[key] = value
 
         lot_list = Lot.objects.filter(**filter_map).order_by('-pub_date')
-        msg = "<br>FILTER_MAP={}".format(filter_map)
+        msg = str(st) + "<br>FILTER_MAP={}".format(filter_map)
         return lot_list, msg

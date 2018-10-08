@@ -25,22 +25,9 @@
                  <input type="hidden" name="new_prod_state" value="all"/>
 
                  <ul id="filter_ul">
-                        <li><label for="id_category">Категория:</label>
-                            <select type="text" name="defined_category" maxlength="200" class="select2" id="id_category">
-                                <option value="-1">Все</option>
-                                {% for category in categories %}
-                                    <option value="{{ category.id }}">{{ category.name }}</option>
-                                {% endfor %}
-                            </select>
-                        </li>
-                        <li><label for="id_group">Группа:</label>
-                            <select type="text" name="defined_group" maxlength="200" class="select2" id="id_group">
-                                <option value="-1">Все</option>
-                                {% for group in groups %}
-                                    <option value="{{ group.id }}">{{ group.name }}</option>
-                                {% endfor %}
-                            </select>
-                        </li>
+
+
+                        {{ form.as_ul }}
                  </ul>
 
             </form>
