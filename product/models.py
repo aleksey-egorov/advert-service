@@ -13,8 +13,8 @@ class Category(models.Model):
 
 class Group(models.Model):
     name = models.CharField('Название', max_length=255)
-    category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, blank=True)
-    parents = models.ManyToManyField('Group')
+    category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, blank=True) # Группа-родитель всегда принадлежит одной категории
+    parents = models.ManyToManyField('Group')                                                # Одна подгруппа может иметь несколько групп-родителей
     alias = models.CharField('Алиас', max_length=120, unique=True)
     active = models.BooleanField('Активность', default=False, null=True, blank=True)
 

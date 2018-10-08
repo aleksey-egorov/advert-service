@@ -1,9 +1,11 @@
+
 var timeout = '';
 var hide_menu = false;
 var menu_item = $(".menu_a");
 var submenu_item = $('div.submenu');
 var submenu_li = $('div.submenu li');
 
+// Menu
 menu_item.mouseover(function() {
     hide_menu = true;
     hideMenu(menu_item);
@@ -43,3 +45,10 @@ function planMenuHide() {
                     hideMenu($(that));
            },200);
 }
+
+//
+
+$("select.select2").select2({
+        minimumResultsForSearch: Infinity,
+        placeholder: "Все"
+    });

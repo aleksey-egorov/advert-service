@@ -22,14 +22,25 @@
              <form action="/catalog/lots/list/" method="post" id="filter_form">
                  {% csrf_token %}
                  <input type="hidden" name="page" value="1"/>
-                 <input type="hidden" name="prod_state" value="all"/>
+                 <input type="hidden" name="new_prod_state" value="all"/>
 
                  <ul id="filter_ul">
                         <li><label for="id_category">Категория:</label>
-                            <select type="text" name="category" required maxlength="200" id="id_category">
+                            <select type="text" name="defined_category" maxlength="200" class="select2" id="id_category">
+                                <option value="-1">Все</option>
+                                {% for category in categories %}
+                                    <option value="{{ category.id }}">{{ category.name }}</option>
+                                {% endfor %}
                             </select>
                         </li>
-
+                        <li><label for="id_group">Группа:</label>
+                            <select type="text" name="defined_group" maxlength="200" class="select2" id="id_group">
+                                <option value="-1">Все</option>
+                                {% for group in groups %}
+                                    <option value="{{ group.id }}">{{ group.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </li>
                  </ul>
 
             </form>

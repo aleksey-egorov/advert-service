@@ -1,5 +1,7 @@
 from django.db import models
 
+from product.models import Product, Category, Group
+
 # Create your models here.
 
 class Currency(models.Model):
@@ -9,6 +11,7 @@ class Currency(models.Model):
 class Lot(models.Model):
     num = models.CharField('Код лота', max_length=10, default=None)
     name = models.CharField('Наименование', max_length=255, default='')
+    product = models.ForeignKey(Product, on_delete=models.SET_NULL, null=True, blank=True)
     price = models.IntegerField('Цена', null=True, blank=True)
     currency = models.ForeignKey(Currency, on_delete=models.SET_NULL, null=True, blank=True)
     main_description = models.TextField('Основное описание', default=None)
@@ -23,6 +26,8 @@ class Lot(models.Model):
     active_date = models.DateTimeField('Дата окончания активности', default=None)
     main_image = models.ImageField('Главное фото', null=True, blank=True, upload_to='lots/')
     manuf_year = models.IntegerField('Год выпуска', null=True, blank=True)
+    defined_category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, blank=True) # Значения полей defined_* определяются автоматически из поля product
+    defined_group = models.ManyToManyField(Group)                                                    # и нужны для облегчения поиска лотов
 
     def state_name(self):
         return "Новый" if self.new_prod_state == True else "б/у"
@@ -31,15 +36,27 @@ class Lot(models.Model):
         return "{:,}".format(self.price).replace(",", " ") + " " + self.currency.name
 
     def make_search(self, params):
-        prod_state_map = {
-            'all': None,
-            'new': True,
-            'used': False
+        param_map = {
+            'new_prod_state': {
+                'all': None,
+                'new': True,
+                'used': False
+            }
         }
         filter_map = {}
-        if not prod_state_map[params['prod_state']] == None:
-            filter_map = {
-                'new_prod_state': prod_state_map[params['prod_state']]
-            }
+
+        for key in params.keys():
+            value = params[key]
+            try:
+                value = param_map[key][params[key]]
+            except:
+                pass
+            if isinstance(value, str):
+                if not int(value) == -1:
+                    filter_map[key] = value
+            elif isinstance(value, bool):
+                filter_map[key] = value
+
         lot_list = Lot.objects.filter(**filter_map).order_by('-pub_date')
-        return lot_list
+        msg = "<br>FILTER_MAP={}".format(filter_map)
+        return lot_list, msg
