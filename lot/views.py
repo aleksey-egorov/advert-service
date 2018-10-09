@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.views.generic import View
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
+from django.shortcuts import get_object_or_404
 
 from main.models import Menu
 from lot.models import Lot
@@ -37,7 +38,7 @@ class CatalogLotsView(View):
         })
 
 class CatalogLotsListView(View):
-    '''Обновление списка лотов (поиск) - запрашивается через Ajax'''
+    '''Обновление списка лотов (поиск), запрашивается через Ajax'''
 
     def __init__(self):
         self.params_keys = {
@@ -65,4 +66,16 @@ class CatalogLotsListView(View):
         return render(request, "lot/list.html", {
             "lots": lot_list,
             "message": str(request.POST) + "PARAMS={} ".format(params) + msg
+        })
+
+class LotView(View):
+    '''Страница лота'''
+
+    def get(self, request, alias):
+        lot = get_object_or_404(Lot, alias=alias)
+
+        return render(request, "lot/lot.html", {
+            "lot": lot,
+            "menu": Menu().get_main_menu(),
+            #"message": "PARAMS={} ".format(params)
         })

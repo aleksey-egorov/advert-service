@@ -20,7 +20,7 @@ from django.contrib.auth import views as auth_views
 
 from user.views import RegisterView, RegisterDoneView, ProfileView
 from main.views import MainView
-from lot.views import CatalogLotsView, CatalogLotsListView
+from lot.views import CatalogLotsView, CatalogLotsListView, LotView
 from product.views import CatalogGroupsListView
 
 urlpatterns = [
@@ -36,6 +36,7 @@ urlpatterns = [
     path('catalog/lots/<str:category>/<str:group>/', CatalogLotsView.as_view()),
     path('catalog/lots/', CatalogLotsView.as_view()),
     path('catalog/groups/list/', CatalogGroupsListView.as_view()),
+    path('lot/<str:alias>/', LotView.as_view()),
     path('admin/', admin.site.urls),
     path('', MainView.as_view()),
 ]
