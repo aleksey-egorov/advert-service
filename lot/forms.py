@@ -3,23 +3,29 @@ from django import forms
 from lot.models import Lot
 from product.models import Category, Group
 from brand.models import Brand
-from utils.form import make_options
+from utils.form import FormHelper
 
 
 class FilterForm(forms.Form):
-    #class Meta:
-    #    model = User
 
-    categories = Category.objects.filter(active=True).order_by("sorting")
-    cat_options = make_options(categories)
-    groups = Group.objects.filter(active=True)
-    gr_options = make_options(groups)
-    brands = Brand.objects.filter(active=True)
-    br_options = make_options(brands)
+    def __init__(self, categories, groups, brands):
+        super().__init__()
+        self.categories = categories
+        self.groups = groups
+        self.brands = brands
 
-    defined_category = forms.ChoiceField(choices=cat_options, label='Категория')
-    defined_group = forms.ChoiceField(choices=gr_options, label='Группа')
-    defined_brand = forms.MultipleChoiceField(choices=br_options, label='Производитель')
+    def set_options(self, params):
+        self.fields['defined_category'].choices = FormHelper.make_options(self.categories)
+        self.fields['defined_group'].choices = FormHelper.make_options(self.groups)
+        self.fields['defined_brand'].choices = FormHelper.make_options(self.brands)
+
+        self.fields['defined_category'].initial = params['defined_category']
+        self.fields['defined_group'].initial = params['defined_group']
+        #self.fields['defined_category'].initial = params['defined_category']
+
+    defined_category = forms.ChoiceField(label='Категория')
+    defined_group = forms.ChoiceField(label='Группа')
+    defined_brand = forms.MultipleChoiceField(label='Производитель')
 
 
     #def clean_login(self):

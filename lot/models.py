@@ -58,6 +58,9 @@ class Lot(models.Model):
             if isinstance(value, str):
                 if not value == '-1':
                     filter_map[key] = int(value)
+            elif isinstance(value, int):
+                if not value == -1:
+                    filter_map[key] = value
             elif isinstance(value, list):
                 if not '-1' in value and len(value) > 0:
                     filter_map[key + '__in'] = value

@@ -32,6 +32,8 @@ urlpatterns = [
     path('register/', RegisterView.as_view()),
     path('user/profile/', ProfileView.as_view()),
     path('catalog/lots/list/', CatalogLotsListView.as_view()),
+    path('catalog/lots/<str:category>/', CatalogLotsView.as_view()),
+    path('catalog/lots/<str:category>/<str:group>/', CatalogLotsView.as_view()),
     path('catalog/lots/', CatalogLotsView.as_view()),
     path('catalog/groups/list/', CatalogGroupsListView.as_view()),
     path('admin/', admin.site.urls),

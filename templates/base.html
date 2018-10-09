@@ -62,11 +62,11 @@
                     <ul class="menu">
 
                         {% for menu_item in menu %}
-                            <li><a class="menu_a" href="/{{ menu_item.alias }}/">{{ menu_item.short_name }}</a>
+                            <li><a class="menu_a" href="/catalog/lots/{{ menu_item.alias }}/">{{ menu_item.short_name }}</a>
                                 <div class="submenu">
                                     <ul>
                                         {% for group in menu_item.groups %}
-                                            <li><a href="/{{ group.url }}">{{ group.name }}</a></li>
+                                            <li><a href="/catalog/lots/{{ group.url }}">{{ group.name }}</a></li>
                                         {% endfor %}
                                     </ul>
                                 </div>
