@@ -7,7 +7,7 @@ from main.models import Menu
 from lot.models import Lot
 from product.models import Category, Group
 from brand.models import Brand
-from lot.forms import FilterForm
+from lot.forms import FilterForm, ContactForm
 from utils.form import FormHelper
 
 # Create your views here.
@@ -33,7 +33,7 @@ class CatalogLotsView(View):
         return render(request, "lot/catalog.html", {
             "form": form,
             "lots": lot_list,
-            "menu": Menu().get_main_menu(),
+            "menu": Menu.get_main_menu(),
             "message": "PARAMS={} ".format(params)
         })
 
@@ -73,9 +73,13 @@ class LotView(View):
 
     def get(self, request, alias):
         lot = get_object_or_404(Lot, alias=alias)
+        form = ContactForm()
+        recommended_lots = Lot().get_recommended(lot.id)
 
         return render(request, "lot/lot.html", {
             "lot": lot,
-            "menu": Menu().get_main_menu(),
+            "form": form,
+            "recommended_lots": recommended_lots,
+            "menu": Menu.get_main_menu(),
             #"message": "PARAMS={} ".format(params)
         })

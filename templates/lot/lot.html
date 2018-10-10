@@ -50,15 +50,75 @@
                     <button>Аренда</button>
                 </div>
             </div>
-            <div id="short_descr">
-                {{ lot.short_description | safe }}
+            <div id="tech_descr">
+                {{ lot.tech_description | safe }}
             </div>
+
+            <div id="contacts_wrap">
+                <div class="inline">
+                        <div class="button_wrap"  id="contacts-list"><button>Показать контакты</button></div>
+
+                        <div class="pname_wrap">
+                            <div class="wr"><a class="suppl_name" href="/supplier/office/{{ lot.supplier.alias }}/">{{ lot.supplier.main_name }}</a> <span class="lottext">({{ lot.supplier.stat_lots_formatted }})</span></div>
+                            <div class="author_name">{{ lot.author.first_name }}</div>
+                        </div>
+                </div>
+            </div>
+
         </div>
     </div>
 </div>
 
-<div class="clear"></div>
+<div id="lot_addition">
+    <div class="inline">
+        <div  class="left w75">
+            <div id="main_description">
+                {{ lot.main_description | safe }}
+            </div>
+        </div>
+         <div  class="right w25">
+             <div id="contact_form">
+                 <h3>Сообщение продавцу</h3>
+                 <form action="/lot/{{ lot.alias }}/" method="post" class="common">
+                     {% csrf_token %}
+                     <ul class="form_ul full_width">
+                        {{ form.as_ul }}
+                     </ul>
+                     <div class="btn">
+                         <button>Отправить</button>
+                     </div>
+                 </form>
+             </div>
+        </div>
 
+    </div>
+</div>
+
+
+<div id="recommended">
+    <div id="recommended_lots">
+
+        {% if recommended_lots %}
+            <h3>Похожие лоты</h3>
+
+            <ul class="lots_list">
+                {% for lot in recommended_lots %}
+                    <li class="lot_li col5">
+                            <a href="/lot/{{ lot.alias }}/">
+                                <div class="lot_image" style="background-image:url('/media/{{ lot.main_image }}');background-repeat:no-repeat;background-position:center center;background-size:cover;"></div>
+                                <div class="lot_info">
+                                    <div class="lot_title">{{ lot.name }}</div>
+                                    <div class="lot_price_wrap">
+                                        <span class="price_tag"><b>{{ lot.state_name }}</b> {{ lot.price_formatted }}</span>
+                                    </div>
+                                </div>
+                            </a>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    </div>
+</div>
 
 
 

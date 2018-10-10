@@ -71,13 +71,14 @@ form.common label {
     padding-top:5px;
 }
 
-form.common input[type=text], form.common input[type=password], form.common input[type=file] {
+form.common input[type=text],
+form.common input[type=email],
+form.common input[type=password],
+form.common input[type=file] {
     -moz-box-sizing: border-box;
     box-sizing: border-box;
      display: inline-block;
     border: 1px solid #999;
-    width:300px;
-
     float:left;
     margin-bottom: 10px;
 }
@@ -104,8 +105,12 @@ form.common .form_ul > li {
     margin-bottom:10px;
     clear:both;
 }
-form.common .form_ul input[type=text] {
-    width:500px;
+form.common .form_ul.full_width input[type=text],
+form.common .form_ul.full_width input[type=email] {
+    width:100%;
+}
+form.common .form_ul.full_width textarea {
+    width:99.5%;
 }
 
 
@@ -113,8 +118,13 @@ input:focus {
     border-color: #000;
 }
 
-p, div.button {
+div.button {
     text-align: center;
+}
+
+p {
+    padding-bottom:2px;
+    padding-top:3px;
 }
 
 p.error-message {

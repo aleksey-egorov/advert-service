@@ -25,6 +25,6 @@ class MainView(View):
             "articles": articles,
             "brands": brands,
             "suppliers": suppliers,
-            "menu": Menu().get_main_menu()
+            "menu": Menu.get_main_menu()
         })
 

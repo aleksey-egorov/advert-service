@@ -6,7 +6,8 @@ from product.models import Category, Group
 
 class Menu():
 
-    def get_main_menu(self):
+    @staticmethod
+    def get_main_menu():
         cat_list = []
         categories = Category.objects.filter(active=True).order_by('sorting')
         for category in categories:
