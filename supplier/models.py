@@ -3,11 +3,10 @@ from django.db import models
 # Create your models here.
 
 class Supplier(models.Model):
-    '''Поставщик (офис продаж или физлицо)'''
+    '''Поставщик (офис или пункт продаж)'''
     name = models.CharField('Название', max_length=255)
     alias = models.CharField('Алиас', max_length=255)
     org = models.ForeignKey('Org', on_delete=models.SET_NULL, null=True, blank=True)
-    type = models.ForeignKey('SupplierType', on_delete=models.SET_NULL, null=True, blank=True)
     address = models.TextField('Адрес')
     phone = models.CharField('Телефон', max_length=16)
     description = models.TextField('Описание',  null=True, blank=True)
@@ -43,8 +42,9 @@ class SupplierType(models.Model):
     name = models.CharField('Название', max_length=20)
 
 class Org(models.Model):
-    '''Головная организация-поставщик'''
+    '''Головная организация-поставщик (или физлицо/ИП)'''
     name = models.CharField('Название', max_length=255)
+    type = models.ForeignKey('SupplierType', on_delete=models.SET_NULL, null=True, blank=True)
     alias = models.CharField('Алиас', max_length=255)
     logo = models.ImageField(null=True, blank=True, upload_to='orgs/')
     phone = models.CharField('Телефон', max_length=16)

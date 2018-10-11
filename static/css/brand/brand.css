@@ -1,0 +1,60 @@
+#brand_logo{
+    width:30%;
+    height:100px;
+    background-color:#fff;
+    float:left;
+}
+
+#products_content ul {
+    list-style: none;
+    padding-top:10px;
+    font-size:0.9em;
+}
+
+#products_content ul a {
+    color:#666;
+}
+
+#products_content ul a:hover {
+    color:#ef0000;
+}
+
+#popular {
+    clear:both;
+    padding-top:20px;
+}
+
+#popular ul {
+    padding-top:10px;
+}
+
+#office_list {
+    clear:both;
+    width:100%;
+    padding-top:20px;
+}
+
+#office_list #contact-maps {
+    padding-top:10px;
+}
+
+#brand_addition {
+    padding-top:20px;
+}
+
+#brand_addition #choose_form {
+    padding:20px 15px;
+    min-height:200px;
+    background:#efefef;
+}
+
+#brand_addition #choose_form ul {
+    padding-top:10px;
+    list-style:none;
+    font-size:0.8em;
+}
+
+#brand_addition #choose_form ul li {
+    clear:both;
+    display:block;
+}

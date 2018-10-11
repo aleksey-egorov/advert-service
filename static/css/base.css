@@ -406,6 +406,11 @@ input[type=text], input[type=password], input[type=email] {
     padding-top:20px;
 }
 
+#map-canvas {
+    height:500px;
+    width:100%;
+}
+
 
 
 #footer {

@@ -9,6 +9,7 @@ class Category(models.Model):
     short_name = models.CharField('Короткое название', max_length=20)
     alias = models.CharField('Алиас', max_length=60, unique=True)
     sorting = models.IntegerField('Сортировка')
+    main_image = models.ImageField('Главное фото', null=True, blank=True, upload_to='products/')
     active = models.BooleanField('Активность', default=False, null=True, blank=True)
 
 class Group(models.Model):

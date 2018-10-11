@@ -72,7 +72,7 @@ class LotView(View):
     '''Страница лота'''
 
     def get(self, request, alias):
-        lot = get_object_or_404(Lot, alias=alias)
+        lot = get_object_or_404(Lot, alias=alias, active=True)
         form = ContactForm()
         recommended_lots = Lot().get_recommended(lot.id)
 
