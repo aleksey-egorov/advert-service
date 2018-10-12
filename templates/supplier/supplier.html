@@ -3,46 +3,73 @@
 {% block content %}
 
 {% load static %}
-<link rel="stylesheet" type="text/css" href="{% static 'css/brand/brand.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'css/supplier/supplier.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'css/slides.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'css/list.css' %}" />
 
 
 <div class="page_head">
-    <h1>{{ brand.name }}</h1>
+    <h1>{{ supplier.name }}</h1>
 </div>
 
-<div id="left_container" class="left w25">
-    <div id="brand_logo" style="background-image:url('/media/{{ brand.logo }}');background-size:contain;background-repeat:no-repeat; background-position:center center;"></div>
-</div>
+<div id="left_container" class="left w19">
+    <div id="supplier_info">
+        {% if supplier.descr %}
+            <h3>О нас</h3>
+            {{ supplier.descr }}
+        {% endif%}
 
-<div id="right_container" class="left w25">
-
-        <div id="products_content">
-            <h3>Модельный ряд</h3>
-            <ul >
-                {% for group in groups %}
-                    <li><a href="/">{{ group.name }}</a></li>
-                {% endfor %}
-            </ul>
+        <h3>Контакты</h3>
+        <ul class="contacts_ul">
+            <li>{{ supplier.phone }}</li>
+            <li>{{ supplier.address }}</li>
+            <li>{{ supplier.email }}</li>
+            <li>{{ supplier.url }}</li>
+        </ul>
+        <div class="btn">
+            <button>Сообщение поставщику</button>
         </div>
+    </div>
+
 
 </div>
 
+<div id="right_container" class="left w81">
 
-<div id="popular">
-    <div id="popular_products">
 
-        {% if popular_prods %}
-            <h3>Популярные модели</h3>
+     {% if best_lots %}
+        <div id="slides_wrap">
+            <div id="slides">
+                    <ul class="slides">
+                        {% for lot in best_lots %}
+                        <li class="best_lot_li">
+                            <a href="/lot/{{ lot.alias }}/">
+                                <div class="slide-image" style="background-image:url('/media/{{ lot.main_image }}');background-repeat:no-repeat;background-position:center center;background-size:cover;"></div>
+                                <div class="slide-info">
+                                    <h3>{{ lot.name }}</h3>
+                                    <span class="state-tag">{{ lot.state_name }}</span>
+                                    <span class="price-tag">{{ lot.price_formatted }}</span>
+                                    <span class="year-tag">{{ lot.manuf_year }} г.в.</span>
+                                </div>
+                            </a>
+                        </li>
+                        {% endfor %}
+                    </ul>
+            </div>
+        </div>
+     {% endif %}
 
-            <ul class="prod_list">
-                {% for prod in popular_prods %}
-                    <li class="prod_li col5">
-                            <a href="/product/{{ prod.alias }}/">
-                                <div class="prod_image" style="background-image:url('/media/{{ prod.main_image }}');background-repeat:no-repeat;background-position:center center;background-size:cover;"></div>
-                                <div class="prod_info">
-                                    <div class="prod_title">{{ prod.name }}</div>
-                                    <div class="prod_stats_wrap">
-
+     <div id="lot_list">
+         {% if lots %}
+            <ul class="lots_list">
+                {% for lot in lots %}
+                    <li class="lot_li col4 mbottom">
+                            <a href="/lot/{{ lot.alias }}/">
+                                <div class="lot_image" style="background-image:url('/media/{{ lot.main_image }}');background-repeat:no-repeat;background-position:center center;background-size:cover;"></div>
+                                <div class="lot_info">
+                                    <div class="lot_title">{{ lot.name }}</div>
+                                    <div class="lot_price_wrap">
+                                        <span class="price_tag"><b>{{ lot.state_name }}</b> {{ lot.price_formatted }}</span>
                                     </div>
                                 </div>
                             </a>
@@ -54,52 +81,6 @@
 </div>
 
 
-<div id="office_list">
-
-            <h3>Офисы дилеров <span id="office-counter"></span></h3>
-
-            <div id="contact-maps">
-                <div id="map-canvas" data-coord-x="55.74929" data-coord-y="37.072067" data-zoom="4"></div>
-            </div>
-
-</div>
-
-
-<div id="brand_addition">
-
-            <div id="brand_description" class="left w75">
-
-                <h3>О марке</h3>
-
-                <div class="descr">
-                    {{ brand.descr }}
-                </div>
-
-                <div class="feed-post-text-more">
-                    <div class="feed-post-text-more-but">
-                        <div class="feed-post-text-more-left"></div>
-                        <div class="feed-post-text-more-right"></div>
-                    </div>
-                </div>
-            </div>
-
-
-            <div class="right w25">
-                <div id="choose_form">
-                      <h3>Помощь в подборе</h3>
-                      <form action="" method="post" class="common">
-                         {% csrf_token %}
-                         <ul class="form_ul full_width">
-                            {{ form.as_ul }}
-                         </ul>
-                         <div class="btn">
-                             <button>Отправить</button>
-                         </div>
-                 </form>
-                </div>
-            </div>
-</div>
-
 
 
 
@@ -108,5 +89,5 @@
 {% endif %}
 
 
-<script src="/static/js/brand/brand.js" type="text/javascript"></script>
+<script src="/static/js/supplier/supplier.js" type="text/javascript"></script>
 {% endblock content %}

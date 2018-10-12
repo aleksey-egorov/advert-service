@@ -241,7 +241,21 @@ input[type=text], input[type=password], input[type=email] {
     width:80%;
     border:1px solid #ddd;
     height:34px;
+    float:left;
 }
+
+#main_header .search #search_button {
+    width:36px;
+    height:36px;
+    background:#efefef;
+    margin-left:4px;
+    float:left;
+}
+
+#main_header .search #search_button:hover {
+    background: #23d36c;
+}
+
 
 #main_header ul {
     list-style: none;
@@ -328,13 +342,12 @@ input[type=text], input[type=password], input[type=email] {
     color:#ef0000;
 }
 
+
 #menu_header {
     width:100%;
     background-color:#efefef;
     height:38px;
 }
-
-
 
 #menu_header ul {
     list-style: none;
@@ -397,6 +410,8 @@ input[type=text], input[type=password], input[type=email] {
     color:#fff;
     cursor: pointer;
 }
+
+
 
 
 

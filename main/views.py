@@ -5,7 +5,7 @@ from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from lot.models import Lot
 from article.models import Article
 from brand.models import Brand
-from supplier.models import Supplier
+from supplier.models import SupplierOrg
 from main.models import Menu
 
 # Create your views here.
@@ -17,14 +17,14 @@ class MainView(View):
         new_lots = Lot.objects.filter(active=True).order_by('-pub_date')[:10]
         articles = Article.objects.filter(active=True).order_by('-date')[:3]
         brands = Brand.objects.filter(active=True, popular=True).order_by('-rating')[:10]
-        suppliers = Supplier.objects.filter(active=True, popular=True).order_by('-rating')[:10]
+        supplier_orgs = SupplierOrg.objects.filter(active=True, popular=True).order_by('-rating')[:10]
 
         return render(request, "main/index.html", {
             "best_lots": best_lots,
             "new_lots": new_lots,
             "articles": articles,
             "brands": brands,
-            "suppliers": suppliers,
+            "supplier_orgs": supplier_orgs,
             "menu": Menu.get_main_menu()
         })
 

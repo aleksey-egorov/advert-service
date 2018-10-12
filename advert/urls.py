@@ -22,7 +22,7 @@ from main.views import MainView
 from lot.views import CatalogLotsView, CatalogLotsListView, LotView
 from product.views import CatalogGroupsListView
 from brand.views import BrandView
-from supplier.views import SupplierView
+from supplier.views import SupplierOrgView, SupplierView
 
 urlpatterns = [
     path('login/', auth_views.LoginView.as_view(
@@ -39,7 +39,8 @@ urlpatterns = [
     path('catalog/groups/list/', CatalogGroupsListView.as_view()),
     path('lot/<str:alias>/', LotView.as_view()),
     path('brand/<str:alias>/', BrandView.as_view()),
-    path('supplier/<str:alias>/', SupplierView.as_view()),
+    path('supplier/office/<str:alias>/', SupplierView.as_view()),
+    path('supplier/<str:alias>/', SupplierOrgView.as_view()),
     path('admin/', admin.site.urls),
     path('', MainView.as_view()),
 ]

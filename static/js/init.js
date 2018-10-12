@@ -6,4 +6,5 @@ $("#filter_wrap select").select2({
     });
 
 
+Search.init();
 Menu.init();

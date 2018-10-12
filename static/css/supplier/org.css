@@ -1,0 +1,69 @@
+#org_logo{
+    width:30%;
+    height:100px;
+    background-color:#fff;
+    float:left;
+}
+
+.org_info {
+    clear:both;
+}
+
+.org_info ul {
+    list-style:none;
+}
+
+.org_info ul li {
+    display:block;
+    font-size:0.9em;
+    padding-bottom:4px;
+}
+
+
+
+#lots_content ul {
+    list-style: none;
+    padding-top:10px;
+    font-size:0.9em;
+}
+
+#lots_content ul a {
+    color:#666;
+}
+
+#lots_content ul a:hover {
+    color:#ef0000;
+}
+
+
+#office_list {
+    clear:both;
+    padding-top:20px;
+}
+
+#office_list #contact-maps {
+    padding-top:10px;
+}
+
+
+
+#org_addition {
+    padding-top:20px;
+}
+
+#org_addition #contact_form {
+    padding:20px 15px;
+    min-height:200px;
+    background:#efefef;
+}
+
+#org_addition #contact_form ul {
+    padding-top:10px;
+    list-style:none;
+    font-size:0.8em;
+}
+
+#org_addition #contact_form ul li {
+    clear:both;
+    display:block;
+}

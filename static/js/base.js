@@ -1,6 +1,4 @@
-
 var timeout = '';
-
 
 // Menu
 Menu = {
@@ -46,7 +44,10 @@ Menu = {
     }
 };
 
+// Search
+Search = {
 
+};
 
 
 function initMap () {

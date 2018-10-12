@@ -4,7 +4,7 @@
 
 {% load static %}
 <link rel="stylesheet" type="text/css" href="{% static 'css/main/index.css' %}" />
-
+<link rel="stylesheet" type="text/css" href="{% static 'css/slides.css' %}" />
 
     <div id="best_lot_list">
         {% if best_lots %}
@@ -88,10 +88,10 @@
             <div class="col">
                 <h3>Популярные поставщики</h3>
                 <ul class="popular_ul">
-                    {% for supplier in suppliers %}
+                    {% for org in supplier_orgs %}
                         <li>
-                            <a href="/supplier/{{ supplier.alias }}/" class="brand-name">{{ supplier.name }}</a>
-                            <span class="amount-offers">{{ supplier.lots }}</span>
+                            <a href="/supplier/{{ org.alias }}/" class="suppl-name">{{ org.name }}</a>
+                            <span class="amount-offers">{{ org.lots }}</span>
                         </li>
                     {% endfor %}
                 </ul>
