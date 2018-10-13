@@ -16,22 +16,21 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from django.contrib.auth import views as auth_views
+from django.conf.urls import url
 
-from user.views import RegisterView, RegisterDoneView, ProfileView
+from user.views import RegisterView, RegisterDoneView, ProfileView, AddLotView
 from main.views import MainView, SearchView
 from lot.views import CatalogLotsView, CatalogLotsListView, LotView
 from product.views import CatalogGroupsListView
 from brand.views import BrandView
 from supplier.views import SupplierOrgView, SupplierView
 
+
 urlpatterns = [
     path('login/', auth_views.LoginView.as_view(
         template_name='user/login.html', extra_context={}
     )),
     path('logout/', auth_views.LogoutView.as_view()),
-    path('register/done/', RegisterDoneView.as_view()),
-    path('register/', RegisterView.as_view()),
-    path('user/profile/', ProfileView.as_view()),
     path('catalog/lots/list/', CatalogLotsListView.as_view()),
     path('catalog/lots/<str:category>/', CatalogLotsView.as_view()),
     path('catalog/lots/<str:category>/<str:group>/', CatalogLotsView.as_view()),
@@ -42,6 +41,16 @@ urlpatterns = [
     path('supplier/office/<str:alias>/', SupplierView.as_view()),
     path('supplier/<str:alias>/', SupplierOrgView.as_view()),
     path('search/', SearchView.as_view()),
+    path('register/done/', RegisterDoneView.as_view()),
+    path('register/', RegisterView.as_view()),
+    path('user/profile/', ProfileView.as_view()),
+    path('user/add-lot/', AddLotView.as_view()),
     path('admin/', admin.site.urls),
+
+    #url(r'^brand-autocomplete/$',
+    #    BrandAutocomplete.as_view(),
+    #     name='brand-autocomplete',
+    # ),
+
     path('', MainView.as_view()),
 ]

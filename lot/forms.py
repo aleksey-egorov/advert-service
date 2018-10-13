@@ -27,7 +27,7 @@ class FilterForm(forms.Form):
     defined_group = forms.ChoiceField(label='Группа')
     defined_brand = forms.MultipleChoiceField(label='Производитель')
 
-    #TODO extra fields and validation
+    #TODO: add extra fields and validation
 
     #def clean_login(self):
     #    login = self.cleaned_data['login']

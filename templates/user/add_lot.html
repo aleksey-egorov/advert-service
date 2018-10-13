@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+{% load static %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/user/profile.css' %}" />
+
+<div id="left_container" class="left w75">
+    <div id="login_container" class="">
+        <h1>Добавление лота</h1>
+            <form method="post" class="common" action="/user/add-lot/" enctype="multipart/form-data">
+                <div class="cont">
+                    {% csrf_token %}
+                    <ul class="form_ul" id="user_settings_ul">
+                        {{ form.as_ul }}
+                    </ul>
+                    <div class="btn"><button type="submit">Добавить</button></div>
+                </div>
+            </form>
+    </div>
+
+
+    {% if message %}
+        <p><strong>
+            {{ form.errors }}
+            {{ form.non_field_errors }}
+            {{ message }}
+        </strong></p>
+    {% endif %}
+</div>
+
+
+<script src="/static/js/user/add_lot.js" type="text/javascript"></script>
+{% endblock content %}
