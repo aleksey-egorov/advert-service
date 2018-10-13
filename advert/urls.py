@@ -18,7 +18,7 @@ from django.urls import path
 from django.contrib.auth import views as auth_views
 
 from user.views import RegisterView, RegisterDoneView, ProfileView
-from main.views import MainView
+from main.views import MainView, SearchView
 from lot.views import CatalogLotsView, CatalogLotsListView, LotView
 from product.views import CatalogGroupsListView
 from brand.views import BrandView
@@ -41,6 +41,7 @@ urlpatterns = [
     path('brand/<str:alias>/', BrandView.as_view()),
     path('supplier/office/<str:alias>/', SupplierView.as_view()),
     path('supplier/<str:alias>/', SupplierOrgView.as_view()),
+    path('search/', SearchView.as_view()),
     path('admin/', admin.site.urls),
     path('', MainView.as_view()),
 ]

@@ -46,7 +46,28 @@ Menu = {
 
 // Search
 Search = {
+    init: function() {
+        search_form = $("#main_search_form");
+        search_field = $("#main_search");
+        search_button = $("#search_button");
 
+        search_form.submit(function(e) {
+            e.preventDefault();
+            var query=search_field.val();
+            var regexp = /tag\:[(\s\w)+]/g;
+            if (regexp.test(query)) {
+                var words = query.split(":");
+                var word = $.trim(words[1]);
+                location.href = "/tag/" + word + "/";
+            } else {
+                location.href = "/search/?q=" + query;
+            }
+        });
+
+        search_button.click(function() {
+            search_form.submit();
+        });
+    }
 };
 
 

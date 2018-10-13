@@ -42,17 +42,6 @@
     margin: 0;
 }
 
-.articles_ul li img{
-    width: 81px;
-    height: 62px;
-    float: left;
-    margin: 0 13px 0 0;
-    border-radius: 3px;
-    -moz-border-radius: 3px;
-    -webkit-border-radius: 3px;
-    background: url("/images/article_icon.gif") no-repeat;
-}
-
 
 .articles_ul li .preview{
     font-family: 'Museo-300', Arial, Verdana, sans-serif;
