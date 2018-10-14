@@ -1,0 +1,8 @@
+#add_lot_container .cont {
+    clear:both;
+}
+
+#add_lot_container .form_ul {
+    padding-bottom:10px;
+    padding-top:10px;
+}

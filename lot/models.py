@@ -1,4 +1,6 @@
+import datetime
 from django.db import models
+from django.db import transaction
 
 from product.models import Product, Category, Group
 from brand.models import Brand
@@ -37,6 +39,15 @@ class Lot(models.Model):
     defined_group = models.ManyToManyField(Group)                                                    # и нужны для облегчения поиска лотов
     defined_brand = models.ManyToManyField(Brand)
 
+    param_map = {
+        'new_prod_state': {
+            'all': None,
+            'new': True,
+            'used': False
+        }
+    }
+
+
     def state_name(self):
         return "Новый" if self.new_prod_state == True else "б/у"
 
@@ -44,20 +55,13 @@ class Lot(models.Model):
         return "{:,}".format(self.price).replace(",", " ") + " " + self.currency.name
 
     def make_search(self, params):
-        param_map = {
-            'new_prod_state': {
-                'all': None,
-                'new': True,
-                'used': False
-            }
-        }
         filter_map = {}
         st = ''
 
         for key in params.keys():
             value = params[key]
             try:
-                value = param_map[key][params[key]]
+                value = self.param_map[key][params[key]]
             except:
                 pass
             st += "KEY={} VAL={} {}".format(key, value, type(value))
@@ -78,6 +82,33 @@ class Lot(models.Model):
         return lot_list, msg
 
     def get_recommended(self, id):
-        #TODO recommendation system
+        # TODO recommendation system
         lots = Lot.objects.filter(active=True).order_by('-pub_date')[:5]
         return lots
+
+    @staticmethod
+    def add(cleaned_data, user):
+        try:
+            product = Product.objects.get(active=True, id=cleaned_data['product'])
+            with transaction.atomic():
+                new_lot = Lot(
+                    num='',
+                    name='',
+                    product=product,
+                    supplier='',
+                    price=cleaned_data['price'],
+                    currency=cleaned_data['currency'],
+                    main_description='',
+                    alias='',
+                    active=False,
+                    new_prod_state=False,
+                    best=False,
+                    add_date=datetime.datetime.now(),
+                    main_image=None,
+                    manuf_year=cleaned_data['manuf_year'],
+                    author=user
+                )
+                new_lot.save()
+                return True, None
+        except Exception as err:
+            return False, err

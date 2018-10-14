@@ -7,7 +7,7 @@ from django.views.generic import View
 
 from main.models import Menu
 from user.models import User
-from brand.models import Brand
+from lot.models import Lot
 from utils.mailer import Mailer
 from user.forms import RegisterForm, UserForm, AddLotForm
 
@@ -88,7 +88,6 @@ class AddLotView(View):
         form = AddLotForm()
 
         return render(request, "user/add_lot.html", {
-            #"categories": categories,
             "form": form,
             "menu": Menu.get_main_menu()
         })
@@ -96,29 +95,19 @@ class AddLotView(View):
     def post(self, request):
         form = AddLotForm(request.POST, request.FILES)
         if form.is_valid():
-            # Creating user and profile
-            try:
-                with transaction.atomic():
-                    new_user = User(
-                                    username=form.cleaned_data['login'],
-                                    password=make_password(form.cleaned_data['password']),
-                                    email=form.cleaned_data['email'],
-                                    avatar=form.cleaned_data['avatar'],
-                                    reg_date=datetime.datetime.now()
-                                    )
-                    new_user.save()
-
-                Mailer().send(new_user.email, 'sign_up', context={"login": new_user.username})
+            result, err = Lot.add(form.cleaned_data, request.user)
+            if result:
+                # Mailer().send(email, 'lot_add', context={"login": new_user.username})
                 return HttpResponseRedirect('/register/done/')
-            except Exception as error:
-                message = 'Ошибка при регистрации пользователя: ' + str(error) + str(form.cleaned_data)
+            else:
+                message = 'Ошибка при добавлении лота: ' + str(err) + str(form.cleaned_data)
         else:
-            message = 'Ошибка при регистрации пользователя, проверьте поля '
+            message = 'Ошибка при добавлении лота, проверьте поля '
 
-        return render(request, "user/register.html", {
+        return render(request, "user/add_lot.html", {
             "form": form,
+            "menu": Menu.get_main_menu(),
             "message": message,
-            #"trends": Trend.get_trends()
         })
 
 

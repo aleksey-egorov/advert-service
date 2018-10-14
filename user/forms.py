@@ -3,7 +3,7 @@ from django import forms
 from user.models import User
 from utils.form import FormHelper
 from product.models import Category, Group
-from brand.models import Brand
+from lot.models import Currency
 
 
 class UserForm(forms.ModelForm):
@@ -35,5 +35,13 @@ class AddLotForm(forms.Form):
     category = forms.ChoiceField(label='Категория', choices=FormHelper.make_options(categories_list))
 
     brand = forms.CharField(label='Бренд/марка')
-    product = forms.ChoiceField(label='Модель')
+    product = forms.CharField(label='Модель')
 
+    currency_list = Currency.objects.all()
+    price = forms.IntegerField(label='Цена')
+    currency = forms.ChoiceField(label='Валюта', choices=FormHelper.make_options(currency_list, option_all=False))
+
+    state = forms.ChoiceField(label='Новый или б/у', choices=[("new", "Новый"), ("used", "б/у")])
+    manuf_year = forms.IntegerField(label='Год выпуска')
+
+    #TODO: extra fields and form validation

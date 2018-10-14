@@ -50,6 +50,12 @@ $("#filter_wrap button").click(function() {
 });
 
 
+$("#filter_wrap select").select2({
+        minimumResultsForSearch: Infinity,
+        placeholder: "Все"
+    });
+
+
 $("#filter_wrap select").change(function() {
     Catalog.activateFilter();
 });

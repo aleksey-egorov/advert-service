@@ -3,19 +3,57 @@
 {% block content %}
 
 {% load static %}
-<link rel="stylesheet" type="text/css" href="{% static 'css/user/profile.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'css/user/add_lot.css' %}" />
 
 <div id="left_container" class="left w75">
-    <div id="login_container" class="">
+    <div id="add_lot_container" class="">
         <h1>Добавление лота</h1>
-            <form method="post" class="common" action="/user/add-lot/" enctype="multipart/form-data">
+            <form method="post" class="common" action="/user/add-lot/" enctype="multipart/form-data" id="add_lot_form">
+                <input type="hidden" name="brand_id" id="brand_id">
                 <div class="cont">
                     {% csrf_token %}
-                    <ul class="form_ul" id="user_settings_ul">
-                        {{ form.as_ul }}
+                    <h3>Основная информация</h3>
+                    <ul class="form_ul">
+                        <li><label for="{{ form.category.id_for_label }}">Категория:</label>
+                            {{ form.category }}
+                        </li>
+                        <li><label for="{{ form.brand.id_for_label }}">Бренд/марка:</label>
+                            {{ form.brand }}
+                        </li>
+                        <li><label for="{{ form.product.id_for_label }}">Модель:</label>
+                            {{ form.product }}
+                        </li>
                     </ul>
-                    <div class="btn"><button type="submit">Добавить</button></div>
                 </div>
+
+                <div class="cont">
+                    <h3>Стоимость</h3>
+                    <ul class="form_ul">
+                        <li><label for="{{ form.price.id_for_label }}">Цена:</label>
+                            {{ form.price }}
+                        </li>
+                        <li><label for="{{ form.currency.id_for_label }}">Валюта:</label>
+                            {{ form.currency }}
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="cont">
+                    <h3>Состояние</h3>
+                    <ul class="form_ul">
+                        <li><label for="{{ form.state.id_for_label }}">Новый или б/у:</label>
+                            {{ form.state }}
+                        </li>
+                        <li><label for="{{ form.manif_year.id_for_label }}">Год выпуска:</label>
+                            {{ form.manuf_year }}
+                        </li>
+                    </ul>
+                </div>
+
+
+
+
+                <div class="btn"><button type="submit">Добавить</button></div>
             </form>
     </div>
 

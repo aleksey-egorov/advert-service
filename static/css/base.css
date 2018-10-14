@@ -190,7 +190,7 @@ button:hover {
     text-align:left !important;
 }
 
-input[type=text], input[type=password], input[type=email] {
+input[type=text], input[type=password], input[type=email], input[type=number] {
     height: 34px;
     padding:0px 4px 0px 4px;
     border: 1px solid #aaa;

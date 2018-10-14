@@ -2,8 +2,10 @@
 class FormHelper():
 
     @staticmethod
-    def make_options(model_items):
-        options = [(-1, 'Все')]
+    def make_options(model_items, option_all=True):
+        options = []
+        if option_all:
+            options.append((-1, 'Все'))
         for item in model_items:
             options.append((item.id, item.name))
         return options
@@ -24,3 +26,9 @@ class FormHelper():
                 params[key] = request.POST.getlist(key)
         return params
 
+    @staticmethod
+    def make_acomp_options(model_items):
+        options = []
+        for item in model_items:
+            options.append({"id": item.id, "label": item.name})
+        return options
