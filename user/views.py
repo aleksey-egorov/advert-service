@@ -95,10 +95,10 @@ class AddLotView(View):
     def post(self, request):
         form = AddLotForm(request.POST, request.FILES)
         if form.is_valid():
-            result, err = Lot.add(form.cleaned_data, request.user)
+            result, err = Lot().add(form.cleaned_data, request.user)
             if result:
                 # Mailer().send(email, 'lot_add', context={"login": new_user.username})
-                return HttpResponseRedirect('/register/done/')
+                return HttpResponseRedirect('/user/add-lot-done/')
             else:
                 message = 'Ошибка при добавлении лота: ' + str(err) + str(form.cleaned_data)
         else:
@@ -111,4 +111,10 @@ class AddLotView(View):
         })
 
 
+class AddLotDoneView(View):
+
+    def get(self, request):
+        return render(request, "user/add_lot_done.html", {
+            "menu": Menu.get_main_menu()
+        })
 

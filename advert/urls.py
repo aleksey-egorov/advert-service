@@ -19,7 +19,7 @@ from django.contrib.auth import views as auth_views
 from django.conf.urls import url
 
 from main.models import Menu
-from user.views import RegisterView, RegisterDoneView, ProfileView, AddLotView
+from user.views import RegisterView, RegisterDoneView, ProfileView, AddLotView, AddLotDoneView
 from main.views import MainView, SearchView
 from lot.views import CatalogLotsView, CatalogLotsListView, LotView
 from product.views import CatalogGroupsListView
@@ -48,6 +48,7 @@ urlpatterns = [
     path('logout/', auth_views.LogoutView.as_view()),
     path('user/profile/', ProfileView.as_view()),
     path('user/add-lot/', AddLotView.as_view()),
+    path('user/add-lot-done/', AddLotDoneView.as_view()),
 
     # Autocomplete URLs
     path('autocomplete/brand/', BrandAcompView.as_view()),

@@ -1,4 +1,5 @@
 import datetime
+import re
 from django.db import models
 from django.db import transaction
 
@@ -14,16 +15,16 @@ class Currency(models.Model):
     course = models.DecimalField('Курс', max_digits=5, decimal_places=2)
 
 class Lot(models.Model):
-    num = models.CharField('Код лота', max_length=10, default=None)
-    name = models.CharField('Наименование', max_length=255, default='')
+    num = models.CharField('Код лота', max_length=10, default=None, unique=True, null=True)
+    name = models.CharField('Наименование', max_length=255,  null=False, blank=False)
     product = models.ForeignKey(Product, on_delete=models.SET_NULL, null=True, blank=True)
     supplier = models.ForeignKey(Supplier, on_delete=models.SET_NULL, null=True, blank=True)
     price = models.IntegerField('Цена', null=True, blank=True)
     currency = models.ForeignKey(Currency, on_delete=models.SET_NULL, null=True, blank=True)
-    main_description = models.TextField('Основное описание', default=None)
-    short_description = models.TextField('Краткое описание', default=None)
-    tech_description = models.TextField('Техническое описание', default=None)
-    alias = models.CharField('Алиас', max_length=255, default=None)
+    main_description = models.TextField('Основное описание', default=None, null=True, blank=True)
+    short_description = models.TextField('Краткое описание', default=None, null=True, blank=True)
+    tech_description = models.TextField('Техническое описание', default=None, null=True, blank=True)
+    alias = models.CharField('Алиас', max_length=255, default=None, unique=True, null=True)
     active = models.BooleanField('Активность', default=False, null=True, blank=True)
     new_prod_state = models.BooleanField('Продукт новый или б/у', default=False, null=True, blank=True)
     best = models.BooleanField('Рекомендованное предложение', default=False, null=True, blank=True)
@@ -81,27 +82,26 @@ class Lot(models.Model):
         msg = str(st) + "<br>FILTER_MAP={}".format(filter_map)
         return lot_list, msg
 
-    def get_recommended(self, id):
+    @staticmethod
+    def get_recommended(id):
         # TODO recommendation system
         lots = Lot.objects.filter(active=True).order_by('-pub_date')[:5]
         return lots
 
-    @staticmethod
-    def add(cleaned_data, user):
+    def add(self, cleaned_data, user):
         try:
             product = Product.objects.get(active=True, id=cleaned_data['product'])
+            currency = Currency.objects.get(id=int(cleaned_data['currency']))
             with transaction.atomic():
                 new_lot = Lot(
-                    num='',
-                    name='',
+                    name=product.name,
                     product=product,
-                    supplier='',
-                    price=cleaned_data['price'],
-                    currency=cleaned_data['currency'],
-                    main_description='',
-                    alias='',
+                    supplier=user.supplier,
+                    price=int(cleaned_data['price']),
+                    currency=currency,
+                    main_description=cleaned_data['main_description'],
                     active=False,
-                    new_prod_state=False,
+                    new_prod_state=self.param_map['new_prod_state'][cleaned_data['state']],
                     best=False,
                     add_date=datetime.datetime.now(),
                     main_image=None,
@@ -109,6 +109,23 @@ class Lot(models.Model):
                     author=user
                 )
                 new_lot.save()
+                alias, num = self._make_num_alias(new_lot.name, new_lot.id)
+                new_lot.alias = alias
+                new_lot.num = num
+                new_lot.save()
                 return True, None
         except Exception as err:
             return False, err
+
+    def _make_num_alias(self, name, id):
+        symbols = (u"абвгдеёжзийклмнопрстуфхцчшщъыьэюяАБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ",
+                   u"abvgdeejzijklmnoprstufhzcss_y_euaABVGDEEJZIJKLMNOPRSTUFHZCSS_Y_EUA")
+        tr = {ord(a): ord(b) for a, b in zip(*symbols)}
+        alias = name.translate(tr).lower()
+        alias = re.sub('[\s\-]', '_', alias)
+        alias = re.sub('[()]', '', alias)
+        id_str = str(id)
+        id_len = len(id_str)
+        num = '0'*(6-id_len) + id_str
+        alias += '_' + num
+        return alias, num

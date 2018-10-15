@@ -44,4 +44,6 @@ class AddLotForm(forms.Form):
     state = forms.ChoiceField(label='Новый или б/у', choices=[("new", "Новый"), ("used", "б/у")])
     manuf_year = forms.IntegerField(label='Год выпуска')
 
+    main_description = forms.CharField(label='Описание', widget=forms.Textarea)
+
     #TODO: extra fields and form validation
