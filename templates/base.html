@@ -40,13 +40,10 @@
 
                 <ul>
                 {% if user.is_authenticated %}
-                    <li class="avatar">
+                    <li class="avatar usermenu_item">
                         <a href="/user/profile/"><div style="background-image:url('/media/{{ user.avatar }}');background-size:cover;background-repeat:no-repeat;background-position:center center;" class="avatar_img"></div></a>
                     </li>
-                    <li class="logout">
-                        <a href="/logout/">Выйти</a>
-                    </li>
-                    <li class="username">
+                    <li class="username usermenu_item">
                         <a href="/user/profile/">{{ user.username }}</a>
                     </li>
                 {% else %}
@@ -61,7 +58,17 @@
                     </li>
                 {% endif %}
                 </ul>
+
+                <div id="user_menu">
+                    <ul>
+                        <li><a href="/user/profile/">Мой профиль</a></li>
+                        <li><a href="/user/lots/">Мои лоты</a></li>
+                        <li><a href="/user/add-lot/">Добавить лот</a></li>
+                        <li><a href="/logout/">Выйти</a></li>
+                    </ul>
+                </div>
             </div>
+
         </header>
 
         <div id="menu_header">
@@ -82,6 +89,8 @@
 
                     </ul>
             </div>
+
+
         </div>
 
 

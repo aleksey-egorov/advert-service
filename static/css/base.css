@@ -206,6 +206,7 @@ input[type=text], input[type=password], input[type=email], input[type=number] {
     width:1300px;
     height:70px;
     margin:0 auto;
+    position:relative;
 }
 
 #main_header a {
@@ -289,10 +290,9 @@ input[type=text], input[type=password], input[type=email], input[type=number] {
 }
 
 #main_header .username {
-    width:10%;
+    padding:26px 20px;
     float: right;
     text-align:center;
-    padding-top:25px;
     color:#ffffff;
 }
 
@@ -412,7 +412,40 @@ input[type=text], input[type=password], input[type=email], input[type=number] {
 }
 
 
+#user_menu {
+    position:absolute;
+    width:200px;
+    min-height:140px;
+    background-color: #414141;
+    right:0px;
+    top:70px;
+    display:none;
+    z-index:99999;
+}
 
+#user_menu.active {
+    display:block;
+}
+
+#user_menu ul {
+    list-style:none;
+}
+
+#user_menu ul li {
+    width:100%;
+}
+
+#user_menu ul li a {
+    width:180px;
+    display:block;
+    padding:10px;
+    color:#fff;
+}
+
+#user_menu ul li a:hover {
+    background-color: #ccc;
+    color:#444;
+}
 
 
 #main-container {
