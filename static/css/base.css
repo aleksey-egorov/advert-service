@@ -147,6 +147,10 @@ button:hover {
     background: #23d36c;
 }
 
+
+.w100 {
+    width: 100%;
+}
 .w90 {
     width: 90%;
 }
@@ -190,6 +194,14 @@ button:hover {
     text-align:left !important;
 }
 
+a.gray {
+    color: #333;
+}
+a.gray:hover {
+    color: #f88a21;
+}
+
+
 input[type=text], input[type=password], input[type=email], input[type=number] {
     height: 34px;
     padding:0px 4px 0px 4px;
@@ -200,6 +212,24 @@ input[type=text], input[type=password], input[type=email], input[type=number] {
     width:1300px;
     margin:0 auto;
 }
+
+
+table.common {
+    border-top:1px solid #efefef;
+    border-left:1px solid #efefef;
+    font-size:0.9em;
+}
+table.common thead tr{
+    background-color: #666;
+    color:#fff;
+    font-weight:bold;
+}
+table.common td{
+    padding:10px;
+    border-right: 1px solid #efefef;
+    border-bottom: 1px solid #efefef;
+}
+
 
 
 #main_header {
@@ -221,6 +251,10 @@ input[type=text], input[type=password], input[type=email], input[type=number] {
 #main_header .heading {
     width:15%;
     float:left;
+}
+
+#main_header .heading a:hover {
+    color: #fff;
 }
 
 

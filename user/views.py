@@ -9,7 +9,7 @@ from main.models import Menu
 from user.models import User
 from lot.models import Lot
 from utils.mailer import Mailer
-from user.forms import RegisterForm, UserForm, AddLotForm
+from user.forms import RegisterForm, UserForm, LotAddForm, LotEditForm
 
 # Create your views here.
 
@@ -82,10 +82,10 @@ class ProfileView(View):
         })
 
 
-class AddLotView(View):
+class LotAddView(View):
 
     def get(self, request):
-        form = AddLotForm()
+        form = LotAddForm()
 
         return render(request, "user/add_lot.html", {
             "form": form,
@@ -93,12 +93,12 @@ class AddLotView(View):
         })
 
     def post(self, request):
-        form = AddLotForm(request.POST, request.FILES)
+        form = LotAddForm(request.POST, request.FILES)
         if form.is_valid():
             result, err = Lot().add(form.cleaned_data, request.user)
             if result:
                 # Mailer().send(email, 'lot_add', context={"login": new_user.username})
-                return HttpResponseRedirect('/user/add-lot-done/')
+                return HttpResponseRedirect('/user/lot/add/done/')
             else:
                 message = 'Ошибка при добавлении лота: ' + str(err) + str(form.cleaned_data)
         else:
@@ -111,10 +111,53 @@ class AddLotView(View):
         })
 
 
-class AddLotDoneView(View):
+class LotAddDoneView(View):
 
     def get(self, request):
         return render(request, "user/add_lot_done.html", {
             "menu": Menu.get_main_menu()
         })
 
+
+class LotEditView(View):
+
+    def get(self, request, id):
+        lot = Lot.objects.get(id=id)
+        form = LotEditForm()
+        params = {
+            'brand': 594
+        }
+        form.set_options(params)
+
+        return render(request, "user/edit_lot.html", {
+            "form": form,
+            "menu": Menu.get_main_menu()
+        })
+
+    def post(self, request):
+        form = LotEditForm(request.POST, request.FILES)
+        if form.is_valid():
+            result, err = Lot().add(form.cleaned_data, request.user)
+            if result:
+                # Mailer().send(email, 'lot_add', context={"login": new_user.username})
+                return HttpResponseRedirect('/user/lot/add/done/')
+            else:
+                message = 'Ошибка при добавлении лота: ' + str(err) + str(form.cleaned_data)
+        else:
+            message = 'Ошибка при добавлении лота, проверьте поля '
+
+        return render(request, "user/add_lot.html", {
+            "form": form,
+            "menu": Menu.get_main_menu(),
+            "message": message,
+        })
+
+
+class UserLotsView(View):
+
+    def get(self, request):
+        lots = Lot.objects.filter(author=request.user).order_by('-add_date')
+        return render(request, "user/lots.html", {
+            "lots": lots,
+            "menu": Menu.get_main_menu()
+        })

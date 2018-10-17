@@ -36,18 +36,19 @@ class Lot(models.Model):
     manuf_year = models.IntegerField('Год выпуска', null=True, blank=True)
     author = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
 
-    defined_category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, blank=True) # Значения полей defined_* определяются автоматически из поля product
-    defined_group = models.ManyToManyField(Group)                                                    # и нужны для облегчения поиска лотов
-    defined_brand = models.ManyToManyField(Brand)
-
-    param_map = {
+    param_val_map = {
         'new_prod_state': {
             'all': None,
             'new': True,
             'used': False
-        }
+        },
     }
 
+    param_key_map = {
+        'defined_category': 'lotcategoryconn__category',
+        'defined_group': 'lotgroupconn__group',
+        'defined_brand': 'lotbrandconn__brand'
+    }
 
     def state_name(self):
         return "Новый" if self.new_prod_state == True else "б/у"
@@ -62,9 +63,14 @@ class Lot(models.Model):
         for key in params.keys():
             value = params[key]
             try:
-                value = self.param_map[key][params[key]]
+                value = self.param_val_map[key][params[key]]
             except:
                 pass
+            try:
+                key = self.param_key_map[key]
+            except:
+                pass
+
             st += "KEY={} VAL={} {}".format(key, value, type(value))
             if isinstance(value, str):
                 if not value == '-1':
@@ -101,7 +107,7 @@ class Lot(models.Model):
                     currency=currency,
                     main_description=cleaned_data['main_description'],
                     active=False,
-                    new_prod_state=self.param_map['new_prod_state'][cleaned_data['state']],
+                    new_prod_state=self.param_val_map['new_prod_state'][cleaned_data['state']],
                     best=False,
                     add_date=datetime.datetime.now(),
                     main_image=None,
@@ -129,3 +135,21 @@ class Lot(models.Model):
         num = '0'*(6-id_len) + id_str
         alias += '_' + num
         return alias, num
+
+
+class LotBrandConn(models.Model):
+    lot = models.ForeignKey(Lot, on_delete=models.SET_NULL, null=True, blank=True)
+    brand = models.ForeignKey('brand.Brand', on_delete=models.SET_NULL, null=True, blank=True)              # Значения полей определяются автоматически из поля Lot.product
+    last_update = models.DateTimeField('Дата последнего обновления', default=None, null=True, blank=True)   # и нужны для облегчения поиска лотов
+
+
+class LotCategoryConn(models.Model):
+    lot = models.ManyToManyField(Lot)
+    category = models.ManyToManyField('product.Category')                                                   # Значения полей определяются автоматически из поля Lot.product
+    last_update = models.DateTimeField('Дата последнего обновления', default=None, null=True, blank=True)   # и нужны для облегчения поиска лотов
+
+
+class LotGroupConn(models.Model):
+    lot = models.ManyToManyField(Lot)
+    group = models.ManyToManyField('product.Group')                                                         # Значения полей определяются автоматически из поля Lot.product
+    last_update = models.DateTimeField('Дата последнего обновления', default=None, null=True, blank=True)   # и нужны для облегчения поиска лотов

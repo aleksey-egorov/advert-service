@@ -7,8 +7,8 @@
 
 <div id="left_container" class="left w75">
     <div id="add_lot_container" class="">
-        <h1>Добавление лота</h1>
-            <form method="post" class="common" action="/user/lot/add/" enctype="multipart/form-data" id="add_lot_form">
+        <h1>Редактирование лота</h1>
+            <form method="post" class="common" action="/user/lot/edit/" enctype="multipart/form-data" id="add_lot_form">
                 <input type="hidden" name="brand_id" id="brand_id">
                 <div class="cont">
                     {% csrf_token %}
