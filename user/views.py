@@ -8,7 +8,7 @@ from django.shortcuts import get_object_or_404
 
 from main.models import Menu
 from user.models import User
-from lot.models import Lot
+from lot.models import Lot, LotGallery
 from utils.mailer import Mailer
 from user.forms import RegisterForm, UserForm, LotAddForm, LotEditForm
 
@@ -125,11 +125,14 @@ class LotEditView(View):
     def get(self, request, id):
         lot = get_object_or_404(Lot, id=id)
         if lot.author == request.user:
+            lot_gallery = LotGallery.objects.filter(lot=lot)
+
             form = LotEditForm()
             form.set_options(id)
 
             return render(request, "user/edit_lot.html", {
                 "lot_id": lot.id,
+                "lot_gallery": lot_gallery,
                 "form": form,
                 "menu": Menu.get_main_menu()
             })

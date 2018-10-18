@@ -166,20 +166,106 @@ class Lot(models.Model):
         lots = Lot.objects.filter(active=True).order_by('-pub_date')[:5]
         return lots
 
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+        self._update_conns()
+
+    def delete(self, *args, **kwargs):
+        super().delete(*args, **kwargs)
+        self._update_conns()
+
+    def _update_conns(self):
+        self._update_brand_conn()
+        self._update_group_conn()
+        self._update_category_conn()
+
+    def _update_brand_conn(self):
+        brand = Brand.objects.get(id=self.product.brand.id)
+        if LotBrandConn.objects.filter(lot=self).exists():
+            with transaction.atomic():
+                brand_conn = LotBrandConn.objects.get(lot=self)
+                brand_conn.brand = brand
+                brand_conn.last_update = datetime.datetime.now()
+                brand_conn.save()
+        else:
+            with transaction.atomic():
+                brand_conn = LotBrandConn(
+                    lot=self,
+                    brand=brand,
+                    last_update=datetime.datetime.now()
+                )
+                brand_conn.save()
+
+    def _update_group_conn(self):
+        group = Group.objects.get(id=self.product.group.id)
+        if LotGroupConn.objects.filter(lot=self).exists():
+            with transaction.atomic():
+                group_conn = LotGroupConn.objects.get(lot=self)
+                group_conn.brand = group
+                group_conn.last_update = datetime.datetime.now()
+                group_conn.save()
+        else:
+            with transaction.atomic():
+                group_conn = LotGroupConn(
+                    lot=self,
+                    group=group,
+                    last_update=datetime.datetime.now()
+                )
+                group_conn.save()
+
+    def _update_category_conn(self):
+        categories = self.product.group.get_categories()
+        if LotCategoryConn.objects.filter(lot=self).exists():
+            with transaction.atomic():
+                cat_conn = LotCategoryConn.objects.get(lot=self)
+                cat_conn.last_update = datetime.datetime.now()
+                cat_conn.save()
+                for ct in categories:
+                    cat_conn.category.add(ct)
+        else:
+            with transaction.atomic():
+                cat_conn = LotCategoryConn(
+                    lot=self,
+                    last_update=datetime.datetime.now()
+                )
+                cat_conn.save()
+                for ct in categories:
+                    cat_conn.category.add(ct)
+
+
+class LotGallery(models.Model):
+    lot = models.ForeignKey(Lot, on_delete=models.CASCADE, null=True, blank=True)
+    num = models.IntegerField('Номер', null=True, blank=True)
+    image = models.ImageField('Фото', null=True, blank=True, upload_to='lots/')
+    sorting = models.IntegerField('Сортировка', null=True, blank=True)
+    active = models.BooleanField('Активность', default=True, null=True, blank=True)
+
+
+
+# Intermediate models
 
 class LotBrandConn(models.Model):
-    lot = models.ForeignKey(Lot, on_delete=models.SET_NULL, null=True, blank=True)
-    brand = models.ForeignKey('brand.Brand', on_delete=models.SET_NULL, null=True, blank=True)              # Значения полей определяются автоматически из поля Lot.product
-    last_update = models.DateTimeField('Дата последнего обновления', default=None, null=True, blank=True)   # и нужны для облегчения поиска лотов
+    '''Значения полей определяются автоматически из поля Lot.product
+        и нужны для облегчения поиска лотов
+    '''
+    lot = models.ForeignKey(Lot, on_delete=models.CASCADE, null=True, blank=True)
+    brand = models.ForeignKey('brand.Brand', on_delete=models.CASCADE, null=True, blank=True)
+    last_update = models.DateTimeField('Дата последнего обновления', default=None, null=True, blank=True)
 
 
 class LotCategoryConn(models.Model):
-    lot = models.ManyToManyField(Lot)
-    category = models.ManyToManyField('product.Category')                                                   # Значения полей определяются автоматически из поля Lot.product
-    last_update = models.DateTimeField('Дата последнего обновления', default=None, null=True, blank=True)   # и нужны для облегчения поиска лотов
+    '''Значения полей определяются автоматически из поля Lot.product
+            и нужны для облегчения поиска лотов
+    '''
+    lot = models.ForeignKey(Lot, on_delete=models.CASCADE, null=True, blank=True)
+    category = models.ManyToManyField('product.Category')
+    last_update = models.DateTimeField('Дата последнего обновления', default=None, null=True, blank=True)
 
 
 class LotGroupConn(models.Model):
-    lot = models.ForeignKey(Lot, on_delete=models.SET_NULL, null=True, blank=True)
-    group = models.ForeignKey('product.Group', on_delete=models.SET_NULL, null=True, blank=True)            # Значения полей определяются автоматически из поля Lot.product
-    last_update = models.DateTimeField('Дата последнего обновления', default=None, null=True, blank=True)   # и нужны для облегчения поиска лотов
+    '''Значения полей определяются автоматически из поля Lot.product
+            и нужны для облегчения поиска лотов
+    '''
+    lot = models.ForeignKey(Lot, on_delete=models.CASCADE, null=True, blank=True)
+    group = models.ForeignKey('product.Group', on_delete=models.CASCADE, null=True, blank=True)
+    last_update = models.DateTimeField('Дата последнего обновления', default=None, null=True, blank=True)
