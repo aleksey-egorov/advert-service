@@ -1,3 +1,11 @@
+function updateLotImage(key, id, result) {
+    alert('key=' + key);
+    alert('id=' + id);
+    alert('result=' + result);
+    $('#' + key + '_' + id).html(result);
+}
+
+
 $("#id_brand").autocomplete({
                 source: "/autocomplete/brand/",
                 minLength: 0,
@@ -74,3 +82,11 @@ $("#id_product").attr('data-id', $("#id_product_id").val());
 
 $("#id_brand_id").val("");
 $("#id_product_id").val("");
+
+
+var Timer=window.setTimeout(function() {
+   for(i=1;i<=12;i++) {
+        Upload.initFileUpload('userphoto', i, updateLotImage);
+   }
+},1000);
+

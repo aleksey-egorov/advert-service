@@ -126,6 +126,7 @@ class LotEditView(View):
         lot = get_object_or_404(Lot, id=id)
         if lot.author == request.user:
             lot_gallery = LotGallery.objects.filter(lot=lot)
+            empty_images = [5,6,7,8,9,10,11,12]
 
             form = LotEditForm()
             form.set_options(id)
@@ -133,6 +134,7 @@ class LotEditView(View):
             return render(request, "user/edit_lot.html", {
                 "lot_id": lot.id,
                 "lot_gallery": lot_gallery,
+                "empty_images": empty_images,
                 "form": form,
                 "menu": Menu.get_main_menu()
             })
@@ -161,7 +163,6 @@ class LotEditView(View):
 
 
 class LotEditDoneView(View):
-
     def get(self, request):
         return render(request, "user/edit_lot_done.html", {
             "menu": Menu.get_main_menu()
@@ -169,10 +170,17 @@ class LotEditDoneView(View):
 
 
 class UserLotsView(View):
-
     def get(self, request):
         lots = Lot.objects.filter(author=request.user).order_by('-add_date')
         return render(request, "user/lots.html", {
             "lots": lots,
+            "menu": Menu.get_main_menu()
+        })
+
+
+class LotImageAddView(View):
+    def post(self, request):
+        return render(request, "user/lot_image.html", {
+            "request": request,
             "menu": Menu.get_main_menu()
         })

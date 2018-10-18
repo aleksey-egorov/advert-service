@@ -117,6 +117,105 @@ Search = {
 };
 
 
+Upload={
+    files:[],
+    initFileUpload: function(key, id, add_func, del_func) {
+
+        var file={};
+        var that=file;
+
+        that.add_func = add_func;
+        that.del_func = del_func;
+        that.fileId = id;
+        that.key = key;
+
+        $('#'+key+'_'+id+' .upload').fileupload({
+
+            // Функция будет вызвана при помещении файла в очередь
+            add: function (e, data) {
+
+                //  var ul = $(this).children('ul');
+                var tpl = $('<li><input type="text" value="0" data-width="48" data-height="48"' +
+                    ' data-fgColor="#0788a5" data-readOnly="1" data-bgColor="#3e4043" /><p></p><span></span></li>');
+
+                // отслеживание нажатия на иконку отмены
+                tpl.find('span').click(function () {
+                    if (tpl.hasClass('working')) {
+                        jqXHR.abort();
+                    }
+                    tpl.fadeOut(function () {
+                        tpl.remove();
+                    });
+                });
+
+                // Автоматически загружаем файл при добавлении в очередь
+                var jqXHR = data.submit().success(function (result, textStatus, jqXHR) {
+                    var File = '';
+                    //alert(result);
+
+                    if ($('#uploaded-file-'+key+'-'+id)) {
+                        $('#uploaded-file-'+key+'-'+id).val(File['filename']);
+                    }
+                    if (typeof(that.add_func) != 'undefined') {
+                        that.add_func(that.key, that.fileId, result);
+                    }
+                });
+
+            },
+
+            progress: function (e, data) {
+
+                // Вычисление процента загрузки
+                var progress = parseInt(data.loaded / data.total * 100, 10);
+
+                // обновляем шкалу
+                $(this).find('progress').val(progress).change();
+
+                if (progress == 100) {
+                    //data.context.removeClass('working');
+                    // UpdatePreview();
+                }
+            },
+
+            fail: function (e, data) {
+                // что-то пошло не так
+                data.context.addClass('error');
+            }
+
+        });
+
+        Upload.files[file.fileId]=file;
+        Upload.initDelButton(file);
+        Upload.initAddButton(file);
+    },
+
+    initDelButton: function(file) {
+        $('#'+file.key+'-'+file.fileId+' .del .delete').click(function (e) {
+            e.preventDefault();
+
+            if (typeof(file.del_func)!='undefined') {
+                file.del_func(file.key,file.fileId);
+            }
+            Upload.files[file.fileId]=null;
+        });
+    },
+
+    initAddButton: function(file) {
+        $('#' + file.key + '_' + file.fileId + ' .add .addb').click(function (e) {
+            if (!$(this).hasClass('disabled')) {
+                e.preventDefault();
+                $(this).parent().parent().find('.file').click();
+            }
+        })
+    },
+
+    processUploadResult: function(file) {
+
+    }
+};
+
+
+
 function initMap () {
         var marker='dealer';
 

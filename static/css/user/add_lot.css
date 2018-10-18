@@ -17,26 +17,27 @@
 
 
 
-
-
-
 #gallery {
     margin-top:15px;
     width:100%;
-    min-height:225px;
+    min-height:525px;
     border:1px solid red;
 }
 
-#gallery .photo {
-    width: 200px;
-    height: 200px;
+
+#gallery .photo_wrap {
+    width: 150px;
+    height: 150px;
     float: left;
-    border: 1px solid #ddd;
     margin: 4px 14px 13px 0px;
     position: relative;
 }
 
-
+#gallery .photo {
+    width: 150px;
+    height: 150px;
+    border: 1px solid #ddd;
+}
 
 #gallery .photo.empty {
     background: url('/images/no-foto.png');
@@ -46,9 +47,10 @@
 }
 
 
+
 #gallery .photo .add-layer {
-    width:200px;
-    height:200px;
+    width:150px;
+    height:150px;
     opacity:0;
     position:absolute;
     z-index:50;
@@ -86,17 +88,16 @@
 #gallery .photo .add-layer .file {
     opacity: 0;
     filter: alpha(opacity=0);
-    width:100px;
-    height:100px;
+    width:150px;
+    height:150px;
     cursor:pointer;
 }
 
 
 
-
 #gallery .photo .del-layer {
-    width:100px;
-    height:100px;
+    width:150px;
+    height:150px;
     background:#000;
     opacity:0;
     z-index:50;
@@ -159,3 +160,7 @@
     background-color: #f87000;
 }
 
+
+#gallery .photo_wrap:nth-child(4n) {
+    margin-right: 0px !important;
+}
