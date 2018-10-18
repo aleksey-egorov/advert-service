@@ -4,6 +4,7 @@ from django.http import HttpResponseRedirect
 from django.db import transaction
 from django.contrib.auth.hashers import make_password
 from django.views.generic import View
+from django.shortcuts import get_object_or_404
 
 from main.models import Menu
 from user.models import User
@@ -122,30 +123,45 @@ class LotAddDoneView(View):
 class LotEditView(View):
 
     def get(self, request, id):
-        form = LotEditForm(id)
-        form.set_options()
+        lot = get_object_or_404(Lot, id=id)
+        if lot.author == request.user:
+            form = LotEditForm()
+            form.set_options(id)
 
-        return render(request, "user/edit_lot.html", {
-            "form": form,
-            "menu": Menu.get_main_menu()
-        })
+            return render(request, "user/edit_lot.html", {
+                "lot_id": lot.id,
+                "form": form,
+                "menu": Menu.get_main_menu()
+            })
 
-    def post(self, request):
-        form = LotEditForm(request.POST, request.FILES)
-        if form.is_valid():
-            result, err = Lot().add(form.cleaned_data, request.user)
-            if result:
-                # Mailer().send(email, 'lot_add', context={"login": new_user.username})
-                return HttpResponseRedirect('/user/lot/add/done/')
+    def post(self, request, id):
+        lot = get_object_or_404(Lot, id=id)
+        if lot.author == request.user:
+            form = LotEditForm(request.POST, request.FILES)
+            if form.is_valid():
+                result, err = Lot.objects.update_lot(id, form.cleaned_data)
+                if result:
+                    return HttpResponseRedirect('/user/lot/edit/done/')
+                    #message = str(form.cleaned_data)
+                else:
+                    message = 'Ошибка при редактировании лота: ' + str(err) + str(form.cleaned_data)
+
             else:
-                message = 'Ошибка при добавлении лота: ' + str(err) + str(form.cleaned_data)
-        else:
-            message = 'Ошибка при добавлении лота, проверьте поля '
+                message = 'Ошибка при редактировании лота, проверьте поля '
 
-        return render(request, "user/add_lot.html", {
-            "form": form,
-            "menu": Menu.get_main_menu(),
-            "message": message,
+            return render(request, "user/edit_lot.html", {
+                "lot_id": lot.id,
+                "form": form,
+                "menu": Menu.get_main_menu(),
+                "message": message,
+            })
+
+
+class LotEditDoneView(View):
+
+    def get(self, request):
+        return render(request, "user/edit_lot_done.html", {
+            "menu": Menu.get_main_menu()
         })
 
 

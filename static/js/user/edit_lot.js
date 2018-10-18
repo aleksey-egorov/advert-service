@@ -53,6 +53,11 @@ $("#id_product").autocomplete({
                 }
 });
 
+$("#delete_button").click(function(e) {
+     e.preventDefault();
+     //TODO: Lot delete confirmation
+});
+
 
 $("#add_lot_form").submit(function(e) {
      $("#id_brand").val($("#id_brand").attr("data-id"));
@@ -66,3 +71,6 @@ $("#add_lot_container select").select2({
 
 $("#id_brand").attr('data-id', $("#id_brand_id").val());
 $("#id_product").attr('data-id', $("#id_product_id").val());
+
+$("#id_brand_id").val("");
+$("#id_product_id").val("");

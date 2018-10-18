@@ -71,6 +71,10 @@ form.common label {
     padding-top:5px;
 }
 
+form.common.l200 label {
+     width:200px;
+}
+
 form.common input[type=text],
 form.common input[type=email],
 form.common input[type=password],
@@ -228,6 +232,7 @@ table.common td{
     padding:10px;
     border-right: 1px solid #efefef;
     border-bottom: 1px solid #efefef;
+    text-align:center;
 }
 
 

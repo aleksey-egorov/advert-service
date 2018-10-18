@@ -52,30 +52,30 @@ class LotAddForm(forms.Form):
 
 class LotEditForm(forms.Form):
 
-    def __init__(self, id):
-        super().__init__()
-        self.lot = Lot.objects.get(id=id)
-
-    def set_options(self):
-        product = Product.objects.get(id=self.lot.product.id)
+    def set_options(self, id):
+        lot = Lot.objects.get(id=id)
+        product = Product.objects.get(id=lot.product.id)
         brand = Brand.objects.get(id=product.brand.id)
         group = Group.objects.get(id=product.group.id)
         categories = group.get_categories()
+        state = "new" if lot.new_prod_state == True else "used"
 
-        self.fields['name'].initial = self.lot.name
+        self.fields['name'].initial = lot.name
         self.fields['product'].initial = product.name
         self.fields['product_id'].initial = product.id
         self.fields['brand'].initial = brand.name
         self.fields['brand_id'].initial = brand.id
         self.fields['category'].initial = categories[0]
+        self.fields['active'].initial = lot.active
+        self.fields['best'].initial = lot.best
 
+        self.fields['price'].initial = lot.price
+        self.fields['currency'].initial = lot.currency.id
 
-        #self.fields['defined_group'].choices = FormHelper.make_options(self.groups)
-        #self.fields['defined_brand'].choices = FormHelper.make_options(self.brands)
+        self.fields['state'].initial = state
+        self.fields['manuf_year'].initial = lot.manuf_year
 
-        #self.fields['defined_category'].initial = params['defined_category']
-        #self.fields['defined_group'].initial = params['defined_group']
-
+        self.fields['main_description'].initial = lot.main_description
 
     name = forms.CharField(label='Название лота')
 
@@ -83,9 +83,11 @@ class LotEditForm(forms.Form):
     category = forms.ChoiceField(label='Категория', choices=FormHelper.make_options(categories_list))
 
     brand = forms.CharField(label='Бренд/марка')
-    brand_id = forms.CharField(widget=forms.HiddenInput)
+    brand_id = forms.CharField(widget=forms.HiddenInput, required=False)
     product = forms.CharField(label='Модель')
-    product_id = forms.CharField(widget=forms.HiddenInput)
+    product_id = forms.CharField(widget=forms.HiddenInput, required=False)
+    active = forms.BooleanField(label='Лот активен', required=False)
+    best = forms.BooleanField(label='Рекомендованное предложение', required=False)
 
     currency_list = Currency.objects.all()
     price = forms.IntegerField(label='Цена')

@@ -8,13 +8,21 @@
 <div id="left_container" class="left w75">
     <div id="add_lot_container" class="">
         <h1>Редактирование лота</h1>
-            <form method="post" class="common" action="/user/lot/edit/" enctype="multipart/form-data" id="add_lot_form">
-                <input type="hidden" name="brand_id" id="brand_id">
+            <form method="post" class="common l200" action="/user/lot/edit/{{ lot_id }}/" enctype="multipart/form-data" id="add_lot_form">
                 <div class="cont">
                     {% csrf_token %}
                     {{ form.product_id }}
                     {{ form.brand_id }}
-                    <h3>Основная информация</h3>
+                    <h3>Общая информация</h3>
+                    <ul class="form_ul">
+                        <li><label for="{{ form.active.id_for_label }}">{{ form.active.label }}:</label>
+                            {{ form.active }}
+                        </li>
+                        <li><label for="{{ form.best.id_for_label }}">{{ form.best.label }}:</label>
+                            {{ form.best }}
+                        </li>
+                    </ul>
+                    <h3>Продукт</h3>
                     <ul class="form_ul">
                         <li><label for="{{ form.category.id_for_label }}">Категория:</label>
                             {{ form.category }}
@@ -66,7 +74,10 @@
                 </div>
 
 
-                <div class="btn"><button type="submit">Добавить</button></div>
+                <div class="btn">
+                    <button type="submit">Сохранить</button>
+                    <button id="delete_button">Удалить</button>
+                </div>
             </form>
     </div>
 

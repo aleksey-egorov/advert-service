@@ -14,6 +14,48 @@ class Currency(models.Model):
     name = models.CharField('Валюта', max_length=10)
     course = models.DecimalField('Курс', max_digits=5, decimal_places=2)
 
+
+class LotManager(models.Manager):
+
+    param_val_map = {
+        'new_prod_state': {
+            'all': None,
+            'new': True,
+            'used': False
+        },
+    }
+
+    param_key_map = {
+        'defined_category': 'lotcategoryconn__category',
+        'defined_group': 'lotgroupconn__group',
+        'defined_brand': 'lotbrandconn__brand'
+    }
+
+    def update_lot(self, id, cleaned_data):
+        try:
+            product = Product.objects.get(active=True, id=int(cleaned_data['product']))
+            currency = Currency.objects.get(id=int(cleaned_data['currency']))
+            with transaction.atomic():
+                upd_lot = Lot(
+                    id=id,
+                    name=cleaned_data['name'],
+                    product=product,
+                    price=int(cleaned_data['price']),
+                    currency=currency,
+                    main_description=cleaned_data['main_description'],
+                    active=cleaned_data['active'],
+                    new_prod_state=self.param_val_map['new_prod_state'][cleaned_data['state']],
+                    best=cleaned_data['best'],
+                    upd_date=datetime.datetime.now(),
+                    manuf_year=cleaned_data['manuf_year']
+                )
+                upd_lot.save(update_fields=['name','product','price','currency','main_description','active','best',
+                                            'new_prod_state','upd_date','manuf_year'])
+                return True, None
+        except Exception as err:
+            return False, err
+
+
 class Lot(models.Model):
     num = models.CharField('Код лота', max_length=10, default=None, unique=True, null=True)
     name = models.CharField('Наименование', max_length=255,  null=False, blank=False)
@@ -36,19 +78,7 @@ class Lot(models.Model):
     manuf_year = models.IntegerField('Год выпуска', null=True, blank=True)
     author = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
 
-    param_val_map = {
-        'new_prod_state': {
-            'all': None,
-            'new': True,
-            'used': False
-        },
-    }
-
-    param_key_map = {
-        'defined_category': 'lotcategoryconn__category',
-        'defined_group': 'lotgroupconn__group',
-        'defined_brand': 'lotbrandconn__brand'
-    }
+    objects = LotManager()
 
     def state_name(self):
         return "Новый" if self.new_prod_state == True else "б/у"
@@ -123,6 +153,7 @@ class Lot(models.Model):
         except Exception as err:
             return False, err
 
+
     def _make_num_alias(self, name, id):
         symbols = (u"абвгдеёжзийклмнопрстуфхцчшщъыьэюяАБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ",
                    u"abvgdeejzijklmnoprstufhzcss_y_euaABVGDEEJZIJKLMNOPRSTUFHZCSS_Y_EUA")
@@ -135,6 +166,7 @@ class Lot(models.Model):
         num = '0'*(6-id_len) + id_str
         alias += '_' + num
         return alias, num
+
 
 
 class LotBrandConn(models.Model):
