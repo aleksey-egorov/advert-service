@@ -26,10 +26,39 @@ class LotManager(models.Manager):
     }
 
     param_key_map = {
-        'defined_category': 'lotcategoryconn__category',
-        'defined_group': 'lotgroupconn__group',
-        'defined_brand': 'lotbrandconn__brand'
+        'category': 'lotcategoryconn__category',
+        'group': 'lotgroupconn__group',
+        'brand': 'lotbrandconn__brand'
     }
+
+    def add_lot(self, cleaned_data, user):
+        try:
+            product = Product.objects.get(active=True, id=cleaned_data['product'])
+            currency = Currency.objects.get(id=int(cleaned_data['currency']))
+            with transaction.atomic():
+                new_lot = Lot(
+                    name=product.name,
+                    product=product,
+                    supplier=user.supplier,
+                    price=int(cleaned_data['price']),
+                    currency=currency,
+                    main_description=cleaned_data['main_description'],
+                    active=False,
+                    new_prod_state=self.param_val_map['new_prod_state'][cleaned_data['state']],
+                    best=False,
+                    add_date=datetime.datetime.now(),
+                    main_image=None,
+                    manuf_year=cleaned_data['manuf_year'],
+                    author=user
+                )
+                new_lot.save()
+                alias, num = self._make_num_alias(new_lot.name, new_lot.id)
+                new_lot.alias = alias
+                new_lot.num = num
+                new_lot.save()
+                return True, None
+        except Exception as err:
+            return False, err
 
     def update_lot(self, id, cleaned_data):
         try:
@@ -54,6 +83,51 @@ class LotManager(models.Manager):
                 return True, None
         except Exception as err:
             return False, err
+
+    def make_search(self, params):
+        filter_map = {}
+        st = ''
+
+        for key in params.keys():
+            value = params[key]
+            try:
+                value = self.param_val_map[key][params[key]]
+            except:
+                pass
+            try:
+                key = self.param_key_map[key]
+            except:
+                pass
+
+            st += "KEY={} VAL={} {}".format(key, value, type(value))
+            if isinstance(value, str):
+                if not value == '-1':
+                    filter_map[key] = int(value)
+            elif isinstance(value, int):
+                if not value == -1:
+                    filter_map[key] = value
+            elif isinstance(value, list):
+                if not '-1' in value and len(value) > 0:
+                    filter_map[key + '__in'] = value
+            elif isinstance(value, bool):
+                filter_map[key] = value
+
+        lot_list = self.filter(active=True).filter(**filter_map).order_by('-pub_date')
+        msg = str(st) + "<br>FILTER_MAP={}".format(filter_map)
+        return lot_list, msg
+
+    def _make_num_alias(self, name, id):
+        symbols = (u"абвгдеёжзийклмнопрстуфхцчшщъыьэюяАБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ",
+                   u"abvgdeejzijklmnoprstufhzcss_y_euaABVGDEEJZIJKLMNOPRSTUFHZCSS_Y_EUA")
+        tr = {ord(a): ord(b) for a, b in zip(*symbols)}
+        alias = name.translate(tr).lower()
+        alias = re.sub('[\s\-]', '_', alias)
+        alias = re.sub('[()]', '', alias)
+        id_str = str(id)
+        id_len = len(id_str)
+        num = '0'*(6-id_len) + id_str
+        alias += '_' + num
+        return alias, num
 
 
 class Lot(models.Model):
@@ -86,87 +160,11 @@ class Lot(models.Model):
     def price_formatted(self):
         return "{:,}".format(self.price).replace(",", " ") + " " + self.currency.name
 
-    def make_search(self, params):
-        filter_map = {}
-        st = ''
-
-        for key in params.keys():
-            value = params[key]
-            try:
-                value = self.param_val_map[key][params[key]]
-            except:
-                pass
-            try:
-                key = self.param_key_map[key]
-            except:
-                pass
-
-            st += "KEY={} VAL={} {}".format(key, value, type(value))
-            if isinstance(value, str):
-                if not value == '-1':
-                    filter_map[key] = int(value)
-            elif isinstance(value, int):
-                if not value == -1:
-                    filter_map[key] = value
-            elif isinstance(value, list):
-                if not '-1' in value and len(value) > 0:
-                    filter_map[key + '__in'] = value
-            elif isinstance(value, bool):
-                filter_map[key] = value
-
-        lot_list = Lot.objects.filter(**filter_map).order_by('-pub_date')
-        msg = str(st) + "<br>FILTER_MAP={}".format(filter_map)
-        return lot_list, msg
-
     @staticmethod
     def get_recommended(id):
         # TODO recommendation system
         lots = Lot.objects.filter(active=True).order_by('-pub_date')[:5]
         return lots
-
-    def add(self, cleaned_data, user):
-        try:
-            product = Product.objects.get(active=True, id=cleaned_data['product'])
-            currency = Currency.objects.get(id=int(cleaned_data['currency']))
-            with transaction.atomic():
-                new_lot = Lot(
-                    name=product.name,
-                    product=product,
-                    supplier=user.supplier,
-                    price=int(cleaned_data['price']),
-                    currency=currency,
-                    main_description=cleaned_data['main_description'],
-                    active=False,
-                    new_prod_state=self.param_val_map['new_prod_state'][cleaned_data['state']],
-                    best=False,
-                    add_date=datetime.datetime.now(),
-                    main_image=None,
-                    manuf_year=cleaned_data['manuf_year'],
-                    author=user
-                )
-                new_lot.save()
-                alias, num = self._make_num_alias(new_lot.name, new_lot.id)
-                new_lot.alias = alias
-                new_lot.num = num
-                new_lot.save()
-                return True, None
-        except Exception as err:
-            return False, err
-
-
-    def _make_num_alias(self, name, id):
-        symbols = (u"абвгдеёжзийклмнопрстуфхцчшщъыьэюяАБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ",
-                   u"abvgdeejzijklmnoprstufhzcss_y_euaABVGDEEJZIJKLMNOPRSTUFHZCSS_Y_EUA")
-        tr = {ord(a): ord(b) for a, b in zip(*symbols)}
-        alias = name.translate(tr).lower()
-        alias = re.sub('[\s\-]', '_', alias)
-        alias = re.sub('[()]', '', alias)
-        id_str = str(id)
-        id_len = len(id_str)
-        num = '0'*(6-id_len) + id_str
-        alias += '_' + num
-        return alias, num
-
 
 
 class LotBrandConn(models.Model):

@@ -21,11 +21,10 @@ class CatalogLotsView(View):
         brands = Brand.objects.filter(active=True)
 
         params = {
-            'defined_category': FormHelper.get_option_id(categories, category),
-            'defined_group': FormHelper.get_option_id(groups, group),
-            #'defined_brand': FormHelper.get_option_id(categories, category)
+            'category': FormHelper.get_option_id(categories, category),
+            'group': FormHelper.get_option_id(groups, group),
         }
-        lot_list, msg = Lot().make_search(params)
+        lot_list, msg = Lot.objects.make_search(params)
 
         form = FilterForm(categories, groups, brands)
         form.set_options(params)
@@ -43,9 +42,9 @@ class CatalogLotsListView(View):
     def __init__(self):
         self.params_keys = {
             'new_prod_state': 'bool',
-            'defined_category': 'int',
-            'defined_group': 'int',
-            'defined_brand': 'list'
+            'category': 'int',
+            'group': 'int',
+            'brand': 'list'
         }
 
     def post(self, request):
@@ -53,7 +52,7 @@ class CatalogLotsListView(View):
         page = request.POST.get('page')
         params = FormHelper.get_params_from_post(self.params_keys, request)
 
-        lot_list, msg = Lot().make_search(params)
+        lot_list, msg = Lot.objects.make_search(params)
         paginator = Paginator(lot_list, 20)
 
        # try:

@@ -87,7 +87,7 @@ class LotEditForm(forms.Form):
     product = forms.CharField(label='Модель')
     product_id = forms.CharField(widget=forms.HiddenInput, required=False)
     active = forms.BooleanField(label='Лот активен', required=False)
-    best = forms.BooleanField(label='Рекомендованное предложение', required=False)
+    best = forms.BooleanField(label='В списке лучших', required=False)
 
     currency_list = Currency.objects.all()
     price = forms.IntegerField(label='Цена')

@@ -96,7 +96,7 @@ class LotAddView(View):
     def post(self, request):
         form = LotAddForm(request.POST, request.FILES)
         if form.is_valid():
-            result, err = Lot().add(form.cleaned_data, request.user)
+            result, err = Lot.objects.add_lot(form.cleaned_data, request.user)
             if result:
                 # Mailer().send(email, 'lot_add', context={"login": new_user.username})
                 return HttpResponseRedirect('/user/lot/add/done/')

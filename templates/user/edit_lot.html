@@ -15,6 +15,9 @@
                     {{ form.brand_id }}
                     <h3>Общая информация</h3>
                     <ul class="form_ul">
+                        <li><label for="{{ form.name.id_for_label }}">{{ form.name.label }}:</label>
+                            {{ form.name }}
+                        </li>
                         <li><label for="{{ form.active.id_for_label }}">{{ form.active.label }}:</label>
                             {{ form.active }}
                         </li>
@@ -22,31 +25,30 @@
                             {{ form.best }}
                         </li>
                     </ul>
+                </div>
+
+                <div class="cont">
                     <h3>Продукт</h3>
                     <ul class="form_ul">
-                        <li><label for="{{ form.category.id_for_label }}">Категория:</label>
+                        <li><label for="{{ form.category.id_for_label }}">{{ form.category.label }}:</label>
                             {{ form.category }}
                         </li>
-                        <li><label for="{{ form.brand.id_for_label }}">Бренд/марка:</label>
+                        <li><label for="{{ form.brand.id_for_label }}">{{ form.brand.label }}:</label>
                             {{ form.brand }}
                         </li>
-                        <li><label for="{{ form.product.id_for_label }}">Модель:</label>
+                        <li><label for="{{ form.product.id_for_label }}">{{ form.product.label }}:</label>
                             {{ form.product }}
                         </li>
-                         <li><label for="{{ form.name.id_for_label }}">Название лота:</label>
-                            {{ form.name }}
-                        </li>
-
                     </ul>
                 </div>
 
                 <div class="cont">
                     <h3>Стоимость</h3>
                     <ul class="form_ul">
-                        <li><label for="{{ form.price.id_for_label }}">Цена:</label>
+                        <li><label for="{{ form.price.id_for_label }}">{{ form.price.label }}:</label>
                             {{ form.price }}
                         </li>
-                        <li><label for="{{ form.currency.id_for_label }}">Валюта:</label>
+                        <li><label for="{{ form.currency.id_for_label }}">{{ form.currency.label }}:</label>
                             {{ form.currency }}
                         </li>
                     </ul>
@@ -55,10 +57,10 @@
                 <div class="cont">
                     <h3>Состояние</h3>
                     <ul class="form_ul">
-                        <li><label for="{{ form.state.id_for_label }}">Новый или б/у:</label>
+                        <li><label for="{{ form.state.id_for_label }}">{{ form.state.label }}:</label>
                             {{ form.state }}
                         </li>
-                        <li><label for="{{ form.manif_year.id_for_label }}">Год выпуска:</label>
+                        <li><label for="{{ form.manif_year.id_for_label }}">{{ form.manuf_year.label }}:</label>
                             {{ form.manuf_year }}
                         </li>
                     </ul>
@@ -67,7 +69,7 @@
                 <div class="cont">
                     <h3>Дополнительно</h3>
                     <ul class="form_ul">
-                        <li><label for="{{ form.main_description.id_for_label }}">Описание:</label>
+                        <li><label for="{{ form.main_description.id_for_label }}">{{ form.main_description.label }}:</label>
                             {{ form.main_description }}
                         </li>
                     </ul>

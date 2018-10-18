@@ -15,17 +15,17 @@ class FilterForm(forms.Form):
         self.brands = brands
 
     def set_options(self, params):
-        self.fields['defined_category'].choices = FormHelper.make_options(self.categories)
-        self.fields['defined_group'].choices = FormHelper.make_options(self.groups)
-        self.fields['defined_brand'].choices = FormHelper.make_options(self.brands)
+        self.fields['category'].choices = FormHelper.make_options(self.categories)
+        self.fields['group'].choices = FormHelper.make_options(self.groups)
+        self.fields['brand'].choices = FormHelper.make_options(self.brands)
 
-        self.fields['defined_category'].initial = params['defined_category']
-        self.fields['defined_group'].initial = params['defined_group']
-        #self.fields['defined_category'].initial = params['defined_category']
+        self.fields['category'].initial = params['category']
+        self.fields['group'].initial = params['group']
+        #self.fields['category'].initial = params['category']
 
-    defined_category = forms.ChoiceField(label='Категория')
-    defined_group = forms.ChoiceField(label='Группа')
-    defined_brand = forms.MultipleChoiceField(label='Производитель')
+    category = forms.ChoiceField(label='Категория')
+    group = forms.ChoiceField(label='Группа')
+    brand = forms.MultipleChoiceField(label='Производитель')
 
     #TODO: add extra fields and validation
 
