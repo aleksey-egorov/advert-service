@@ -8,7 +8,7 @@
 
 <div id="add_lot_container" class="w100">
         <h1>Мои лоты</h1>
-        <table cellpadding="0" cellspacing="0" class="common w100">
+        <table cellpadding="0" cellspacing="0" class="common w100" id="my_lots_table">
             <thead>
                 <tr>
                     <td>Номер лота</td>
@@ -22,7 +22,7 @@
                 <tr>
                     <td>{{ lot.num }}</td>
                     <td>{{ lot.name }}</td>
-                    <td>{{ lot.main_image }}</td>
+                    <td class="foto_td"><div class="small_image" style="background-image:url('/media/{{ lot.main_image }}');background-repeat:no-repeat;background-position:center center;background-size:cover;"></div></td>
                     <td>{{ lot.add_date }}</td>
                     <td><a class=gray href="/user/lot/edit/{{ lot.id }}/">Изменить</a></td>
                 </tr>

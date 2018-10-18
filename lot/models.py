@@ -150,6 +150,6 @@ class LotCategoryConn(models.Model):
 
 
 class LotGroupConn(models.Model):
-    lot = models.ManyToManyField(Lot)
-    group = models.ManyToManyField('product.Group')                                                         # Значения полей определяются автоматически из поля Lot.product
+    lot = models.ForeignKey(Lot, on_delete=models.SET_NULL, null=True, blank=True)
+    group = models.ForeignKey('product.Group', on_delete=models.SET_NULL, null=True, blank=True)            # Значения полей определяются автоматически из поля Lot.product
     last_update = models.DateTimeField('Дата последнего обновления', default=None, null=True, blank=True)   # и нужны для облегчения поиска лотов

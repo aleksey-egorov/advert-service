@@ -122,12 +122,8 @@ class LotAddDoneView(View):
 class LotEditView(View):
 
     def get(self, request, id):
-        lot = Lot.objects.get(id=id)
-        form = LotEditForm()
-        params = {
-            'brand': 594
-        }
-        form.set_options(params)
+        form = LotEditForm(id)
+        form.set_options()
 
         return render(request, "user/edit_lot.html", {
             "form": form,

@@ -2,8 +2,8 @@ from django import forms
 
 from user.models import User
 from utils.form import FormHelper
-from product.models import Category, Group
-from lot.models import Currency
+from product.models import Category, Product, Group
+from lot.models import Currency, Lot
 from brand.models import Brand
 
 
@@ -52,21 +52,40 @@ class LotAddForm(forms.Form):
 
 class LotEditForm(forms.Form):
 
-    def set_options(self, params):
-        brand = Brand.objects.get(id=params['brand'])
+    def __init__(self, id):
+        super().__init__()
+        self.lot = Lot.objects.get(id=id)
+
+    def set_options(self):
+        product = Product.objects.get(id=self.lot.product.id)
+        brand = Brand.objects.get(id=product.brand.id)
+        group = Group.objects.get(id=product.group.id)
+        categories = group.get_categories()
+
+        self.fields['name'].initial = self.lot.name
+        self.fields['product'].initial = product.name
+        self.fields['product_id'].initial = product.id
         self.fields['brand'].initial = brand.name
+        self.fields['brand_id'].initial = brand.id
+        self.fields['category'].initial = categories[0]
+
+
         #self.fields['defined_group'].choices = FormHelper.make_options(self.groups)
         #self.fields['defined_brand'].choices = FormHelper.make_options(self.brands)
 
         #self.fields['defined_category'].initial = params['defined_category']
         #self.fields['defined_group'].initial = params['defined_group']
-        pass
+
+
+    name = forms.CharField(label='Название лота')
 
     categories_list = Category.objects.filter(active=True).order_by("sorting")
     category = forms.ChoiceField(label='Категория', choices=FormHelper.make_options(categories_list))
 
     brand = forms.CharField(label='Бренд/марка')
+    brand_id = forms.CharField(widget=forms.HiddenInput)
     product = forms.CharField(label='Модель')
+    product_id = forms.CharField(widget=forms.HiddenInput)
 
     currency_list = Currency.objects.all()
     price = forms.IntegerField(label='Цена')

@@ -15,8 +15,8 @@ class Category(models.Model):
 class Group(models.Model):
     name = models.CharField('Название', max_length=255)
     category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, blank=True) # Группа-родитель всегда принадлежит одной категории
-    parents = models.ManyToManyField('Group')                                                # Одна подгруппа может иметь несколько групп-родителей
-    alias = models.CharField('Алиас', max_length=120, unique=True)
+    parents = models.ManyToManyField('Group')                                                # Одна подгруппа может иметь несколько групп-родителей,
+    alias = models.CharField('Алиас', max_length=120, unique=True)                           # а значит и несколько категорий
     active = models.BooleanField('Активность', default=False, null=True, blank=True)
 
     def get_url(self):
@@ -25,6 +25,14 @@ class Group(models.Model):
             par = self.parents.all()[0]
             par_url = par + '/'
         return par_url + str(self.alias) + '/'
+
+    def get_categories(self):
+        if len(self.parents.all()) > 0:
+            categories = [p.category.id for p in self.parents.all()]
+        else:
+            categories = [self.category.id]
+        return categories
+
 
 class Product(models.Model):
     name = models.CharField('Название/Модель', max_length=120)
