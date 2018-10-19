@@ -244,25 +244,24 @@ class Lot(models.Model):
 
 
 class LotGalleryManager(models.Manager):
+    total_images = 12
 
     def get_images_forms(self, lot, upload_form, delete_form):
-        total_images = 12
         lot_gallery = []
-        begin = 0
+
+        for i in range(self.total_images):
+            image_form = upload_form()
+            image_form.set_initial(num=i, status='empty')
+            lot_gallery.append({'num': i, 'type': 'empty', 'form': image_form})
+
         if not lot == None:
             gallery_images = self.filter(lot=lot)
             for im in gallery_images:
                 del_form = delete_form()
                 del_form.set_initial(num=im.num, status='old')
-                lot_gallery.append({'im': im, 'form': del_form})
-            begin = len(lot_gallery)
+                lot_gallery[im.num] = {'num': im.num, 'type':'real', 'image': im.image, 'form': del_form}
 
-        empty_images = []
-        for i in range(total_images)[begin:]:
-            image_form = upload_form()
-            image_form.set_initial(num=i, status='empty')
-            empty_images.append({'num': i, 'form': image_form})
-        return lot_gallery, empty_images
+        return lot_gallery
 
     def save_tmp_image(self, image):
         filepath = os.path.join(settings.MEDIA_ROOT, 'lots', 'tmp', image.name )
@@ -273,25 +272,35 @@ class LotGalleryManager(models.Manager):
     def update_gallery(self, lot, images):
         for image in images:
             if image['status'] == 'added':
-                self.move_image_from_tmp(image['filename'])
-                if self.filter(lot=lot, num=image['num']).exists():
-                    lot_gallery = self.get(lot=lot, num=image['num'])
-                    lot_gallery.image = image['filename']
-                    lot_gallery.save(update_fields=['image'])
-                else:
-                    lot_gallery = LotGallery(
-                        lot=lot,
-                        num=image['num'],
-                        image=image['filename'],
-                        sorting=image['num'],
-                        active=True
-                    )
-                    lot_gallery.save()
+                self._move_image_from_tmp(image['filename'])
+                self._update_image(lot, image['num'], image['filename'])
+            elif image['status'] == 'deleted':
+                self._delete_image(lot, image['num'])
 
-    def move_image_from_tmp(self, filename):
-        os.rename("path/to/current/file.foo", "path/to/new/destination/for/file.foo")
+    def _update_image(self, lot, num, filename):
+        if self.filter(lot=lot, num=num).exists():
+            gallery = self.get(lot=lot, num=num)
+            gallery.image = os.path.join('lots', filename)
+            gallery.save(update_fields=['image'])
+        else:
+            gallery = LotGallery(
+                lot=lot,
+                num=num,
+                image=os.path.join('lots', filename),
+                sorting=num,
+                active=True
+            )
+            gallery.save()
 
+    def _move_image_from_tmp(self, filename):
+        tmppath = os.path.join(settings.MEDIA_ROOT, 'lots', 'tmp', filename)
+        realpath = os.path.join(settings.MEDIA_ROOT, 'lots', filename)
+        os.rename(tmppath, realpath)
 
+    def _delete_image(self, lot, num):
+        if self.filter(lot=lot, num=num).exists():
+            gallery = self.get(lot=lot, num=num)
+            gallery.delete()
 
 
 class LotGallery(models.Model):

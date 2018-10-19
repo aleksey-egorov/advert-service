@@ -1,3 +1,26 @@
+function updateLotImage(key, id, result) {
+    $('#' + key + '_' + id).html(result).addClass('changed');
+    var Timer=window.setTimeout(function() {
+        Upload.initFileUpload(key, id, updateLotImage, delLotImage);
+    },500);
+}
+
+function delLotImage(key, id) {
+    var params = $('#' + key + '_' + id).find(".del_form").serialize();
+    $.ajax({
+            url: '/user/lot/image/del/',
+            type: 'post',
+            data: params,
+            success: function (data, textStatus) {
+                  $('#' + key + '_' + id).html(data).addClass('changed');
+                  var Timer=window.setTimeout(function() {
+                        Upload.initFileUpload(key, id, updateLotImage, delLotImage);
+                  },500);
+            }
+    });
+}
+
+
 $("#id_brand").autocomplete({
                 source: "/autocomplete/brand/",
                 minLength: 0,
@@ -57,6 +80,14 @@ $("#id_product").autocomplete({
 $("#add_lot_form").submit(function(e) {
      $("#id_brand").val($("#id_brand").attr("data-id"));
      $("#id_product").val($("#id_product").attr("data-id"));
+     var images = [];
+     $("#gallery_content .photo_wrap.changed form").each(function() {
+         var num = $(this).find('input[name=num]').val();
+         var filename = $(this).find('input[name=filename]').val();
+         var status = $(this).find('input[name=status]').val();
+         images.push({'num': num, 'filename': filename, 'status': status});
+     });
+     $("#id_image_filenames").val(JSON.stringify(images));
 });
 
 $("#add_lot_container select").select2({
@@ -64,3 +95,8 @@ $("#add_lot_container select").select2({
         placeholder: "Все"
     });
 
+window.setTimeout(function() {
+   for(i=0;i<12;i++) {
+        Upload.initFileUpload('userphoto', i, updateLotImage, delLotImage);
+   }
+}, 500);

@@ -82,7 +82,6 @@ $("#delete_button").click(function(e) {
 
 
 $("#edit_lot_form").submit(function(e) {
-    // e.preventDefault();
      $("#id_brand").val($("#id_brand").attr("data-id"));
      $("#id_product").val($("#id_product").attr("data-id"));
      var images = [];
@@ -107,9 +106,9 @@ $("#id_brand_id").val("");
 $("#id_product_id").val("");
 
 
-var Timer=window.setTimeout(function() {
+window.setTimeout(function() {
    for(i=0;i<12;i++) {
         Upload.initFileUpload('userphoto', i, updateLotImage, delLotImage);
    }
-},1000);
+}, 500);
 

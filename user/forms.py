@@ -46,6 +46,7 @@ class LotAddForm(forms.Form):
     manuf_year = forms.IntegerField(label='Год выпуска')
 
     main_description = forms.CharField(label='Описание', widget=forms.Textarea)
+    image_filenames = forms.CharField(widget=forms.HiddenInput)
 
     #TODO: extra fields and form validation
 

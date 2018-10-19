@@ -87,9 +87,11 @@ class LotAddView(View):
 
     def get(self, request):
         form = LotAddForm()
+        lot_gallery = LotGallery.objects.get_images_forms(None, LotImageUploadForm, LotImageDelForm)
 
         return render(request, "user/add_lot.html", {
             "form": form,
+            "lot_gallery": lot_gallery,
             "menu": Menu.get_main_menu()
         })
 
@@ -128,12 +130,11 @@ class LotEditView(View):
             form_main = LotEditForm()
             form_main.set_options(id)
 
-            lot_gallery, empty_images = LotGallery.objects.get_images_forms(lot, LotImageUploadForm, LotImageDelForm)
+            lot_gallery = LotGallery.objects.get_images_forms(lot, LotImageUploadForm, LotImageDelForm)
 
             return render(request, "user/edit_lot.html", {
                 "lot_id": lot.id,
                 "lot_gallery": lot_gallery,
-                "empty_images": empty_images,
                 "form": form_main,
                 "menu": Menu.get_main_menu()
             })
