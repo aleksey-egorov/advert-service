@@ -1,6 +1,7 @@
 import datetime
 import re
 import os
+import json
 from django.db import models
 from django.db import transaction
 from django.conf import settings
@@ -59,6 +60,9 @@ class LotManager(models.Manager):
                 new_lot.alias = alias
                 new_lot.num = num
                 new_lot.save()
+
+                LotGallery.objects.update_gallery(new_lot, json.loads(cleaned_data['image_filenames']))
+
                 return True, None
         except Exception as err:
             return False, err
@@ -83,6 +87,9 @@ class LotManager(models.Manager):
                 )
                 upd_lot.save(update_fields=['name','product','price','currency','main_description','active','best',
                                             'new_prod_state','upd_date','manuf_year'])
+
+                LotGallery.objects.update_gallery(upd_lot, json.loads(cleaned_data['image_filenames']))
+
                 return True, None
         except Exception as err:
             return False, err
@@ -263,8 +270,28 @@ class LotGalleryManager(models.Manager):
             for chunk in image.chunks():
                 destination.write(chunk)
 
-    def remove_image(self, cleaned_data):
-        pass
+    def update_gallery(self, lot, images):
+        for image in images:
+            if image['status'] == 'added':
+                self.move_image_from_tmp(image['filename'])
+                if self.filter(lot=lot, num=image['num']).exists():
+                    lot_gallery = self.get(lot=lot, num=image['num'])
+                    lot_gallery.image = image['filename']
+                    lot_gallery.save(update_fields=['image'])
+                else:
+                    lot_gallery = LotGallery(
+                        lot=lot,
+                        num=image['num'],
+                        image=image['filename'],
+                        sorting=image['num'],
+                        active=True
+                    )
+                    lot_gallery.save()
+
+    def move_image_from_tmp(self, filename):
+        os.rename("path/to/current/file.foo", "path/to/new/destination/for/file.foo")
+
+
 
 
 class LotGallery(models.Model):

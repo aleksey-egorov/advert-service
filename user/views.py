@@ -195,7 +195,6 @@ class LotImageDelView(View):
     def post(self, request):
         del_form = LotImageDelForm(request.POST, request.FILES)
         if del_form.is_valid():
-            LotGallery.objects.remove_image(del_form.cleaned_data)
             image_form = LotImageUploadForm()
             image_form.set_initial(status='deleted', num=del_form.cleaned_data['num'])
 
