@@ -94,6 +94,10 @@ form.common .btn {
     display:block;
     width:100%;
 }
+form.common .cont {
+    clear:both;
+    margin-top:3px;
+}
 
 form.common .form_ul{
     list-style: none;

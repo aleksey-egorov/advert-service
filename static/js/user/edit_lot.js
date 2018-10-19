@@ -1,5 +1,5 @@
 function updateLotImage(key, id, result) {
-    $('#' + key + '_' + id).html(result);
+    $('#' + key + '_' + id).html(result).addClass('changed');
     var Timer=window.setTimeout(function() {
         Upload.initFileUpload(key, id, updateLotImage, delLotImage);
     },500);
@@ -12,7 +12,7 @@ function delLotImage(key, id) {
             type: 'post',
             data: params,
             success: function (data, textStatus) {
-                  $('#' + key + '_' + id).html(data);
+                  $('#' + key + '_' + id).html(data).addClass('changed');
                   var Timer=window.setTimeout(function() {
                         Upload.initFileUpload(key, id, updateLotImage, delLotImage);
                   },500);
@@ -81,12 +81,21 @@ $("#delete_button").click(function(e) {
 });
 
 
-$("#add_lot_form").submit(function(e) {
+$("#edit_lot_form").submit(function(e) {
+    // e.preventDefault();
      $("#id_brand").val($("#id_brand").attr("data-id"));
      $("#id_product").val($("#id_product").attr("data-id"));
+     var images = [];
+     $("#gallery_content .photo_wrap.changed form").each(function() {
+         var num = $(this).find('input[name=num]').val();
+         var filename = $(this).find('input[name=filename]').val();
+         var status = $(this).find('input[name=status]').val();
+         images.push({'num': num, 'filename': filename, 'status': status});
+     });
+     $("#id_image_filenames").val(JSON.stringify(images));
 });
 
-$("#add_lot_container select").select2({
+$("#edit_lot_container select").select2({
         minimumResultsForSearch: Infinity,
         placeholder: "Все"
     });

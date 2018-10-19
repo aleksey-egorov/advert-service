@@ -68,13 +68,10 @@ class LotEditForm(forms.Form):
         self.fields['category'].initial = categories[0]
         self.fields['active'].initial = lot.active
         self.fields['best'].initial = lot.best
-
         self.fields['price'].initial = lot.price
         self.fields['currency'].initial = lot.currency.id
-
         self.fields['state'].initial = state
         self.fields['manuf_year'].initial = lot.manuf_year
-
         self.fields['main_description'].initial = lot.main_description
 
     name = forms.CharField(label='Название лота')
@@ -86,6 +83,8 @@ class LotEditForm(forms.Form):
     brand_id = forms.CharField(widget=forms.HiddenInput, required=False)
     product = forms.CharField(label='Модель')
     product_id = forms.CharField(widget=forms.HiddenInput, required=False)
+    # TODO: replace brand and product with custom widget
+
     active = forms.BooleanField(label='Лот активен', required=False)
     best = forms.BooleanField(label='В списке лучших', required=False)
 
@@ -97,27 +96,30 @@ class LotEditForm(forms.Form):
     manuf_year = forms.IntegerField(label='Год выпуска')
 
     main_description = forms.CharField(label='Описание', widget=forms.Textarea)
+    image_filenames = forms.CharField(widget=forms.HiddenInput)
 
     #TODO: extra fields and form validation
 
 
 class LotImageUploadForm(forms.Form):
 
-    def set_initial(self, num):
+    def set_initial(self, status, num):
         self.fields['num'].initial = num
+        self.fields['status'].initial = status
 
     num = forms.CharField(widget=forms.HiddenInput, required=True)
     image = forms.ImageField(label=None)
+    status = forms.CharField(widget=forms.HiddenInput, required=True)
 
 
 class LotImageDelForm(forms.Form):
 
-    def set_initial(self, imtype, num, filename=None):
+    def set_initial(self, status, num, filename=None):
         self.fields['num'].initial = num
-        self.fields['imtype'].initial = imtype
+        self.fields['status'].initial = status
         if not filename == None:
             self.fields['filename'].initial = filename
 
     num = forms.CharField(widget=forms.HiddenInput, required=True)
     filename = forms.CharField(widget=forms.HiddenInput, required=False)
-    imtype = forms.CharField(widget=forms.HiddenInput, required=True)
+    status = forms.CharField(widget=forms.HiddenInput, required=True)

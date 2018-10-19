@@ -5,17 +5,18 @@
 {% load static %}
 <link rel="stylesheet" type="text/css" href="{% static 'css/user/add_lot.css' %}" />
 
-<div id="add_lot_container" class="">
+<div id="edit_lot_container" class="">
         <h1>Редактирование лота</h1>
         <div class="inline">
             <div id="lot_content" class="left w50">
 
-                <form method="post" class="common l200" action="/user/lot/edit/{{ lot_id }}/" enctype="multipart/form-data" id="add_lot_form">
+                <form method="post" class="common l200" action="/user/lot/edit/{{ lot_id }}/" enctype="multipart/form-data" id="edit_lot_form">
+                    {% csrf_token %}
+                    {{ form.product_id }}
+                    {{ form.brand_id }}
+                    {{ form.image_filenames }}
 
                     <div class="cont">
-                        {% csrf_token %}
-                        {{ form.product_id }}
-                        {{ form.brand_id }}
                         <h3>Общая информация</h3>
                         <ul class="form_ul">
                             <li><label for="{{ form.name.id_for_label }}">{{ form.name.label }}:</label>

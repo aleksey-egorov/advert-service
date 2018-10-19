@@ -246,14 +246,14 @@ class LotGalleryManager(models.Manager):
             gallery_images = self.filter(lot=lot)
             for im in gallery_images:
                 del_form = delete_form()
-                del_form.set_initial(imtype='lot', num=im.num)
+                del_form.set_initial(num=im.num, status='old')
                 lot_gallery.append({'im': im, 'form': del_form})
             begin = len(lot_gallery)
 
         empty_images = []
         for i in range(total_images)[begin:]:
             image_form = upload_form()
-            image_form.set_initial(num=i)
+            image_form.set_initial(num=i, status='empty')
             empty_images.append({'num': i, 'form': image_form})
         return lot_gallery, empty_images
 

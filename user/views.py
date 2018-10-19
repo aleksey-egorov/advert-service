@@ -183,7 +183,7 @@ class LotImageAddView(View):
         if image_form.is_valid():
             LotGallery.objects.save_tmp_image(image_form.cleaned_data['image'])
             del_form = LotImageDelForm()
-            del_form.set_initial(imtype='tmp', num=image_form.cleaned_data['num'], filename=image_form.cleaned_data['image'])
+            del_form.set_initial(status='added', num=image_form.cleaned_data['num'], filename=image_form.cleaned_data['image'])
 
             return render(request, "user/lot_image.html", {
                 "image_form": image_form,
@@ -197,7 +197,7 @@ class LotImageDelView(View):
         if del_form.is_valid():
             LotGallery.objects.remove_image(del_form.cleaned_data)
             image_form = LotImageUploadForm()
-            image_form.set_initial(num=del_form.cleaned_data['num'])
+            image_form.set_initial(status='deleted', num=del_form.cleaned_data['num'])
 
             return render(request, "user/lot_image_empty.html", {
                 "image_form": image_form
