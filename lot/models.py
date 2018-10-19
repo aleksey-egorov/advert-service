@@ -1,7 +1,9 @@
 import datetime
 import re
+import os
 from django.db import models
 from django.db import transaction
+from django.conf import settings
 
 from product.models import Product, Category, Group
 from brand.models import Brand
@@ -233,12 +235,23 @@ class Lot(models.Model):
                     cat_conn.category.add(ct)
 
 
+class LotGalleryManager(models.Manager):
+
+    def save_tmp_image(self, image):
+        filepath = os.path.join(settings.MEDIA_ROOT, 'lots', 'tmp', image.name )
+        with open(filepath, 'wb+') as destination:
+            for chunk in image.chunks():
+                destination.write(chunk)
+
+
 class LotGallery(models.Model):
     lot = models.ForeignKey(Lot, on_delete=models.CASCADE, null=True, blank=True)
     num = models.IntegerField('Номер', null=True, blank=True)
     image = models.ImageField('Фото', null=True, blank=True, upload_to='lots/')
     sorting = models.IntegerField('Сортировка', null=True, blank=True)
     active = models.BooleanField('Активность', default=True, null=True, blank=True)
+
+    objects = LotGalleryManager()
 
 
 

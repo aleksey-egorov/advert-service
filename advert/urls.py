@@ -20,7 +20,7 @@ from django.conf.urls import url
 
 from main.models import Menu
 from user.views import RegisterView, RegisterDoneView, ProfileView, LotAddView, LotAddDoneView, UserLotsView
-from user.views import LotEditView, LotEditDoneView, LotImageAddView
+from user.views import LotEditView, LotEditDoneView, LotImageAddView, LotImageDelView
 from main.views import MainView, SearchView
 from lot.views import CatalogLotsView, CatalogLotsListView, LotView
 from product.views import CatalogGroupsListView
@@ -53,6 +53,7 @@ urlpatterns = [
     path('user/lot/edit/<int:id>/', LotEditView.as_view()),
     path('user/lot/edit/done/', LotEditDoneView.as_view()),
     path('user/lot/image/add/', LotImageAddView.as_view()),
+    path('user/lot/image/del/', LotImageDelView.as_view()),
     path('user/lots/', UserLotsView.as_view()),
 
     # Autocomplete URLs

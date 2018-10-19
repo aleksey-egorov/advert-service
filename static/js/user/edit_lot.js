@@ -1,8 +1,28 @@
 function updateLotImage(key, id, result) {
-    alert('key=' + key);
-    alert('id=' + id);
-    alert('result=' + result);
     $('#' + key + '_' + id).html(result);
+    var Timer=window.setTimeout(function() {
+        Upload.initFileUpload(key, id, updatePreloadImage, delPreloadImage);
+    },500);
+}
+
+
+function updatePreloadImage(key, id) {
+    alert('upd key=' + key);
+    alert('id=' + id);
+}
+
+function delPreloadImage(key, id) {
+    var params = $('#' + key + '_' + id).find(".del_form").serialize();
+    $.ajax({
+            url: '/user/lot/image/del/',
+            type: 'post',
+            data: params,
+            success: function (data, textStatus) {
+                alert(data);
+                //$('#uploaded-file-userphoto-0').val('');
+                // Register.updateUserPreloadPhoto();
+            }
+    });
 }
 
 
@@ -48,7 +68,6 @@ $("#id_product").autocomplete({
                 },
                 response: function (event, ui) {
                     var load = ui.content.length;
-
                     //Form.makeCleanField($('#brand'));
 
                     if (load == 0) {

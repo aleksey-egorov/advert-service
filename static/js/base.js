@@ -121,13 +121,11 @@ Upload={
     files:[],
     initFileUpload: function(key, id, add_func, del_func) {
 
-        var file={};
-        var that=file;
-
-        that.add_func = add_func;
-        that.del_func = del_func;
-        that.fileId = id;
-        that.key = key;
+        var file = {};
+        file.add_func = add_func;
+        file.del_func = del_func;
+        file.fileId = id;
+        file.key = key;
 
         $('#'+key+'_'+id+' .upload').fileupload({
 
@@ -150,14 +148,15 @@ Upload={
 
                 // Автоматически загружаем файл при добавлении в очередь
                 var jqXHR = data.submit().success(function (result, textStatus, jqXHR) {
-                    var File = '';
+                    //var File = '';
                     //alert(result);
 
-                    if ($('#uploaded-file-'+key+'-'+id)) {
-                        $('#uploaded-file-'+key+'-'+id).val(File['filename']);
-                    }
-                    if (typeof(that.add_func) != 'undefined') {
-                        that.add_func(that.key, that.fileId, result);
+                    //if ($('#uploaded-file-'+key+'-'+id)) {
+                    //    $('#uploaded-file-'+key+'-'+id).val(File['filename']);
+                    //}
+
+                    if (typeof(file.add_func) != 'undefined') {
+                        file.add_func(file.key, file.fileId, result);
                     }
                 });
 
@@ -184,19 +183,18 @@ Upload={
 
         });
 
-        Upload.files[file.fileId]=file;
+        Upload.files[file.fileId] = file;
         Upload.initDelButton(file);
         Upload.initAddButton(file);
     },
 
     initDelButton: function(file) {
-        $('#'+file.key+'-'+file.fileId+' .del .delete').click(function (e) {
+        $('#' + file.key + '_' + file.fileId + ' .del .delete').click(function (e) {
             e.preventDefault();
-
-            if (typeof(file.del_func)!='undefined') {
-                file.del_func(file.key,file.fileId);
+            if (typeof(file.del_func) != 'undefined') {
+                file.del_func(file.key, file.fileId);
             }
-            Upload.files[file.fileId]=null;
+            Upload.files[file.fileId] = null;
         });
     },
 
@@ -204,7 +202,7 @@ Upload={
         $('#' + file.key + '_' + file.fileId + ' .add .addb').click(function (e) {
             if (!$(this).hasClass('disabled')) {
                 e.preventDefault();
-                $(this).parent().parent().find('.file').click();
+                $(this).parent().parent().find('input[type=file]').click();
             }
         })
     },

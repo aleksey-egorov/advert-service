@@ -99,3 +99,21 @@ class LotEditForm(forms.Form):
     main_description = forms.CharField(label='Описание', widget=forms.Textarea)
 
     #TODO: extra fields and form validation
+
+
+class LotImageUploadForm(forms.Form):
+
+    def set_initial(self, id):
+        self.fields['num'].initial = id
+
+    num = forms.CharField(widget=forms.HiddenInput, required=True)
+    image = forms.ImageField(label=None)
+
+
+class LotImageDelForm(forms.Form):
+
+    #def set_initial(self, id):
+    #    self.fields['num'].initial = id
+
+    num = forms.CharField(widget=forms.HiddenInput, required=True)
+    filename = forms.CharField(label=None)

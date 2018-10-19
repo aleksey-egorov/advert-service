@@ -10,7 +10,7 @@ from main.models import Menu
 from user.models import User
 from lot.models import Lot, LotGallery
 from utils.mailer import Mailer
-from user.forms import RegisterForm, UserForm, LotAddForm, LotEditForm
+from user.forms import RegisterForm, UserForm, LotAddForm, LotEditForm, LotImageUploadForm, LotImageDelForm
 
 # Create your views here.
 
@@ -125,17 +125,23 @@ class LotEditView(View):
     def get(self, request, id):
         lot = get_object_or_404(Lot, id=id)
         if lot.author == request.user:
-            lot_gallery = LotGallery.objects.filter(lot=lot)
-            empty_images = [5,6,7,8,9,10,11,12]
+            form_main = LotEditForm()
+            form_main.set_options(id)
 
-            form = LotEditForm()
-            form.set_options(id)
+            total_images = 12
+            lot_gallery = LotGallery.objects.filter(lot=lot)
+            begin = len(lot_gallery)
+            empty_images = []
+            for i in range(total_images)[begin:]:
+                image_form = LotImageUploadForm()
+                image_form.set_initial(i)
+                empty_images.append({'num': i, 'form': image_form})
 
             return render(request, "user/edit_lot.html", {
                 "lot_id": lot.id,
                 "lot_gallery": lot_gallery,
                 "empty_images": empty_images,
-                "form": form,
+                "form": form_main,
                 "menu": Menu.get_main_menu()
             })
 
@@ -180,7 +186,24 @@ class UserLotsView(View):
 
 class LotImageAddView(View):
     def post(self, request):
-        return render(request, "user/lot_image.html", {
-            "request": request,
-            "menu": Menu.get_main_menu()
-        })
+        image_form = LotImageUploadForm(request.POST, request.FILES)
+        if image_form.is_valid():
+            LotGallery.objects.save_tmp_image(image_form.cleaned_data['image'])
+           # del_form = LotImageDelForm()
+
+            return render(request, "user/lot_image.html", {
+                "image_form": image_form,
+                #"del_form": del_form,
+                "menu": Menu.get_main_menu()
+            })
+
+
+class LotImageDelView(View):
+    def post(self, request):
+        pass
+        #LotGallery.objects.remove_image(cleaned_data['image'])
+
+        #    return render(request, "user/lot_image.html", {
+        #        "form": image_form,
+        #        "menu": Menu.get_main_menu()
+        #    })

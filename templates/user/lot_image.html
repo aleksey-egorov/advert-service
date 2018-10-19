@@ -1,5 +1,8 @@
-<div class="photo" data-type="user" style="background-image:url('/media/{{ im.image }}');background-repeat:no-repeat;background-position:center center;background-size:cover;">
+<div class="photo" data-type="tmp" data-image="{{ image_form.image.value }}" style="background-image:url('/media/lots/tmp/{{ image_form.image.value }}');background-repeat:no-repeat;background-position:center center;background-size:cover;">
           <div class="del-layer"><a href="/" class="colorbox"></a></div>
-          <div class="act"><button data-id="{{ im.num }}" class="actb" >Деактивировать</button></div>
           <div class="del"><button class="delete" >Удалить</button></div>
+          <form method="post" action="/user/log/image/del/" class="del_form">
+                {% csrf_token %}
+                {{ empty.form }}
+          </form>
 </div>
