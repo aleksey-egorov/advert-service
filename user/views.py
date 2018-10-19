@@ -128,14 +128,7 @@ class LotEditView(View):
             form_main = LotEditForm()
             form_main.set_options(id)
 
-            total_images = 12
-            lot_gallery = LotGallery.objects.filter(lot=lot)
-            begin = len(lot_gallery)
-            empty_images = []
-            for i in range(total_images)[begin:]:
-                image_form = LotImageUploadForm()
-                image_form.set_initial(i)
-                empty_images.append({'num': i, 'form': image_form})
+            lot_gallery, empty_images = LotGallery.objects.get_images_forms(lot, LotImageUploadForm, LotImageDelForm)
 
             return render(request, "user/edit_lot.html", {
                 "lot_id": lot.id,
@@ -189,21 +182,23 @@ class LotImageAddView(View):
         image_form = LotImageUploadForm(request.POST, request.FILES)
         if image_form.is_valid():
             LotGallery.objects.save_tmp_image(image_form.cleaned_data['image'])
-           # del_form = LotImageDelForm()
+            del_form = LotImageDelForm()
+            del_form.set_initial(imtype='tmp', num=image_form.cleaned_data['num'], filename=image_form.cleaned_data['image'])
 
             return render(request, "user/lot_image.html", {
                 "image_form": image_form,
-                #"del_form": del_form,
-                "menu": Menu.get_main_menu()
+                "del_form": del_form
             })
 
 
 class LotImageDelView(View):
     def post(self, request):
-        pass
-        #LotGallery.objects.remove_image(cleaned_data['image'])
+        del_form = LotImageDelForm(request.POST, request.FILES)
+        if del_form.is_valid():
+            LotGallery.objects.remove_image(del_form.cleaned_data)
+            image_form = LotImageUploadForm()
+            image_form.set_initial(num=del_form.cleaned_data['num'])
 
-        #    return render(request, "user/lot_image.html", {
-        #        "form": image_form,
-        #        "menu": Menu.get_main_menu()
-        #    })
+            return render(request, "user/lot_image_empty.html", {
+                "image_form": image_form
+            })

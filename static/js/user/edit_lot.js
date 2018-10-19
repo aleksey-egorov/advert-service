@@ -1,26 +1,21 @@
 function updateLotImage(key, id, result) {
     $('#' + key + '_' + id).html(result);
     var Timer=window.setTimeout(function() {
-        Upload.initFileUpload(key, id, updatePreloadImage, delPreloadImage);
+        Upload.initFileUpload(key, id, updateLotImage, delLotImage);
     },500);
 }
 
-
-function updatePreloadImage(key, id) {
-    alert('upd key=' + key);
-    alert('id=' + id);
-}
-
-function delPreloadImage(key, id) {
+function delLotImage(key, id) {
     var params = $('#' + key + '_' + id).find(".del_form").serialize();
     $.ajax({
             url: '/user/lot/image/del/',
             type: 'post',
             data: params,
             success: function (data, textStatus) {
-                alert(data);
-                //$('#uploaded-file-userphoto-0').val('');
-                // Register.updateUserPreloadPhoto();
+                  $('#' + key + '_' + id).html(data);
+                  var Timer=window.setTimeout(function() {
+                        Upload.initFileUpload(key, id, updateLotImage, delLotImage);
+                  },500);
             }
     });
 }
@@ -104,8 +99,8 @@ $("#id_product_id").val("");
 
 
 var Timer=window.setTimeout(function() {
-   for(i=1;i<=12;i++) {
-        Upload.initFileUpload('userphoto', i, updateLotImage);
+   for(i=0;i<12;i++) {
+        Upload.initFileUpload('userphoto', i, updateLotImage, delLotImage);
    }
 },1000);
 

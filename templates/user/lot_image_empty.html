@@ -1,0 +1,9 @@
+<div class="photo empty">
+    <div class="add-layer">
+        <form class="upload" method="post" action="/user/lot/image/add/" enctype="multipart/form-data">
+           {% csrf_token %}
+           {{ image_form }}
+        </form>
+    </div>
+    <div class="add"><button class="addb" >Добавить</button></div>
+</div>

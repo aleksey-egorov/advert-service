@@ -103,8 +103,8 @@ class LotEditForm(forms.Form):
 
 class LotImageUploadForm(forms.Form):
 
-    def set_initial(self, id):
-        self.fields['num'].initial = id
+    def set_initial(self, num):
+        self.fields['num'].initial = num
 
     num = forms.CharField(widget=forms.HiddenInput, required=True)
     image = forms.ImageField(label=None)
@@ -112,8 +112,12 @@ class LotImageUploadForm(forms.Form):
 
 class LotImageDelForm(forms.Form):
 
-    #def set_initial(self, id):
-    #    self.fields['num'].initial = id
+    def set_initial(self, imtype, num, filename=None):
+        self.fields['num'].initial = num
+        self.fields['imtype'].initial = imtype
+        if not filename == None:
+            self.fields['filename'].initial = filename
 
     num = forms.CharField(widget=forms.HiddenInput, required=True)
-    filename = forms.CharField(label=None)
+    filename = forms.CharField(widget=forms.HiddenInput, required=False)
+    imtype = forms.CharField(widget=forms.HiddenInput, required=True)

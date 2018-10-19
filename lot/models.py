@@ -10,6 +10,7 @@ from brand.models import Brand
 from supplier.models import Supplier
 from user.models import User
 
+
 # Create your models here.
 
 class Currency(models.Model):
@@ -237,11 +238,33 @@ class Lot(models.Model):
 
 class LotGalleryManager(models.Manager):
 
+    def get_images_forms(self, lot, upload_form, delete_form):
+        total_images = 12
+        lot_gallery = []
+        begin = 0
+        if not lot == None:
+            gallery_images = self.filter(lot=lot)
+            for im in gallery_images:
+                del_form = delete_form()
+                del_form.set_initial(imtype='lot', num=im.num)
+                lot_gallery.append({'im': im, 'form': del_form})
+            begin = len(lot_gallery)
+
+        empty_images = []
+        for i in range(total_images)[begin:]:
+            image_form = upload_form()
+            image_form.set_initial(num=i)
+            empty_images.append({'num': i, 'form': image_form})
+        return lot_gallery, empty_images
+
     def save_tmp_image(self, image):
         filepath = os.path.join(settings.MEDIA_ROOT, 'lots', 'tmp', image.name )
         with open(filepath, 'wb+') as destination:
             for chunk in image.chunks():
                 destination.write(chunk)
+
+    def remove_image(self, cleaned_data):
+        pass
 
 
 class LotGallery(models.Model):
