@@ -16,6 +16,7 @@
 #add_lot_container .form_ul textarea, #edit_lot_container .form_ul textarea {
     width:588px;
     margin-top:5px;
+    border:1px solid #ccc;
 }
 
 

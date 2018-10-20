@@ -22,19 +22,24 @@ UserLot = {
     },
 
     init: function () {
+        var category = $("#id_category");
+        var brand = $('#id_brand');
+        var product = $('#id_product');
 
-        $("#id_category").change(function () {
-            $('#id_brand').autocomplete({source: "/autocomplete/brand/?category=" + $('#id_category').val()});
+        category.change(function () {
+            brand.autocomplete({source: "/autocomplete/brand/?category=" + category.val()});
+            brand.val('').attr("data-id", 0);
+            product.val('').attr("data-id", 0);
         });
 
-        $("#id_brand").autocomplete({
+        brand.autocomplete({
             source: "/autocomplete/brand/",
             minLength: 0,
             mustMatch: true,
             select: function (event, ui) {
-                $('#id_brand').attr("data-id", ui.item.id);
-                $('#id_product').autocomplete({source: "/autocomplete/brand/?category=" + $('#id_category').val()});
-                $('#id_product').val('').attr("data-id", 0);
+                brand.attr("data-id", ui.item.id);
+                product.autocomplete({source: "/autocomplete/product/?category=" + category.val() + "&brand=" + brand.val()});
+                product.val('').attr("data-id", 0);
             },
             response: function (event, ui) {
                 var load = ui.content.length;
@@ -49,17 +54,12 @@ UserLot = {
             }
         });
 
-        $("#id_product").autocomplete({
+        product.autocomplete({
             source: "/autocomplete/product/",
             minLength: 0,
             mustMatch: true,
             select: function (event, ui) {
-                $('#id_product').attr("data-id", ui.item.id);
-
-                //$('#model').autocomplete({source: "/ajax_get/?route=lot/get-models&section=" + $('#section').val() + "&brand=" + $('#brand-id').val()});
-                //$('#model').val('');
-                //$('#model-id').val(0);
-                //$('#model-id').change();
+                product.attr("data-id", ui.item.id);
             },
             response: function (event, ui) {
                 var load = ui.content.length;

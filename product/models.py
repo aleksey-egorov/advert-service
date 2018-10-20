@@ -1,6 +1,8 @@
+import datetime
 from django.db import models
+from django.db import transaction
 
-from brand.models import Brand
+from brand.models import Brand, BrandGroupConn
 
 # Create your models here.
 
@@ -44,3 +46,24 @@ class Product(models.Model):
     upd_date = models.DateTimeField('Дата последнего обновления', default=None)
     main_image = models.ImageField('Главное фото', null=True, blank=True, upload_to='products/')
     active = models.BooleanField('Активность', default=False, null=True, blank=True)
+
+    def save(self, *args, **kwargs):
+        old_group = Product.objects.get(id=self.id).group
+        super().save(*args, **kwargs)
+        self._update_conns(old_group=old_group)
+
+    def delete(self, *args, **kwargs):
+        old_group = Product.objects.get(id=self.id).group
+        super().delete(*args, **kwargs)
+        self._update_conns(old_group=old_group)
+
+    def _update_conns(self, old_group):
+        self._update_brandgroup_conn(old_group=old_group)
+        #self._update_brandcategory_conn()
+
+    def _update_brandgroup_conn(self, old_group):
+        for some_group in (self.group, old_group):
+            if Product.objects.filter(active=True, brand=self.brand, group=some_group).exists():
+                BrandGroupConn.objects.update_conn(self.brand, some_group)
+            else:
+                BrandGroupConn.objects.delete_conn(self.brand, some_group)
