@@ -1,11 +1,25 @@
-#add_lot_container .cont {
+#add_lot_container .cont, #edit_lot_container .cont {
     clear:both;
+    margin-top:3px;
 }
 
-#add_lot_container .form_ul {
+#add_lot_container .form_ul, #edit_lot_container .form_ul {
     padding-bottom:10px;
     padding-top:10px;
 }
+
+#add_lot_container .form_ul input[type=text], #edit_lot_container .form_ul input[type=text] {
+    width:400px;
+}
+
+
+#add_lot_container .form_ul textarea, #edit_lot_container .form_ul textarea {
+    width:588px;
+    margin-top:5px;
+}
+
+
+
 
 #lot_content {
 
@@ -16,7 +30,7 @@
 }
 
 #gallery {
-    margin-top:15px;
+    margin-top:10px;
     width:100%;
     min-height:525px;
 }

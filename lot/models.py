@@ -167,6 +167,9 @@ class Lot(models.Model):
     def state_name(self):
         return "Новый" if self.new_prod_state == True else "б/у"
 
+    def active_name(self):
+        return "Да" if self.active == True else "Нет"
+
     def price_formatted(self):
         return "{:,}".format(self.price).replace(",", " ") + " " + self.currency.name
 
@@ -276,6 +279,7 @@ class LotGalleryManager(models.Manager):
                 self._update_image(lot, image['num'], image['filename'])
             elif image['status'] == 'deleted':
                 self._delete_image(lot, image['num'])
+        self._update_main_image(lot)
 
     def _update_image(self, lot, num, filename):
         if self.filter(lot=lot, num=num).exists():
@@ -301,6 +305,13 @@ class LotGalleryManager(models.Manager):
         if self.filter(lot=lot, num=num).exists():
             gallery = self.get(lot=lot, num=num)
             gallery.delete()
+
+    def _update_main_image(self, lot):
+        first_image = self.filter(lot=lot).order_by('sorting')[0]
+        if first_image.num >= 0:
+            image = self.get(lot=lot, num=first_image.num)
+            lot.main_image = image.image
+            lot.save(update_fields=['main_image'])
 
 
 class LotGallery(models.Model):

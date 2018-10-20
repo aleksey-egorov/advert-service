@@ -68,7 +68,8 @@ form.common label {
     width:150px;
     text-align: left;
     float:left;
-    padding-top:5px;
+    padding-top: 10px;
+    font-size: 0.9em;
 }
 
 form.common.l200 label {
@@ -78,26 +79,39 @@ form.common.l200 label {
 form.common input[type=text],
 form.common input[type=email],
 form.common input[type=password],
-form.common input[type=file] {
+form.common input[type=file],
+form.common input[type=number] {
     -moz-box-sizing: border-box;
     box-sizing: border-box;
      display: inline-block;
-    border: 1px solid #999;
+    border: 1px solid #ccc;
     float:left;
     margin-bottom: 10px;
+    height: 34px;
+    padding:0px 8px 0px 8px;
 }
+
+
+
+
 form.common input[type=file] {
     border:0px;
 }
+
+form.common input[type=checkbox] {
+    margin-top:8px;
+}
+
+form.common textarea {
+    padding: 6px;
+}
+
 form.common .btn {
     clear:both;
     display:block;
     width:100%;
 }
-form.common .cont {
-    clear:both;
-    margin-top:3px;
-}
+
 
 form.common .form_ul{
     list-style: none;
@@ -213,11 +227,6 @@ a.gray:hover {
 }
 
 
-input[type=text], input[type=password], input[type=email], input[type=number] {
-    height: 34px;
-    padding:0px 4px 0px 4px;
-    border: 1px solid #aaa;
-}
 
 .container {
     width:1300px;
