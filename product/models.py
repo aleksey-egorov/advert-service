@@ -2,7 +2,7 @@ import datetime
 from django.db import models
 from django.db import transaction
 
-from brand.models import Brand, BrandGroupConn
+from brand.models import Brand, BrandGroupConn, BrandCategoryConn
 
 # Create your models here.
 
@@ -13,6 +13,14 @@ class Category(models.Model):
     sorting = models.IntegerField('Сортировка')
     main_image = models.ImageField('Главное фото', null=True, blank=True, upload_to='products/')
     active = models.BooleanField('Активность', default=False, null=True, blank=True)
+
+    def has_products(self, brand):
+        groups = Group.objects.filter(active=True, category=self).all()
+        for group in groups:
+            if Product.objects.filter(active=True, brand=brand, group=group).exists():
+                return True
+        return False
+
 
 class Group(models.Model):
     name = models.CharField('Название', max_length=255)
@@ -59,7 +67,7 @@ class Product(models.Model):
 
     def _update_conns(self, old_group):
         self._update_brandgroup_conn(old_group=old_group)
-        #self._update_brandcategory_conn()
+        self._update_brandcategory_conn(old_group=old_group)
 
     def _update_brandgroup_conn(self, old_group):
         for some_group in (self.group, old_group):
@@ -67,3 +75,13 @@ class Product(models.Model):
                 BrandGroupConn.objects.update_conn(self.brand, some_group)
             else:
                 BrandGroupConn.objects.delete_conn(self.brand, some_group)
+
+    def _update_brandcategory_conn(self, old_group):
+        for some_group in (self.group, old_group):
+            categories = some_group.get_categories()
+            for categ_id in categories:
+                categ = Category.objects.get(id=categ_id)
+                if categ.has_products(self.brand):
+                    BrandCategoryConn.objects.update_conn(self.brand, categ)
+                else:
+                    BrandCategoryConn.objects.delete_conn(self.brand, categ)

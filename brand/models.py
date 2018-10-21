@@ -23,7 +23,6 @@ class BrandGroupConnManager(models.Manager):
     logger = logging.getLogger('advert.brand')
 
     def update_conn(self, brand, group):
-        self.logger.info("Add group {}".format(group))
         if self.filter(brand=brand).exists():
             with transaction.atomic():
                 conn = self.get(brand=brand)
@@ -38,14 +37,12 @@ class BrandGroupConnManager(models.Manager):
                 conn.group.add(group)
 
     def delete_conn(self, brand, group):
-        self.logger.info("Remove group {}".format(group))
         if self.filter(brand=brand).exists():
             with transaction.atomic():
                 conn = self.get(brand=brand)
                 conn.group.remove(group)
                 conn.last_update = datetime.datetime.now()
                 conn.save()
-
 
 
 class BrandGroupConn(models.Model):
@@ -56,10 +53,32 @@ class BrandGroupConn(models.Model):
     objects = BrandGroupConnManager()
 
 
+class BrandCategoryConnManager(models.Manager):
+    logger = logging.getLogger('advert.brand')
+
+    def update_conn(self, brand, category):
+        with transaction.atomic():
+            if self.filter(brand=brand).exists():
+                conn = self.get(brand=brand)
+            else:
+                conn = BrandCategoryConn(brand=brand)
+            conn.last_update = datetime.datetime.now()
+            conn.save()
+            conn.category.add(category)
+
+    def delete_conn(self, brand, category):
+        if self.filter(brand=brand).exists():
+            with transaction.atomic():
+                conn = self.get(brand=brand)
+                conn.category.remove(category)
+                conn.last_update = datetime.datetime.now()
+                conn.save()
+
+
 class BrandCategoryConn(models.Model):
     '''Связи с категориями определяются автоматически из принадлежащих бренду продуктов'''
     brand = models.ForeignKey(Brand, on_delete=models.CASCADE, null=True, blank=True)
     category = models.ManyToManyField('product.Category')
     last_update = models.DateTimeField('Дата последнего обновления', default=None, null=True, blank=True)
-
+    objects = BrandCategoryConnManager()
 
