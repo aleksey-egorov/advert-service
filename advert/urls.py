@@ -26,6 +26,7 @@ from lot.views import CatalogLotsView, CatalogLotsListView, LotView
 from product.views import CatalogGroupsListView
 from brand.views import BrandView
 from supplier.views import SupplierOrgView, SupplierView
+from article.views import ArticleView
 from acomp.views import BrandAcompView, ProductAcompView
 
 
@@ -40,6 +41,7 @@ urlpatterns = [
     path('brand/<str:alias>/', BrandView.as_view()),
     path('supplier/office/<str:alias>/', SupplierView.as_view()),
     path('supplier/<str:alias>/', SupplierOrgView.as_view()),
+    path('article/<str:alias>/', ArticleView.as_view()),
     path('search/', SearchView.as_view()),
 
     # User

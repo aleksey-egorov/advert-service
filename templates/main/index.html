@@ -63,7 +63,7 @@
                     <ul class="articles_ul">
                         {% for article in articles %}
                             <li>
-                                <div class="article_image" style="background-image:url('/media/{{ article.small_image }}');background-position:center center;background-size:cover;background-repeat:no-repeat;" alt="Article"></div>
+                                <a href="/article/{{ article.alias }}/"><div class="article_image" style="background-image:url('/media/{{ article.small_image }}');background-position:center center;background-size:cover;background-repeat:no-repeat;" alt="Article"></div></a>
                                 <div class="article_info">
                                     <p class="preview">{{ article.title }}</p>
                                     <a href="/article/{{ article.alias }}/" class="more-link">Подробнее</a>

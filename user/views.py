@@ -4,6 +4,7 @@ from django.http import HttpResponseRedirect
 from django.db import transaction
 from django.contrib.auth.hashers import make_password
 from django.views.generic import View
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import get_object_or_404
 
 from main.models import Menu
@@ -61,7 +62,7 @@ class RegisterDoneView(View):
         })
 
 
-class ProfileView(View):
+class ProfileView(LoginRequiredMixin, View):
 
     def get(self, request):
         return render(request, "user/profile.html", {
@@ -83,7 +84,7 @@ class ProfileView(View):
         })
 
 
-class LotAddView(View):
+class LotAddView(LoginRequiredMixin, View):
 
     def get(self, request):
         form = LotAddForm()
@@ -114,7 +115,7 @@ class LotAddView(View):
         })
 
 
-class LotAddDoneView(View):
+class LotAddDoneView(LoginRequiredMixin, View):
 
     def get(self, request):
         return render(request, "user/add_lot_done.html", {
@@ -122,7 +123,7 @@ class LotAddDoneView(View):
         })
 
 
-class LotEditView(View):
+class LotEditView(LoginRequiredMixin, View):
 
     def get(self, request, id):
         lot = get_object_or_404(Lot, id=id)
@@ -162,14 +163,14 @@ class LotEditView(View):
             })
 
 
-class LotEditDoneView(View):
+class LotEditDoneView(LoginRequiredMixin, View):
     def get(self, request):
         return render(request, "user/edit_lot_done.html", {
             "menu": Menu.get_main_menu()
         })
 
 
-class UserLotsView(View):
+class UserLotsView(LoginRequiredMixin, View):
     def get(self, request):
         lots = Lot.objects.filter(author=request.user).order_by('-add_date')
         return render(request, "user/lots.html", {
@@ -178,7 +179,7 @@ class UserLotsView(View):
         })
 
 
-class LotImageAddView(View):
+class LotImageAddView(LoginRequiredMixin, View):
     def post(self, request):
         image_form = LotImageUploadForm(request.POST, request.FILES)
         if image_form.is_valid():
@@ -192,7 +193,7 @@ class LotImageAddView(View):
             })
 
 
-class LotImageDelView(View):
+class LotImageDelView(LoginRequiredMixin, View):
     def post(self, request):
         del_form = LotImageDelForm(request.POST, request.FILES)
         if del_form.is_valid():

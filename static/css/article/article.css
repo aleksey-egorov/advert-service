@@ -1,0 +1,22 @@
+#article_image {
+    width:100%;
+    height: 400px;
+}
+
+#article_subhead {
+    height: 30px;
+}
+
+#article_subhead .date {
+    color:#aaa;
+    font-size:0.9em;
+}
+
+#article_content {
+    margin-top:20px;
+    font-size:0.9em;
+}
+
+#article_content ul {
+    padding-left:20px;
+}
