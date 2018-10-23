@@ -65,21 +65,25 @@ class RegisterDoneView(View):
 class ProfileView(LoginRequiredMixin, View):
 
     def get(self, request):
+        form = UserForm()
+        form.set_initial(request.user)
+
         return render(request, "user/profile.html", {
+            "form": form,
             "menu": Menu.get_main_menu()
         })
 
     def post(self, request):
-        user_form = UserForm(request.POST, request.FILES, instance=request.user)
-        if user_form.is_valid():
+        form = UserForm(request.POST, request.FILES, instance=request.user)
+        if form.is_valid():
             with transaction.atomic():
-                user_form.save()
+                form.save()
             message = 'Профиль пользователя обновлен'
         else:
             message = 'Ошибка при обновлении профиля'
 
         return render(request, "user/profile.html", {
-            "user_form": user_form,
+            "form": form,
             "message": message
         })
 

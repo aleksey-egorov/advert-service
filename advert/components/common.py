@@ -21,6 +21,7 @@ INSTALLED_APPS = [
     'supplier.apps.SupplierConfig',
     'product.apps.ProductConfig',
     'user.apps.UserConfig',
+    'geo.apps.GeoConfig',
     'main.apps.MainConfig',
 ]
 

@@ -7,10 +7,14 @@ from lot.models import Currency, Lot
 from brand.models import Brand
 
 
-class UserForm(forms.ModelForm):
-    class Meta:
-        model = User
-        fields = ('email','avatar',)
+class UserForm(forms.Form):
+
+    def set_initial(self, user):
+        self.fields['email'].initial = user.email
+
+    email = forms.EmailField(label='E-mail', max_length=200)
+    region = forms.ChoiceField(label='Регион')
+    avatar = forms.ImageField(label='Аватар')
 
 
 class RegisterForm(forms.Form):

@@ -18,10 +18,14 @@
                         </li>
 
                         <li>
-                            <label for="id_email">Email:</label>
-                            <input name="email" id="id_email" maxlength="200" required="" type="email" value="{{ user.email }}">
+                            <label for="{{ form.email.id_for_label }}">{{ form.email.label }}:</label>
+                                {{ form.email }}
                         </li>
-                          <li>
+                        <li>
+                            <label for="{{ form.region.id_for_label }}">{{ form.region.label }}:</label>
+                                {{ form.region }}
+                        </li>
+                        <li>
                             <label for="id_avatar">Аватар:</label>
                             <div class="rcon">
                                 <div class="avatar_check"><input name="avatar-clear" id="avatar-clear_id" type="checkbox"><span>Clear</span></div>
@@ -29,8 +33,6 @@
                                 <div class="avatar_field"><input name="avatar" id="id_avatar" accept="image/*"  type="file"></div>
                             </div>
                         </li>
-
-
 
                     </ul>
                     <div class="btn"><button type="submit">Обновить</button></div>
