@@ -7,7 +7,7 @@ from lot.models import Lot
 from article.models import Article
 from brand.models import Brand
 from supplier.models import SupplierOrg
-from main.models import Menu
+from main.models import Menu, Tag
 
 # Create your views here.
 
@@ -48,3 +48,23 @@ class SearchView(View):
             "query": query,
             "menu": Menu.get_main_menu()
         })
+
+
+class TagView(View):
+
+    def get(self, request, tag):
+        tag = str(tag).strip()
+        if Tag.objects.filter(name=tag).exists():
+            tag_elem = Tag.objects.get(name=tag)
+            articles = Article.objects.filter(active=True, tags=tag_elem).order_by('-date')[:20]
+            suppliers = SupplierOrg.objects.filter(active=True, tags=tag_elem).order_by('-rating')[:20]
+            brands = Brand.objects.filter(active=True, tags=tag_elem).order_by('-rating')[:20]
+
+            return render(request, "main/tag.html", {
+                "articles": articles,
+                "suppliers": suppliers,
+                "brands": brands,
+                "query": "tag:{}".format(tag),
+                "menu": Menu.get_main_menu(),
+                #"message": suppliers
+            })

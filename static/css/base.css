@@ -103,7 +103,7 @@ form.common input[type=checkbox] {
 }
 
 form.common textarea {
-    padding: 6px;
+    padding: 2%;
 }
 
 form.common .btn {
@@ -133,7 +133,7 @@ form.common .form_ul.full_width input[type=email] {
     width:100%;
 }
 form.common .form_ul.full_width textarea {
-    width:99.5%;
+    width:96%;
 }
 
 
@@ -299,6 +299,8 @@ table.common td{
     border:1px solid #ddd;
     height:34px;
     float:left;
+    padding-left:8px;
+    padding-right:8px;
 }
 
 #main_header .search #search_button {

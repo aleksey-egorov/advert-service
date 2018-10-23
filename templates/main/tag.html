@@ -1,0 +1,98 @@
+{% extends "base.html" %}questions_content
+
+{% block content %}
+
+{% load static %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/main/index.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'css/main/search.css' %}" />
+
+
+<div class="page_head">
+    <h1>Результаты поиска</h1>
+</div>
+
+
+{% if lots %}
+<div id="lots_wrap">
+    <h3>Лоты</h3>
+      <ul class="lots_list">
+                {% for lot in lots %}
+                    <li class="lot_li col5">
+                            <a href="/lot/{{ lot.alias }}/">
+                                <div class="lot_image" style="background-image:url('/media/{{ lot.main_image }}');background-repeat:no-repeat;background-position:center center;background-size:cover;"></div>
+                                <div class="lot_info">
+                                    <div class="lot_title">{{ lot.name }}</div>
+                                    <div class="lot_price_wrap">
+                                        <span class="price_tag"><b>{{ lot.state_name }}</b> {{ lot.price_formatted }}</span>
+                                    </div>
+                                </div>
+                            </a>
+                    </li>
+                {% endfor %}
+      </ul>
+</div>
+{% endif %}
+
+{% if suppliers %}
+<div id="suppliers_wrap">
+    <h3>Поставщики</h3>
+      <ul class="suppliers_ul">
+                {% for supplier in suppliers %}
+                    <li>
+                                <div class="supplier_logo" style="background-image:url('/media/{{ supplier.logo }}');background-position:center center;background-size:contain;background-repeat:no-repeat;" alt="{{ supplier.name }}"></div>
+                                <div class="supplier_info">
+                                    <p class="preview">{{ supplier.name }}</p>
+                                    <a href="/supplier/{{ supplier.alias }}/" class="more-link">Подробнее</a>
+                                </div>
+                    </li>
+                {% endfor %}
+      </ul>
+</div>
+{% endif %}
+
+
+{% if brands %}
+<div id="brands_wrap">
+    <h3>Бренды</h3>
+      <ul class="brands_ul">
+                {% for brand in brands %}
+                    <li>
+                                <div class="brand_logo" style="background-image:url('/media/{{ brand.logo }}');background-position:center center;background-size:contain;background-repeat:no-repeat;" alt="{{ brand.name }}"></div>
+                                <div class="brand_info">
+                                    <p class="preview">{{ brand.name }}</p>
+                                    <a href="/brand/{{ brand.alias }}/" class="more-link">Подробнее</a>
+                                </div>
+                    </li>
+                {% endfor %}
+      </ul>
+</div>
+{% endif %}
+
+
+{% if articles %}
+<div id="articles_wrap">
+    <h3>Статьи</h3>
+      <ul class="articles_ul">
+                {% for article in articles %}
+                    <li>
+                                <div class="article_image" style="background-image:url('/media/{{ article.small_image }}');background-position:center center;background-size:cover;background-repeat:no-repeat;" alt="Article"></div>
+                                <div class="article_info">
+                                    <p class="preview">{{ article.title }}</p>
+                                    <a href="/article/{{ article.alias }}/" class="more-link">Подробнее</a>
+                                </div>
+                    </li>
+                {% endfor %}
+      </ul>
+</div>
+{% endif %}
+
+
+
+
+{% if message %}
+    <p><strong>{{ message }}</strong></p>
+{% endif %}
+
+
+<script src="/static/js/search.js" type="text/javascript"></script>
+{% endblock content %}

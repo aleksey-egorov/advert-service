@@ -6,6 +6,10 @@
 
 }
 
+#products_content {
+    padding-left:20px;
+}
+
 #products_content ul {
     list-style: none;
     padding-top:10px;

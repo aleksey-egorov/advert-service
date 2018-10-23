@@ -14,6 +14,7 @@ class Brand(models.Model):
     description = models.TextField('Описание',  null=True, blank=True)
     logo = models.FileField('Лого', null=True, blank=True, upload_to='brands/')            # Используем FileField т.к. ImageField не работает с .svg
     #logo_sm = models.ImageField(null=True, blank=True, upload_to='brands/')               # TODO image validation
+    tags = models.ManyToManyField('main.Tag')
     active = models.BooleanField('Активность', default=False, null=True, blank=True)
 
 
@@ -44,7 +45,6 @@ class BrandGroupConnManager(models.Manager):
                 conn.last_update = datetime.datetime.now()
                 conn.save()
 
-
 class BrandGroupConn(models.Model):
     '''Связи с группами определяются автоматически из принадлежащих бренду продуктов'''
     brand = models.ForeignKey(Brand, on_delete=models.CASCADE, null=True, blank=True)
@@ -73,7 +73,6 @@ class BrandCategoryConnManager(models.Manager):
                 conn.category.remove(category)
                 conn.last_update = datetime.datetime.now()
                 conn.save()
-
 
 class BrandCategoryConn(models.Model):
     '''Связи с категориями определяются автоматически из принадлежащих бренду продуктов'''

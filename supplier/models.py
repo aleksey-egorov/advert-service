@@ -15,6 +15,7 @@ class Supplier(models.Model):
     rating = models.IntegerField('Рейтинг', null=True, blank=True)
     popular = models.BooleanField('Популярный', null=True, blank=True)
     active = models.BooleanField('Активность', default=False, null=True, blank=True)
+
     stat_lots_new = models.IntegerField('Статистика: новые лоты', null=True, blank=True)
     stat_lots_used = models.IntegerField('Статистика: б/у лоты', null=True, blank=True)
 
@@ -55,6 +56,7 @@ class SupplierOrg(models.Model):
     email = models.CharField('E-mail', max_length=60, null=True, blank=True)
     rating = models.IntegerField('Рейтинг', null=True, blank=True)
     popular = models.BooleanField('Популярный', null=True, blank=True)
+    tags = models.ManyToManyField('main.Tag')
     active = models.BooleanField('Активность', default=False, null=True, blank=True)
 
 
