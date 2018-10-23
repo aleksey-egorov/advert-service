@@ -20,3 +20,23 @@
 #article_content ul {
     padding-left:20px;
 }
+
+#article_bottom {
+    margin-top:20px;
+}
+
+#article_bottom .tags {
+    color:#aaa;
+    font-size:0.9em;
+}
+#article_bottom .tags a {
+    color:#aaa;
+    text-decoration:none;
+}
+
+#article_bottom .tags a:hover {
+    color: #f88a21;
+     text-decoration:underline;
+}
+
+

@@ -22,3 +22,8 @@ class Menu():
             }
             cat_list.append(cat_dict)
         return cat_list
+
+
+class Tag(models.Model):
+    name = models.CharField(max_length=60)
+

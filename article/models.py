@@ -10,4 +10,8 @@ class Article(models.Model):
     alias = models.CharField('Алиас', max_length=255, unique=True)
     small_image = models.ImageField(null=True, blank=True, upload_to='articles/')
     big_image = models.ImageField(null=True, blank=True, upload_to='articles/')
+    tags = models.ManyToManyField('main.Tag')
     active = models.BooleanField('Активность', default=False, null=True, blank=True)
+
+    def tag_list(self):
+        return ', '.join([tag.name for tag in self.tags.all()])

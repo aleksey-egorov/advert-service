@@ -307,11 +307,12 @@ class LotGalleryManager(models.Manager):
             gallery.delete()
 
     def _update_main_image(self, lot):
-        first_image = self.filter(lot=lot).order_by('sorting')[0]
-        if first_image.num >= 0:
-            image = self.get(lot=lot, num=first_image.num)
-            lot.main_image = image.image
-            lot.save(update_fields=['main_image'])
+        if self.filter(lot=lot).exists():
+            first_image = self.filter(lot=lot).order_by('sorting')[0]
+            if first_image.num >= 0:
+                image = self.get(lot=lot, num=first_image.num)
+                lot.main_image = image.image
+                lot.save(update_fields=['main_image'])
 
 
 class LotGallery(models.Model):

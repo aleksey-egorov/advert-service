@@ -21,6 +21,7 @@ INSTALLED_APPS = [
     'supplier.apps.SupplierConfig',
     'product.apps.ProductConfig',
     'user.apps.UserConfig',
+    'main.apps.MainConfig',
 ]
 
 AUTH_USER_MODEL = 'user.User'
@@ -109,3 +110,5 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 LOGOUT_REDIRECT_URL = '/'
 LOGIN_REDIRECT_URL = '/'
 LOGIN_URL = '/login/'
+
+
