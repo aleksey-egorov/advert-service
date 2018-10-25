@@ -175,7 +175,7 @@ class Lot(models.Model):
 
     @staticmethod
     def get_recommended(id):
-        # TODO recommendation system
+        # TODO: recommendation system
         lots = Lot.objects.filter(active=True).order_by('-pub_date')[:5]
         return lots
 
@@ -283,18 +283,20 @@ class LotGalleryManager(models.Manager):
 
     def _update_image(self, lot, num, filename):
         if self.filter(lot=lot, num=num).exists():
-            gallery = self.get(lot=lot, num=num)
-            gallery.image = os.path.join('lots', filename)
-            gallery.save(update_fields=['image'])
+            with transaction.atomic():
+                gallery = self.get(lot=lot, num=num)
+                gallery.image = os.path.join('lots', filename)
+                gallery.save(update_fields=['image'])
         else:
-            gallery = LotGallery(
-                lot=lot,
-                num=num,
-                image=os.path.join('lots', filename),
-                sorting=num,
-                active=True
-            )
-            gallery.save()
+            with transaction.atomic():
+                gallery = LotGallery(
+                    lot=lot,
+                    num=num,
+                    image=os.path.join('lots', filename),
+                    sorting=num,
+                    active=True
+                )
+                gallery.save()
 
     def _move_image_from_tmp(self, filename):
         tmppath = os.path.join(settings.MEDIA_ROOT, 'lots', 'tmp', filename)

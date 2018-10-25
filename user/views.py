@@ -1,8 +1,6 @@
 import datetime
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
-from django.db import transaction
-from django.contrib.auth.hashers import make_password
 from django.views.generic import View
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import get_object_or_404
@@ -12,6 +10,7 @@ from user.models import User
 from lot.models import Lot, LotGallery
 from utils.mailer import Mailer
 from user.forms import RegisterForm, UserForm, LotAddForm, LotEditForm, LotImageUploadForm, LotImageDelForm
+from user.models import User
 
 # Create your views here.
 
@@ -28,29 +27,19 @@ class RegisterView(View):
     def post(self, request):
         form = RegisterForm(request.POST, request.FILES)
         if form.is_valid():
-            # Creating user and profile
-            try:
-                with transaction.atomic():
-                    new_user = User(
-                                    username=form.cleaned_data['login'],
-                                    password=make_password(form.cleaned_data['password']),
-                                    email=form.cleaned_data['email'],
-                                    avatar=form.cleaned_data['avatar'],
-                                    reg_date=datetime.datetime.now()
-                                    )
-                    new_user.save()
-
+            new_user = User.add_user(form.cleaned_data)
+            if new_user:
                 Mailer().send(new_user.email, 'sign_up', context={"login": new_user.username})
                 return HttpResponseRedirect('/register/done/')
-            except Exception as error:
-                message = 'Ошибка при регистрации пользователя: ' + str(error) + str(form.cleaned_data)
+            else:
+                message = 'Ошибка при регистрации пользователя: ' + str(form.cleaned_data)
         else:
             message = 'Ошибка при регистрации пользователя, проверьте поля '
 
         return render(request, "user/register.html", {
             "form": form,
             "message": message,
-            #"trends": Trend.get_trends()
+            "menu": Menu.get_main_menu()
         })
 
 
@@ -75,10 +64,12 @@ class ProfileView(LoginRequiredMixin, View):
 
     def post(self, request):
         form = UserForm(request.POST, request.FILES, instance=request.user)
+        message = ''
         if form.is_valid():
-            with transaction.atomic():
-                form.save()
-            message = 'Профиль пользователя обновлен'
+            upd_user = User().update_user(request.user, form.cleaned_data)
+            if upd_user:
+                message = 'Профиль пользователя обновлен'
+                request.user.avatar = 'avatars/' + str(request.user.avatar)    # Корректируем путь к аватару, чтобы показать его сразу, без перезагрузки страницы
         else:
             message = 'Ошибка при обновлении профиля'
 

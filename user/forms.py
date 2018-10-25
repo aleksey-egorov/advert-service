@@ -5,16 +5,32 @@ from utils.form import FormHelper
 from product.models import Category, Product, Group
 from lot.models import Currency, Lot
 from brand.models import Brand
+from geo.models import Region
+from supplier.models import Supplier
 
 
-class UserForm(forms.Form):
+class UserForm(forms.ModelForm):
+
+    class Meta:
+        model = User
+        fields = ('avatar', )
 
     def set_initial(self, user):
+        self.fields['phone'].initial = user.phone
+        self.fields['region'].initial = user.region
         self.fields['email'].initial = user.email
+        self.fields['supplier'].initial = user.supplier.id
+        #self.fields['avatar'].initial = user.avatar
 
     email = forms.EmailField(label='E-mail', max_length=200)
-    region = forms.ChoiceField(label='Регион')
-    avatar = forms.ImageField(label='Аватар')
+    phone = forms.CharField(label='Телефон', max_length=16, required=False)
+    avatar = forms.ImageField(label='Аватар', required=False)
+
+    region_list = Region.objects.filter(active=True).all()
+    region = forms.ChoiceField(label='Регион', choices=FormHelper.make_options(region_list, option_all=False))
+
+    supplier_list = Supplier.objects.filter(active=True).all()
+    supplier = forms.ChoiceField(label='Поставщик', choices=FormHelper.make_options(supplier_list, option_all=True))
 
 
 class RegisterForm(forms.Form):

@@ -44,7 +44,7 @@ LOGGING = {
             'style': '{',
         },
         'simple': {
-            'format': '{levelname} {message}',
+            'format': '{levelname} {asctime} {message}',
             'style': '{',
         },
     },
@@ -54,6 +54,12 @@ LOGGING = {
             'class': 'logging.FileHandler',
             'filename': '/work/advert/debug.log',
             'formatter': 'simple'
+        },
+        'file_error': {
+            'level': 'ERROR',
+            'class': 'logging.FileHandler',
+            'filename': '/work/advert/error.log',
+            'formatter': 'verbose'
         },
         'file_info': {
             'level': 'INFO',
@@ -69,8 +75,7 @@ LOGGING = {
             'propagate': True,
         },
         'advert': {
-            'handlers': ['file_info'],
-            'level': 'INFO',
+            'handlers': ['file_info', 'file_error'],
             'propagate': True,
         },
     },

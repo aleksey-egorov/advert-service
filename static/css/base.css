@@ -517,6 +517,10 @@ table.common td{
     width:100%;
 }
 
+#message_block {
+    padding-top:20px;
+    clear:both;
+}
 
 
 #footer {

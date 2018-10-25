@@ -37,3 +37,10 @@
     clear:both;
 }
 
+#profile_container select {
+    width:247px;
+}
+
+#profile_container form.common input[type="checkbox"] {
+    margin-top: 0px;
+}
