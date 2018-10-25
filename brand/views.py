@@ -2,10 +2,10 @@ from django.shortcuts import render
 from django.views.generic import View
 from django.shortcuts import get_object_or_404
 
-from main.models import Menu
 from brand.models import Brand
 from product.models import Group, Product
 from brand.forms import BrandForm
+from utils.context import Context
 
 # Create your views here.
 
@@ -24,6 +24,6 @@ class BrandView(View):
             "brand": brand,
             "groups": groups,
             "popular_prods": popular_prods,
-            "menu": Menu.get_main_menu(),
+            "context": Context.get(request)
             #"message": "GROUPS={} ".format(groups)
         })

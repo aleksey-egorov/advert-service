@@ -3,12 +3,12 @@ from django.views.generic import View
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from django.shortcuts import get_object_or_404
 
-from main.models import Menu
 from lot.models import Lot
 from product.models import Category, Group
 from brand.models import Brand
 from lot.forms import FilterForm, ContactForm
 from utils.form import FormHelper
+from utils.context import Context
 
 # Create your views here.
 
@@ -32,7 +32,7 @@ class CatalogLotsView(View):
         return render(request, "lot/catalog.html", {
             "form": form,
             "lots": lot_list,
-            "menu": Menu.get_main_menu(),
+            "context": Context.get(request),
             "message": "PARAMS={} ".format(params)
         })
 
@@ -79,6 +79,6 @@ class LotView(View):
             "lot": lot,
             "form": form,
             "recommended_lots": recommended_lots,
-            "menu": Menu.get_main_menu(),
+            "context": Context.get(request)
             #"message": "PARAMS={} ".format(params)
         })

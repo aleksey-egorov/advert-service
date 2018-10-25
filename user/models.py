@@ -23,8 +23,7 @@ class User(AbstractUser):
     USERNAME_FIELD = 'username'
     REQUIRED_FIELDS = ['email']
 
-    @staticmethod
-    def add_user(cleaned_data):
+    def add_user(self, cleaned_data):
         with transaction.atomic():
             new_user = User(
                 username=cleaned_data['login'],
@@ -52,5 +51,5 @@ class User(AbstractUser):
                 return upd_user
         except Exception as err:
             self.logger.error(err)
-        #return True
+
 

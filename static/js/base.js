@@ -213,15 +213,16 @@ Upload={
 };
 
 
+Geo = {
+    initMap: function() {
+        var marker = 'dealer';
+        var canv = $('#map-canvas');
 
-function initMap () {
-        var marker='dealer';
+        var x = canv.attr('data-coord-x');
+        var y = canv.attr('data-coord-y');
+        var z = parseInt(canv.attr('data-zoom'));
 
-        var x=$('#map-canvas').attr('data-coord-x');
-        var y=$('#map-canvas').attr('data-coord-y');
-        var z=parseInt($('#map-canvas').attr('data-zoom'));
-
-        if (typeof(x)!='undefined') {
+        if (typeof(x) != 'undefined') {
             console.log('marker=' + marker + ' x=' + x + ' y=' + y + ' z=' + z);
 
             var myLatlng = new google.maps.LatLng(x, y);
@@ -236,4 +237,57 @@ function initMap () {
             map.setZoom(map.getZoom());
             console.log('end map');
         }
-}
+    },
+    setUserRegion: function(val) {
+        $.ajax({
+            url: '/acomp/session/',
+            type: 'get',
+            data: 'region=' + val,
+            success: function (data, textStatus) {
+
+            }
+        });
+    },
+    initRegionSelector: function() {
+        var reg_overlay = $('#region_reveal');
+        $("#region_selector").click(function() {
+             reg_overlay.reveal();
+        });
+
+        $.ajax({
+             url: '/acomp/region/list/',
+             type: 'get',
+             success: function (data, textStatus) {
+                 //$("#region_reveal .reveal_inner_inline").html(data);
+                 //data = data.replace(/&quot;/g, '"');
+                 var regions = data;
+                 var i = 0;
+                 var perColumn = Math.ceil(regions.length / 4);
+
+                 regions.forEach(function (item, j, arr) {
+                    if (i == 0) {
+                        ul = $('<ul class="list"/>')
+                    }
+                    ul.append('<li><a data-id="' + item.id + '" name="region">' + item.label + '</a></li>');
+                    i++;
+                    if (i % perColumn == 0) {
+                        $('#region_reveal .reveal_inner_inline').append(ul);
+                        i = 0;
+                    }
+                });
+                if (i > 0) {
+                    $("#region_reveal .reveal_inner_inline").append(ul);
+                }
+                $('#region_reveal .reveal_inner_inline ul.list a').click(function() {
+                    var val=$(this).attr('data-id');
+                    Geo.setUserRegion(val);
+                    $('#region_reveal').trigger('reveal:close');
+                });
+
+             }
+        });
+    }
+};
+
+
+

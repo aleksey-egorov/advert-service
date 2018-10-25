@@ -16,9 +16,8 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from django.contrib.auth import views as auth_views
-from django.conf.urls import url
+from django.conf.urls import url, include
 
-from main.models import Menu
 from user.views import RegisterView, RegisterDoneView, ProfileView, LotAddView, LotAddDoneView, UserLotsView
 from user.views import LotEditView, LotEditDoneView, LotImageAddView, LotImageDelView
 from main.views import MainView, SearchView, TagView
@@ -27,7 +26,8 @@ from product.views import CatalogGroupsListView
 from brand.views import BrandView
 from supplier.views import SupplierOrgView, SupplierView
 from article.views import ArticleView
-from acomp.views import BrandAcompView, ProductAcompView
+from utils.context import Context
+
 
 
 urlpatterns = [
@@ -48,7 +48,7 @@ urlpatterns = [
     # User
     path('register/done/', RegisterDoneView.as_view()),
     path('register/', RegisterView.as_view()),
-    path('login/', auth_views.LoginView.as_view(template_name='user/login.html', extra_context={"menu": Menu.get_main_menu()})),
+    path('login/', auth_views.LoginView.as_view(template_name='user/login.html', extra_context={"context": Context.get()})),
     path('logout/', auth_views.LogoutView.as_view()),
     path('user/profile/', ProfileView.as_view()),
     path('user/lot/add/', LotAddView.as_view()),
@@ -60,8 +60,7 @@ urlpatterns = [
     path('user/lots/', UserLotsView.as_view()),
 
     # Autocomplete URLs
-    path('autocomplete/brand/', BrandAcompView.as_view()),
-    path('autocomplete/product/', ProductAcompView.as_view()),
+    url(r'^acomp/', include('acomp.urls')),
 
     path('admin/', admin.site.urls),
     path('', MainView.as_view()),

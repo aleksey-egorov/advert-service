@@ -27,18 +27,18 @@ UserLot = {
         var product = $('#id_product');
 
         category.change(function () {
-            brand.autocomplete({source: "/autocomplete/brand/?category=" + category.val()});
+            brand.autocomplete({source: "/acomp/brand/?category=" + category.val()});
             brand.val('').attr("data-id", 0);
             product.val('').attr("data-id", 0);
         });
 
         brand.autocomplete({
-            source: "/autocomplete/brand/",
+            source: "/acomp/brand/",
             minLength: 0,
             mustMatch: true,
             select: function (event, ui) {
                 brand.attr("data-id", ui.item.id);
-                product.autocomplete({source: "/autocomplete/product/?category=" + category.val() + "&brand=" + brand.val()});
+                product.autocomplete({source: "/acomp/product/?category=" + category.val() + "&brand=" + brand.val()});
                 product.val('').attr("data-id", 0);
             },
             response: function (event, ui) {
@@ -55,7 +55,7 @@ UserLot = {
         });
 
         product.autocomplete({
-            source: "/autocomplete/product/",
+            source: "/acomp/product/",
             minLength: 0,
             mustMatch: true,
             select: function (event, ui) {

@@ -7,7 +7,8 @@ from lot.models import Lot
 from article.models import Article
 from brand.models import Brand
 from supplier.models import SupplierOrg
-from main.models import Menu, Tag
+from main.models import Tag
+from utils.context import Context
 
 # Create your views here.
 
@@ -26,7 +27,7 @@ class MainView(View):
             "articles": articles,
             "brands": brands,
             "supplier_orgs": supplier_orgs,
-            "menu": Menu.get_main_menu()
+            "context": Context.get(request)
         })
 
 
@@ -46,7 +47,7 @@ class SearchView(View):
             "suppliers": suppliers,
             "brands": brands,
             "query": query,
-            "menu": Menu.get_main_menu()
+            "context": Context.get(request)
         })
 
 
@@ -65,6 +66,6 @@ class TagView(View):
                 "suppliers": suppliers,
                 "brands": brands,
                 "query": "tag:{}".format(tag),
-                "menu": Menu.get_main_menu(),
+                "context": Context.get(request)
                 #"message": suppliers
             })

@@ -4,6 +4,7 @@ from django.http import JsonResponse
 
 from brand.models import Brand
 from product.models import Product, Category
+from geo.models import Region
 from utils.form import FormHelper
 
 # Create your views here.
@@ -28,3 +29,17 @@ class ProductAcompView(View):
         pr_options = FormHelper.make_acomp_options(products)
         return JsonResponse(pr_options, safe=False)
 
+class RegionListAcompView(View):
+    ''' '''
+    def get(self, request):
+        regions = Region.objects.filter(active=True).order_by('name')
+        reg_options = FormHelper.make_acomp_options(regions)
+        return JsonResponse(reg_options, safe=False)
+
+class SessionAcompView(View):
+    ''' '''
+    def get(self, request):
+        region = int(request.GET.get('region'))
+        if region > 0:
+            request.session['region'] = region
+            return JsonResponse({'region': region}, safe=False)

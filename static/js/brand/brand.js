@@ -1,1 +1,1 @@
-initMap();
+Geo.initMap();

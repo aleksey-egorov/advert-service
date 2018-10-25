@@ -5,12 +5,11 @@ from django.views.generic import View
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import get_object_or_404
 
-from main.models import Menu
-from user.models import User
 from lot.models import Lot, LotGallery
 from utils.mailer import Mailer
 from user.forms import RegisterForm, UserForm, LotAddForm, LotEditForm, LotImageUploadForm, LotImageDelForm
 from user.models import User
+from utils.context import Context
 
 # Create your views here.
 
@@ -21,13 +20,13 @@ class RegisterView(View):
 
         return render(request, "user/register.html", {
             "form": form,
-            "menu": Menu.get_main_menu()
+            "context": Context.get(request)
         })
 
     def post(self, request):
         form = RegisterForm(request.POST, request.FILES)
         if form.is_valid():
-            new_user = User.add_user(form.cleaned_data)
+            new_user = User().add_user(form.cleaned_data)
             if new_user:
                 Mailer().send(new_user.email, 'sign_up', context={"login": new_user.username})
                 return HttpResponseRedirect('/register/done/')
@@ -39,7 +38,7 @@ class RegisterView(View):
         return render(request, "user/register.html", {
             "form": form,
             "message": message,
-            "menu": Menu.get_main_menu()
+            "context": Context.get(request)
         })
 
 
@@ -47,7 +46,7 @@ class RegisterDoneView(View):
 
     def get(self, request):
         return render(request, "user/register_done.html", {
-            "menu": Menu.get_main_menu()
+            "context": Context.get(request)
         })
 
 
@@ -59,7 +58,7 @@ class ProfileView(LoginRequiredMixin, View):
 
         return render(request, "user/profile.html", {
             "form": form,
-            "menu": Menu.get_main_menu()
+            "context": Context.get(request)
         })
 
     def post(self, request):
@@ -88,7 +87,7 @@ class LotAddView(LoginRequiredMixin, View):
         return render(request, "user/add_lot.html", {
             "form": form,
             "lot_gallery": lot_gallery,
-            "menu": Menu.get_main_menu()
+            "context": Context.get(request)
         })
 
     def post(self, request):
@@ -105,7 +104,7 @@ class LotAddView(LoginRequiredMixin, View):
 
         return render(request, "user/add_lot.html", {
             "form": form,
-            "menu": Menu.get_main_menu(),
+            "context": Context.get(request),
             "message": message,
         })
 
@@ -114,7 +113,7 @@ class LotAddDoneView(LoginRequiredMixin, View):
 
     def get(self, request):
         return render(request, "user/add_lot_done.html", {
-            "menu": Menu.get_main_menu()
+            "context": Context.get(request)
         })
 
 
@@ -132,7 +131,7 @@ class LotEditView(LoginRequiredMixin, View):
                 "lot_id": lot.id,
                 "lot_gallery": lot_gallery,
                 "form": form_main,
-                "menu": Menu.get_main_menu()
+                "context": Context.get(request)
             })
 
     def post(self, request, id):
@@ -153,7 +152,7 @@ class LotEditView(LoginRequiredMixin, View):
             return render(request, "user/edit_lot.html", {
                 "lot_id": lot.id,
                 "form": form,
-                "menu": Menu.get_main_menu(),
+                "context": Context.get(request),
                 "message": message,
             })
 
@@ -161,7 +160,7 @@ class LotEditView(LoginRequiredMixin, View):
 class LotEditDoneView(LoginRequiredMixin, View):
     def get(self, request):
         return render(request, "user/edit_lot_done.html", {
-            "menu": Menu.get_main_menu()
+            "context": Context.get(request)
         })
 
 
@@ -170,7 +169,7 @@ class UserLotsView(LoginRequiredMixin, View):
         lots = Lot.objects.filter(author=request.user).order_by('-add_date')
         return render(request, "user/lots.html", {
             "lots": lots,
-            "menu": Menu.get_main_menu()
+            "context": Context.get(request)
         })
 
 

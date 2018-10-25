@@ -2,11 +2,11 @@ from django.shortcuts import render
 from django.views.generic import View
 from django.shortcuts import get_object_or_404
 
-from main.models import Menu
 from product.models import Group
 from lot.models import Lot
 from supplier.models import SupplierOrg, Supplier
 from supplier.forms import ContactForm
+from utils.context import Context
 
 # Create your views here.
 
@@ -24,7 +24,7 @@ class SupplierOrgView(View):
             "org": supplier_org,
             "groups": groups,
             # "popular_prods": popular_prods,
-            "menu": Menu.get_main_menu(),
+            "context": Context.get(request)
             #"message": "GROUPS={} ".format(groups)
         })
 
@@ -44,6 +44,6 @@ class SupplierView(View):
             "supplier": supplier,
             "best_lots": best_lots,
             "lots": lots,
-            "menu": Menu.get_main_menu(),
+            "context": Context.get(request)
             # "message": "GROUPS={} ".format(groups)
         })
