@@ -38,24 +38,26 @@
 <div id="right_container" class="left w81">
 
         <div id="lots_content">
-            <ul class="lots_list">
-                {% for lot in lots %}
-                                <li class="lot_li col4 mbottom">
-                                        <a href="/lot/{{ lot.alias }}/">
-                                            <div class="lot_image" style="background-image:url('/media/{{ lot.main_image }}');background-repeat:no-repeat;background-position:center center;background-size:cover;"></div>
-                                            <div class="lot_info">
-                                                <div class="lot_title">{{ lot.name }}</div>
-                                                <div class="lot_price_wrap">
-                                                    <span class="price_tag"><b>{{ lot.state_name }}</b> {{ lot.price_formatted }}</span>
-                                                </div>
-                                            </div>
-                                        </a>
-                                </li>
-                {% endfor %}
-            </ul>
-        </div>
 
-        <div class="pagination">
+            <div id="lots_list_wrap">
+                <ul class="lots_list">
+                    {% for lot in lots %}
+                                    <li class="lot_li col4 mbottom">
+                                            <a href="/lot/{{ lot.alias }}/">
+                                                <div class="lot_image" style="background-image:url('/media/{{ lot.main_image }}');background-repeat:no-repeat;background-position:center center;background-size:cover;"></div>
+                                                <div class="lot_info">
+                                                    <div class="lot_title">{{ lot.name }}</div>
+                                                    <div class="lot_price_wrap">
+                                                        <span class="price_tag"><b>{{ lot.state_name }}</b> {{ lot.price_formatted }}</span>
+                                                    </div>
+                                                </div>
+                                            </a>
+                                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+
+            <div class="pagination">
                 <span class="step-links">
                     {% if questions.has_previous %}
                         <a href="?page=1">&laquo; first</a>
@@ -71,10 +73,9 @@
                         <a href="?page={{ questions.paginator.num_pages }}">last &raquo;</a>
                     {% endif %}
                 </span>
+            </div>
+
         </div>
-
-
-
 </div>
 
 

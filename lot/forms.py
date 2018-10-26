@@ -22,7 +22,7 @@ class FilterForm(forms.Form):
         self.fields['category'].initial = params['category']
         self.fields['group'].initial = params['group']
 
-
+    page = forms.IntegerField(widget=forms.HiddenInput, required=False)
     region = forms.ChoiceField(label='Регион')
     category = forms.ChoiceField(label='Категория')
     group = forms.ChoiceField(label='Группа')

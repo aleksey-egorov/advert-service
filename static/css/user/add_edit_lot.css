@@ -12,6 +12,15 @@
     width:400px;
 }
 
+#add_lot_container .form_ul input[type=number], #edit_lot_container .form_ul input[type=number] {
+    width:200px;
+}
+
+
+#add_lot_container .form_ul  select, #edit_lot_container .form_ul select {
+    width:200px;
+}
+
 
 #add_lot_container .form_ul textarea, #edit_lot_container .form_ul textarea {
     width:588px;

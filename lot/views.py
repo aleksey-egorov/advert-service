@@ -18,9 +18,9 @@ class CatalogLotsView(View):
 
     def get(self, request, category=-1, group=-1):
         categories = Category.objects.filter(active=True).order_by("sorting")
-        groups = Group.objects.filter(active=True)
-        brands = Brand.objects.filter(active=True)
-        regions = Region.objects.filter(active=True)
+        groups = Group.objects.filter(active=True).order_by('name')
+        brands = Brand.objects.filter(active=True).order_by('name')
+        regions = Region.objects.filter(active=True).order_by('name')
         context = Context.get(request)
 
         params = {
@@ -48,7 +48,8 @@ class CatalogLotsListView(View):
             'new_prod_state': 'bool',
             'category': 'int',
             'group': 'int',
-            'brand': 'list'
+            'brand': 'list',
+            'region': 'int'
         }
 
     def post(self, request):
@@ -57,17 +58,17 @@ class CatalogLotsListView(View):
         params = FormHelper.get_params_from_post(self.params_keys, request)
 
         lot_list, msg = Lot.objects.make_search(params)
-        paginator = Paginator(lot_list, 20)
+        paginator = Paginator(lot_list, 2)
 
-       # try:
-       #     questions = paginator.get_page(page)
-       # except PageNotAnInteger:
-       #     questions = paginator.get_page(1)
-       # except EmptyPage:
-       #     questions = paginator.get_page(page)
+        try:
+            lots = paginator.get_page(page)
+        except PageNotAnInteger:
+            lots = paginator.get_page(1)
+        except EmptyPage:
+            lots = paginator.get_page(page)
 
         return render(request, "lot/list.html", {
-            "lots": lot_list,
+            "lots": lots,
             "message": str(request.POST) + "PARAMS={} ".format(params) + msg
         })
 

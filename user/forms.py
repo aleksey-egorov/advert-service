@@ -65,6 +65,9 @@ class LotAddForm(forms.Form):
     state = forms.ChoiceField(label='Новый или б/у', choices=[("new", "Новый"), ("used", "б/у")])
     manuf_year = forms.IntegerField(label='Год выпуска')
 
+    region_list = Region.objects.filter(active=True).order_by('name').all()
+    region = forms.ChoiceField(label='Регион', choices=FormHelper.make_options(region_list, option_all=False))
+
     main_description = forms.CharField(label='Описание', widget=forms.Textarea)
     image_filenames = forms.CharField(widget=forms.HiddenInput)
 
@@ -93,6 +96,7 @@ class LotEditForm(forms.Form):
         self.fields['currency'].initial = lot.currency.id
         self.fields['state'].initial = state
         self.fields['manuf_year'].initial = lot.manuf_year
+        self.fields['region'].initial = lot.region.id
         self.fields['main_description'].initial = lot.main_description
 
     name = forms.CharField(label='Название лота')
@@ -104,7 +108,7 @@ class LotEditForm(forms.Form):
     brand_id = forms.CharField(widget=forms.HiddenInput, required=False)
     product = forms.CharField(label='Модель')
     product_id = forms.CharField(widget=forms.HiddenInput, required=False)
-    # TODO: replace brand and product with custom widget
+    # TODO: replace brand and product with custom widgets
 
     active = forms.BooleanField(label='Лот активен', required=False)
     best = forms.BooleanField(label='В списке лучших', required=False)
@@ -115,6 +119,9 @@ class LotEditForm(forms.Form):
 
     state = forms.ChoiceField(label='Новый или б/у', choices=[("new", "Новый"), ("used", "б/у")])
     manuf_year = forms.IntegerField(label='Год выпуска')
+
+    region_list = Region.objects.filter(active=True).order_by('name').all()
+    region = forms.ChoiceField(label='Регион', choices=FormHelper.make_options(region_list, option_all=False))
 
     main_description = forms.CharField(label='Описание', widget=forms.Textarea)
     image_filenames = forms.CharField(widget=forms.HiddenInput)

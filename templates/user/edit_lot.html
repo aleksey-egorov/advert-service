@@ -71,6 +71,15 @@
                     </div>
 
                     <div class="cont">
+                        <h3>Местонахождение</h3>
+                        <ul class="form_ul">
+                            <li><label for="{{ form.region.id_for_label }}">{{ form.region.label }}:</label>
+                                {{ form.region }}
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="cont">
                         <h3>Дополнительно</h3>
                         <ul class="form_ul">
                             <li><label for="{{ form.main_description.id_for_label }}">{{ form.main_description.label }}:</label>

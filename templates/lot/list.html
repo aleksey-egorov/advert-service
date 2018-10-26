@@ -1,21 +1,43 @@
 {% if lots %}
 
-<ul class="lots_list">
+<div id="lots_list_wrap">
+    <ul class="lots_list">
 
-    {% for lot in lots %}
-                    <li class="lot_li col4 mbottom">
-                            <a href="/lot/{{ lot.alias }}/">
-                                <div class="lot_image" style="background-image:url('/media/{{ lot.main_image }}');background-repeat:no-repeat;background-position:center center;background-size:cover;"></div>
-                                <div class="lot_info">
-                                    <div class="lot_title">{{ lot.name }}</div>
-                                    <div class="lot_price_wrap">
-                                        <span class="price_tag"><b>{{ lot.state_name }}</b> {{ lot.price_formatted }}</span>
+        {% for lot in lots %}
+                        <li class="lot_li col4 mbottom">
+                                <a href="/lot/{{ lot.alias }}/">
+                                    <div class="lot_image" style="background-image:url('/media/{{ lot.main_image }}');background-repeat:no-repeat;background-position:center center;background-size:cover;"></div>
+                                    <div class="lot_info">
+                                        <div class="lot_title">{{ lot.name }}</div>
+                                        <div class="lot_price_wrap">
+                                            <span class="price_tag"><b>{{ lot.state_name }}</b> {{ lot.price_formatted }}</span>
+                                        </div>
                                     </div>
-                                </div>
-                            </a>
-                    </li>
-    {% endfor %}
-</ul>
+                                </a>
+                        </li>
+        {% endfor %}
+    </ul>
+</div>
+
+
+<div class="pagination" >
+                <div class="step-links">
+                        {% if lots.has_previous %}
+                            <a data-id="1"><<</a>
+                            <a data-id="{{ lots.previous_page_number }}"><</a>
+                        {% endif %}
+
+                        {% for page in lots.paginator.page_range %}
+                            <a data-id="{{ page }}" class="{% if page == lots.number %} active {% endif %}">{{ page }}</a>
+                        {% endfor %}
+
+                        {% if lots.has_next %}
+                            <a data-id="{{ lots.next_page_number }}">></a>
+                            <a data-id="{{ lots.paginator.num_pages }}">>></a>
+                        {% endif %}
+                </div>
+</div>
+
 
 {% else %}
     <p>К сожалению, по вашему запросу ничего не найдено</p>

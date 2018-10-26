@@ -1,16 +1,19 @@
 Catalog={
     el: {
         'group' : $('#id_group'),
+        'lots_content' : $("#lots_content"),
+        'filter_form': $('#filter_form')
     },
 
     activateFilter:function() {
-         var params = $('#filter_form').serialize();
+         var params = Catalog.el.filter_form.serialize();
          $.ajax({
              url: '/catalog/lots/list/',
              type: 'post',
              data: params,
              success: function (data, textStatus) {
-                 $("#lots_content").html(data);
+                 Catalog.el.lots_content.html(data);
+                 Catalog.initPaginator();
              }
          })
     },
@@ -36,7 +39,15 @@ Catalog={
                  });
              }
          })
+    },
+    initPaginator: function() {
+        $(".pagination .step-links a").click(function() {
+            var val = $(this).attr('data-id');
+            Catalog.el.filter_form.find("input[name=page]").val(val);
+            Catalog.activateFilter();
+        })
     }
+
 };
 
 

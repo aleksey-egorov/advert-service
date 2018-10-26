@@ -2,12 +2,14 @@ import datetime
 import re
 import os
 import json
+import logging
 from django.db import models
 from django.db import transaction
 from django.conf import settings
 
 from product.models import Product, Category, Group
 from brand.models import Brand
+from geo.models import Region
 from supplier.models import Supplier
 from user.models import User
 
@@ -20,6 +22,7 @@ class Currency(models.Model):
 
 
 class LotManager(models.Manager):
+    logger = logging.getLogger('advert.lot')
 
     param_val_map = {
         'new_prod_state': {
@@ -39,6 +42,7 @@ class LotManager(models.Manager):
         try:
             product = Product.objects.get(active=True, id=cleaned_data['product'])
             currency = Currency.objects.get(id=int(cleaned_data['currency']))
+            region = Region.objects.get(id=int(cleaned_data['region']))
             with transaction.atomic():
                 new_lot = Lot(
                     name=product.name,
@@ -53,6 +57,7 @@ class LotManager(models.Manager):
                     add_date=datetime.datetime.now(),
                     main_image=None,
                     manuf_year=cleaned_data['manuf_year'],
+                    region=region,
                     author=user
                 )
                 new_lot.save()
@@ -65,12 +70,14 @@ class LotManager(models.Manager):
 
                 return True, None
         except Exception as err:
+            self.logger.error(err)
             return False, err
 
     def update_lot(self, id, cleaned_data):
         try:
             product = Product.objects.get(active=True, id=int(cleaned_data['product']))
             currency = Currency.objects.get(id=int(cleaned_data['currency']))
+            region = Region.objects.get(id=int(cleaned_data['region']))
             with transaction.atomic():
                 upd_lot = Lot(
                     id=id,
@@ -83,15 +90,17 @@ class LotManager(models.Manager):
                     new_prod_state=self.param_val_map['new_prod_state'][cleaned_data['state']],
                     best=cleaned_data['best'],
                     upd_date=datetime.datetime.now(),
-                    manuf_year=cleaned_data['manuf_year']
+                    manuf_year=cleaned_data['manuf_year'],
+                    region=region
                 )
                 upd_lot.save(update_fields=['name','product','price','currency','main_description','active','best',
-                                            'new_prod_state','upd_date','manuf_year'])
+                                            'new_prod_state','upd_date','manuf_year','region'])
 
                 LotGallery.objects.update_gallery(upd_lot, json.loads(cleaned_data['image_filenames']))
 
                 return True, None
         except Exception as err:
+            self.logger.error(err)
             return False, err
 
     def make_search(self, params):

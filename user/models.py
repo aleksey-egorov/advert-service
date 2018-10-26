@@ -24,15 +24,18 @@ class User(AbstractUser):
     REQUIRED_FIELDS = ['email']
 
     def add_user(self, cleaned_data):
-        with transaction.atomic():
-            new_user = User(
-                username=cleaned_data['login'],
-                password=make_password(cleaned_data['password']),
-                email=cleaned_data['email'],
-                avatar=cleaned_data['avatar'],
-            )
-            new_user.save()
-            return new_user
+        try:
+            with transaction.atomic():
+                new_user = User(
+                    username=cleaned_data['login'],
+                    password=make_password(cleaned_data['password']),
+                    email=cleaned_data['email'],
+                    avatar=cleaned_data['avatar'],
+                )
+                new_user.save()
+                return new_user
+        except Exception as err:
+            self.logger.error(err)
 
     def update_user(self, user, cleaned_data):
         try:

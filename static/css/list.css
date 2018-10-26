@@ -1,3 +1,8 @@
+#lots_list_wrap {
+	width:100%;
+	min-height:600px;
+}
+
 .lots_list {
     list-style: none;
 }
@@ -123,4 +128,39 @@
 		font-size: 11px;
 		font-weight: bold;
 		font-family: 'Museo-300', Arial, Verdana, sans-serif;
+}
+
+
+
+
+.pagination {
+	clear:both;
+	height: 50px;
+	float:right;
+}
+.pagination .step-links a {
+	margin: 0 6px 0 0;
+    border: 1px solid #d3d3d3;
+    color: #414141;
+	font-size:0.9em;
+    padding: 0;
+	height: 30px;
+	line-height: 30px;
+	width: 30px;
+	background-color: #efefef;
+	display:block;
+	text-decoration:none;
+	float:left;
+	text-align:center;
+	cursor:pointer;
+}
+
+.pagination .step-links a:hover {
+	background-color: #ff7400;
+	color:#fff;
+}
+
+.pagination .step-links a.active {
+	background-color: #ff7400;
+	color:#fff;
 }
