@@ -14,7 +14,7 @@ class User(AbstractUser):
     logger = logging.getLogger('advert.user')
 
     email = models.EmailField(null=True, blank=True, default='')
-    phone = models.CharField(null=True, blank=True, default='')
+    phone = models.CharField(null=True, blank=True, default='', max_length=20)
     avatar = models.ImageField(null=True, blank=True, upload_to='avatars/')
     supplier = models.ForeignKey('supplier.Supplier', on_delete=models.SET_NULL, null=True, blank=True)
     region = models.ForeignKey('geo.Region', on_delete=models.SET_NULL, null=True, blank=True)

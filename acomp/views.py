@@ -39,7 +39,8 @@ class RegionListAcompView(View):
 class SessionAcompView(View):
     ''' '''
     def get(self, request):
-        region = int(request.GET.get('region'))
-        if region > 0:
-            request.session['region'] = region
-            return JsonResponse({'region': region}, safe=False)
+        region_id = int(request.GET.get('region'))
+        region = Region.objects.get(id=region_id)
+        if region:
+            request.session['region'] = region.id
+            return JsonResponse({'region': region.name}, safe=False)

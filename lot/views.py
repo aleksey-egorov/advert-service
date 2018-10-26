@@ -6,6 +6,7 @@ from django.shortcuts import get_object_or_404
 from lot.models import Lot
 from product.models import Category, Group
 from brand.models import Brand
+from geo.models import Region
 from lot.forms import FilterForm, ContactForm
 from utils.form import FormHelper
 from utils.context import Context
@@ -19,20 +20,23 @@ class CatalogLotsView(View):
         categories = Category.objects.filter(active=True).order_by("sorting")
         groups = Group.objects.filter(active=True)
         brands = Brand.objects.filter(active=True)
+        regions = Region.objects.filter(active=True)
+        context = Context.get(request)
 
         params = {
+            'region': context['vals']['region'].id,
             'category': FormHelper.get_option_id(categories, category),
             'group': FormHelper.get_option_id(groups, group),
         }
         lot_list, msg = Lot.objects.make_search(params)
 
-        form = FilterForm(categories, groups, brands)
+        form = FilterForm(regions, categories, groups, brands)
         form.set_options(params)
 
         return render(request, "lot/catalog.html", {
             "form": form,
             "lots": lot_list,
-            "context": Context.get(request),
+            "context": context,
             "message": "PARAMS={} ".format(params)
         })
 

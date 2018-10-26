@@ -2,7 +2,7 @@ UserLot = {
     updateLotImage: function (key, id, result) {
         $('#' + key + '_' + id).html(result).addClass('changed');
         var Timer = window.setTimeout(function () {
-            Upload.initFileUpload(key, id, updateLotImage, delLotImage);
+            Upload.initFileUpload(key, id, UserLot.updateLotImage, UserLot.delLotImage);
         }, 500);
     },
 
@@ -15,7 +15,7 @@ UserLot = {
             success: function (data, textStatus) {
                 $('#' + key + '_' + id).html(data).addClass('changed');
                 var Timer = window.setTimeout(function () {
-                    Upload.initFileUpload(key, id, updateLotImage, delLotImage);
+                    Upload.initFileUpload(key, id, UserLot.updateLotImage, UserLot.delLotImage);
                 }, 500);
             }
         });

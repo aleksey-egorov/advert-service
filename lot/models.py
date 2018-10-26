@@ -145,6 +145,7 @@ class Lot(models.Model):
     name = models.CharField('Наименование', max_length=255,  null=False, blank=False)
     product = models.ForeignKey(Product, on_delete=models.SET_NULL, null=True, blank=True)
     supplier = models.ForeignKey(Supplier, on_delete=models.SET_NULL, null=True, blank=True)
+    region = models.ForeignKey('geo.Region', on_delete=models.SET_NULL, null=True, blank=True)
     price = models.IntegerField('Цена', null=True, blank=True)
     currency = models.ForeignKey(Currency, on_delete=models.SET_NULL, null=True, blank=True)
     main_description = models.TextField('Основное описание', default=None, null=True, blank=True)

@@ -244,7 +244,7 @@ Geo = {
             type: 'get',
             data: 'region=' + val,
             success: function (data, textStatus) {
-
+                $("#region_selector").html(data.region);
             }
         });
     },
@@ -258,8 +258,6 @@ Geo = {
              url: '/acomp/region/list/',
              type: 'get',
              success: function (data, textStatus) {
-                 //$("#region_reveal .reveal_inner_inline").html(data);
-                 //data = data.replace(/&quot;/g, '"');
                  var regions = data;
                  var i = 0;
                  var perColumn = Math.ceil(regions.length / 4);

@@ -19,7 +19,7 @@
 }
 
 .select2-container .select2-selection--single.gray {
-    background: url('../images/select2_bg.png') repeat-x;
+    background: url('/static/images/select2_bg.png') repeat-x;
 }
 
 .select2-container .select2-selection--single .select2-selection__rendered {
@@ -250,7 +250,7 @@
     display: inline-block;
     font-weight: bold;
     margin-right: 7px;
-    background-image:url('/images/close.svg');
+    background-image:url('/static/images/close.svg');
     background-position:center center;
     background-size:contain;
     background-repeat:no-repeat;
