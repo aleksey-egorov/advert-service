@@ -59,8 +59,8 @@ urlpatterns = [
     path('user/lot/image/del/', LotImageDelView.as_view()),
     path('user/lots/', UserLotsView.as_view()),
 
-    # Autocomplete URLs
     url(r'^acomp/', include('acomp.urls')),
+    url(r'^sender/', include('sender.urls')),
 
     path('admin/', admin.site.urls),
     path('', MainView.as_view()),

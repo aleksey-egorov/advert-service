@@ -18,6 +18,7 @@ class BrandView(View):
         popular_prods = Product.objects.filter(active=True, brand=brand)
 
         form = BrandForm()
+        form.set_initial(brand.id)
 
         return render(request, "brand/brand.html", {
             "form": form,

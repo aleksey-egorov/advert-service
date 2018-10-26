@@ -87,15 +87,16 @@
             <div class="right w25">
                 <div id="choose_form">
                       <h3>Помощь в подборе</h3>
-                      <form action="" method="post" class="common">
-                         {% csrf_token %}
-                         <ul class="form_ul full_width">
-                            {{ form.as_ul }}
-                         </ul>
-                         <div class="btn">
-                             <button>Отправить</button>
-                         </div>
-                 </form>
+                      <form action="" method="post" class="common" id="brand_form">
+                             {% csrf_token %}
+                             <ul class="form_ul full_width">
+                                {{ form.as_ul }}
+                             </ul>
+                             <div class="btn">
+                                 <button>Отправить</button>
+                             </div>
+                     </form>
+                     <div class="result_div"></div>
                 </div>
             </div>
 </div>

@@ -15,19 +15,9 @@ EMAIL_HOST_USER = 'hasker123'
 EMAIL_HOST_PASSWORD = 'hasker'
 EMAIL_USE_SSL = True
 
-EMAIL_FROM = ''
-EMAIL_MESSAGES = {
-    'sign_up': [
-        'Advert - registration',
-        'Hello!<br>You are now signed up. Your login: <%LOGIN%> <br><br>'
-    ],
-    'new_answer': [
-        'Advert - added new answer to your question',
-        'Hello!<br>New answer to your question has been added. You can find it on this page: <%LINK%> <br><br>'
-    ]
-}
+EMAIL_FROM = 'hasker123@yandex.ru'
+EMAIL_TO = 'a.egorov@daiteco.ru'
 
-EMAIL_SIGN = 'With best wishes,<br>Advert'
 
 # Custom settings
 
