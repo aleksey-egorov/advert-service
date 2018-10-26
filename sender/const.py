@@ -11,6 +11,15 @@ EMAIL_TEMPLATES = {
           <tr><td>E-mail:</td><td><%EMAIL%></td></tr>\
           <tr><td>Сообщение:</td><td><%MESSAGE%></td></tr>\
         </table>'
+    ],
+    'supplier_message': [
+        'Сообщение поставщику',
+        '<table>\
+          <tr><td>Имя:</td><td><%NAME%></td></tr>\
+          <tr><td>Телефон:</td><td><%PHONE%></td></tr>\
+          <tr><td>E-mail:</td><td><%EMAIL%></td></tr>\
+          <tr><td>Сообщение:</td><td><%MESSAGE%></td></tr>\
+        </table>'
     ]
 }
 

@@ -4,6 +4,8 @@ from django.conf import settings
 
 from brand.models import Brand
 from brand.forms import BrandForm
+from supplier.models import Supplier, SupplierOrg
+from supplier.forms import SupplierOrgContactForm, SupplierContactForm
 from sender.const import EMAIL_TEMPLATES
 from utils.mailer import Mailer
 
@@ -25,5 +27,26 @@ class BrandSendMessageView(View):
             }
             subject = 'Помощь в подборе ' + brand.name
             result = Mailer().send_template_message([settings.EMAIL_TO], 'brand_message',
+                                                    subject, message_context)
+            return JsonResponse({'result': result}, safe=False)
+
+
+class SupplierOrgSendMessageView(View):
+    ''' '''
+    def post(self, request):
+        form = SupplierOrgContactForm(request.POST)
+        if form.is_valid():
+            supplier_id = int(form.cleaned_data['id'])
+            supplier = SupplierOrg.objects.get(id=supplier_id)
+
+            message_context = {
+                'name': form.cleaned_data['name'],
+                'phone': form.cleaned_data['phone'],
+                'email': form.cleaned_data['email'],
+                'message': form.cleaned_data['message']
+            }
+
+            subject = 'Cообщение для постащика ' + supplier.name
+            result = Mailer().send_template_message([settings.EMAIL_TO], 'supplier_message',
                                                     subject, message_context)
             return JsonResponse({'result': result}, safe=False)
