@@ -6,7 +6,6 @@ from brand.models import Brand
 from brand.forms import BrandForm
 from supplier.models import Supplier, SupplierOrg
 from supplier.forms import SupplierOrgContactForm, SupplierContactForm
-from sender.const import EMAIL_TEMPLATES
 from utils.mailer import Mailer
 
 # Create your views here.

@@ -10,7 +10,7 @@ class Category(models.Model):
     name = models.CharField('Название', max_length=120)
     short_name = models.CharField('Короткое название', max_length=20)
     alias = models.CharField('Алиас', max_length=60, unique=True)
-    sorting = models.IntegerField('Сортировка')
+    sorting = models.IntegerField('Сортировка', null=True)
     main_image = models.ImageField('Главное фото', null=True, blank=True, upload_to='products/')
     active = models.BooleanField('Активность', default=False, null=True, blank=True)
 
@@ -56,12 +56,16 @@ class Product(models.Model):
     active = models.BooleanField('Активность', default=False, null=True, blank=True)
 
     def save(self, *args, **kwargs):
-        old_group = Product.objects.get(id=self.id).group
+        old_group = None
+        if Product.objects.filter(id=self.id).exists():
+            old_group = Product.objects.get(id=self.id).group
         super().save(*args, **kwargs)
         self._update_conns(old_group=old_group)
 
     def delete(self, *args, **kwargs):
-        old_group = Product.objects.get(id=self.id).group
+        old_group = None
+        if Product.objects.filter(id=self.id).exists():
+            old_group = Product.objects.get(id=self.id).group
         super().delete(*args, **kwargs)
         self._update_conns(old_group=old_group)
 
@@ -78,10 +82,11 @@ class Product(models.Model):
 
     def _update_brandcategory_conn(self, old_group):
         for some_group in (self.group, old_group):
-            categories = some_group.get_categories()
-            for categ_id in categories:
-                categ = Category.objects.get(id=categ_id)
-                if categ.has_products(self.brand):
-                    BrandCategoryConn.objects.update_conn(self.brand, categ)
-                else:
-                    BrandCategoryConn.objects.delete_conn(self.brand, categ)
+            if not some_group == None:
+                categories = some_group.get_categories()
+                for categ_id in categories:
+                    categ = Category.objects.get(id=categ_id)
+                    if categ.has_products(self.brand):
+                        BrandCategoryConn.objects.update_conn(self.brand, categ)
+                    else:
+                        BrandCategoryConn.objects.delete_conn(self.brand, categ)

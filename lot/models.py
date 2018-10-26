@@ -105,7 +105,7 @@ class LotManager(models.Manager):
 
     def make_search(self, params):
         filter_map = {}
-        st = ''
+        #st = ''
 
         for key in params.keys():
             value = params[key]
@@ -118,7 +118,7 @@ class LotManager(models.Manager):
             except:
                 pass
 
-            st += "KEY={} VAL={} {}".format(key, value, type(value))
+            #st += "KEY={} VAL={} {}".format(key, value, type(value))
             if isinstance(value, str):
                 if not value == '-1':
                     filter_map[key] = int(value)
@@ -132,8 +132,8 @@ class LotManager(models.Manager):
                 filter_map[key] = value
 
         lot_list = self.filter(active=True).filter(**filter_map).order_by('-pub_date')
-        msg = str(st) + "<br>FILTER_MAP={}".format(filter_map)
-        return lot_list, msg
+        #msg = str(st) + "<br>FILTER_MAP={}".format(filter_map)
+        return lot_list
 
     def _make_num_alias(self, name, id):
         symbols = (u"абвгдеёжзийклмнопрстуфхцчшщъыьэюяАБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ",

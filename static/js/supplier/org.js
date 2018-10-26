@@ -6,8 +6,8 @@ $("#supplier_form").submit(function(e) {
             type: 'post',
             data: params,
             success: function (data, textStatus) {
-                $('#brand_form').trigger('reset');
-                $('#choose_form .result_div').html('Ваше сообщение отправлено!');
+                $('#supplier_form').trigger('reset');
+                $('#contact_form .result_div').html('Ваше сообщение отправлено!');
             }
         });
 });
