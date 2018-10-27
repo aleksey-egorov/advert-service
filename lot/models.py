@@ -1,8 +1,8 @@
-import datetime
 import re
 import os
 import json
 import logging
+from django.utils import timezone
 from django.db import models
 from django.db import transaction
 from django.conf import settings
@@ -54,7 +54,7 @@ class LotManager(models.Manager):
                     active=False,
                     new_prod_state=self.param_val_map['new_prod_state'][cleaned_data['state']],
                     best=False,
-                    add_date=datetime.datetime.now(),
+                    add_date=timezone.now(),
                     main_image=None,
                     manuf_year=cleaned_data['manuf_year'],
                     region=region,
@@ -89,7 +89,7 @@ class LotManager(models.Manager):
                     active=cleaned_data['active'],
                     new_prod_state=self.param_val_map['new_prod_state'][cleaned_data['state']],
                     best=cleaned_data['best'],
-                    upd_date=datetime.datetime.now(),
+                    upd_date=timezone.now(),
                     manuf_year=cleaned_data['manuf_year'],
                     region=region
                 )
@@ -208,14 +208,14 @@ class Lot(models.Model):
             with transaction.atomic():
                 brand_conn = LotBrandConn.objects.get(lot=self)
                 brand_conn.brand = brand
-                brand_conn.last_update = datetime.datetime.now()
+                brand_conn.last_update = timezone.now()
                 brand_conn.save()
         else:
             with transaction.atomic():
                 brand_conn = LotBrandConn(
                     lot=self,
                     brand=brand,
-                    last_update=datetime.datetime.now()
+                    last_update=timezone.now()
                 )
                 brand_conn.save()
 
@@ -225,14 +225,14 @@ class Lot(models.Model):
             with transaction.atomic():
                 group_conn = LotGroupConn.objects.get(lot=self)
                 group_conn.brand = group
-                group_conn.last_update = datetime.datetime.now()
+                group_conn.last_update = timezone.now()
                 group_conn.save()
         else:
             with transaction.atomic():
                 group_conn = LotGroupConn(
                     lot=self,
                     group=group,
-                    last_update=datetime.datetime.now()
+                    last_update=timezone.now()
                 )
                 group_conn.save()
 
@@ -241,7 +241,7 @@ class Lot(models.Model):
         if LotCategoryConn.objects.filter(lot=self).exists():
             with transaction.atomic():
                 cat_conn = LotCategoryConn.objects.get(lot=self)
-                cat_conn.last_update = datetime.datetime.now()
+                cat_conn.last_update = timezone.now()
                 cat_conn.save()
                 for ct in categories:
                     cat_conn.category.add(ct)
@@ -249,7 +249,7 @@ class Lot(models.Model):
             with transaction.atomic():
                 cat_conn = LotCategoryConn(
                     lot=self,
-                    last_update=datetime.datetime.now()
+                    last_update=timezone.now()
                 )
                 cat_conn.save()
                 for ct in categories:

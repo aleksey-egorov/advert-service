@@ -1,5 +1,5 @@
-import datetime
 import logging
+from django.utils import timezone
 from django.db import models
 from django.db import transaction
 
@@ -28,12 +28,12 @@ class BrandGroupConnManager(models.Manager):
             with transaction.atomic():
                 conn = self.get(brand=brand)
                 conn.group.add(group)
-                conn.last_update = datetime.datetime.now()
+                conn.last_update = timezone.now()
                 conn.save()
         else:
             with transaction.atomic():
                 conn = BrandGroupConn(brand=brand)
-                conn.last_update = datetime.datetime.now()
+                conn.last_update = timezone.now()
                 conn.save()
                 conn.group.add(group)
 
@@ -42,7 +42,7 @@ class BrandGroupConnManager(models.Manager):
             with transaction.atomic():
                 conn = self.get(brand=brand)
                 conn.group.remove(group)
-                conn.last_update = datetime.datetime.now()
+                conn.last_update = timezone.now()
                 conn.save()
 
 class BrandGroupConn(models.Model):
@@ -62,7 +62,7 @@ class BrandCategoryConnManager(models.Manager):
                 conn = self.get(brand=brand)
             else:
                 conn = BrandCategoryConn(brand=brand)
-            conn.last_update = datetime.datetime.now()
+            conn.last_update = timezone.now()
             conn.save()
             conn.category.add(category)
 
@@ -71,7 +71,7 @@ class BrandCategoryConnManager(models.Manager):
             with transaction.atomic():
                 conn = self.get(brand=brand)
                 conn.category.remove(category)
-                conn.last_update = datetime.datetime.now()
+                conn.last_update = timezone.now()
                 conn.save()
 
 class BrandCategoryConn(models.Model):

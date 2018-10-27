@@ -33,7 +33,7 @@ class Group(models.Model):
         par_url = ''
         if len(self.parents.all()) > 0:
             par = self.parents.all()[0]
-            par_url = par + '/'
+            par_url = str(par.alias) + '/'
         return par_url + str(self.alias) + '/'
 
     def get_categories(self):
