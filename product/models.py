@@ -1,4 +1,5 @@
 import datetime
+import logging
 from django.db import models
 from django.db import transaction
 
@@ -81,6 +82,7 @@ class Product(models.Model):
     active = models.BooleanField('Активность', default=False, null=True, blank=True)
 
     objects = ProductManager()
+    logger = logging.getLogger('advert.product')
 
     def save(self, *args, **kwargs):
         old_group = None
@@ -88,6 +90,7 @@ class Product(models.Model):
             old_group = Product.objects.get(id=self.id).group
         super().save(*args, **kwargs)
         Product.objects.update_conn(self.brand, self.group, old_group)
+        self.logger.info("Update prod conn {} {} {} ".format(self.brand, self.group, old_group))
 
     def delete(self, *args, **kwargs):
         old_group = None

@@ -67,24 +67,24 @@ class SupplierOrg(models.Model):
 class SupplierOrgGroupConnManager(models.Manager):
     logger = logging.getLogger('advert.supplier')
 
-    def update_conn(self, brand, group):
-        if self.filter(brand=brand).exists():
+    def update_conn(self, suporg, group):
+        if self.filter(supplier_org=suporg).exists():
             with transaction.atomic():
-                conn = self.get(brand=brand)
+                conn = self.get(supplier_org=suporg)
                 conn.group.add(group)
                 conn.last_update = timezone.now()
                 conn.save()
         else:
             with transaction.atomic():
-                conn = SupplierOrgGroupConn(brand=brand)
+                conn = SupplierOrgGroupConn(supplier_org=suporg)
                 conn.last_update = timezone.now()
                 conn.save()
                 conn.group.add(group)
 
-    def delete_conn(self, brand, group):
-        if self.filter(brand=brand).exists():
+    def delete_conn(self, suporg, group):
+        if self.filter(supplier_org=suporg).exists():
             with transaction.atomic():
-                conn = self.get(brand=brand)
+                conn = self.get(supplier_org=suporg)
                 conn.group.remove(group)
                 conn.last_update = timezone.now()
                 conn.save()

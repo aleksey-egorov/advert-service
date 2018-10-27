@@ -28,7 +28,7 @@ class LotTestCase(TestCase):
 
     def test_lots_search(self):
         Lot.objects.create(id=1, num="000001", name="КАМАЗ-6520", product=Product.objects.get(id=1), price=2000000,
-                             currency=Currency.objects.get(id=1), active=True )
+                             currency=Currency.objects.get(id=1), supplier=Supplier.objects.get(id=1), active=True )
         lots_list = Lot.objects.make_search({'brand': 1})
         lots = lots_list.all()
         self.assertEqual(lots[0].num, '000001')
@@ -90,8 +90,9 @@ class LotTestCase(TestCase):
             'manuf_year': 2018,
             'image_filenames': '[]'
         }
-        Lot.objects.update_lot(lot_id, udata)
+        res = Lot.objects.update_lot(lot_id, udata)
         lots = Lot.objects.filter(price=1500000).all()
+        # print ("UPD={} NUM={}".format(res, lot_num))
         self.assertEqual(lots[0].num, lot_num)
         self.assertEqual(lots[0].price, 1500000)
         self.assertEqual(lots[0].manuf_year, 2018)

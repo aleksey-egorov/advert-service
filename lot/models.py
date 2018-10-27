@@ -10,7 +10,7 @@ from django.conf import settings
 from product.models import Product, Category, Group
 from brand.models import Brand
 from geo.models import Region
-from supplier.models import Supplier
+from supplier.models import Supplier, SupplierOrgGroupConn
 from user.models import User
 
 
@@ -148,12 +148,14 @@ class LotManager(models.Manager):
         alias += '_' + num
         return alias, num
 
-    def update_conn(self, lot):
-        self._update_brand_conn(lot)
-        self._update_group_conn(lot)
-        self._update_category_conn(lot)
+    def update_conn(self, lot, old_group):
+        self._update_lotbrand_conn(lot)
+        self._update_lotgroup_conn(lot)
+        self._update_lotcategory_conn(lot)
+        self._update_suporggroup_conn(lot.supplier, (lot.product.group, old_group))
 
-    def _update_brand_conn(self, lot):
+
+    def _update_lotbrand_conn(self, lot):
         brand = lot.product.brand
         if LotBrandConn.objects.filter(lot=lot).exists():
             with transaction.atomic():
@@ -170,7 +172,7 @@ class LotManager(models.Manager):
                 )
                 brand_conn.save()
 
-    def _update_group_conn(self, lot):
+    def _update_lotgroup_conn(self, lot):
         group = lot.product.group
         if LotGroupConn.objects.filter(lot=lot).exists():
             with transaction.atomic():
@@ -187,7 +189,7 @@ class LotManager(models.Manager):
                 )
                 group_conn.save()
 
-    def _update_category_conn(self, lot):
+    def _update_lotcategory_conn(self, lot):
         categories = lot.product.group.get_categories()
         if LotCategoryConn.objects.filter(lot=lot).exists():
             with transaction.atomic():
@@ -205,6 +207,17 @@ class LotManager(models.Manager):
                 cat_conn.save()
                 for ct in categories:
                     cat_conn.category.add(ct)
+
+    def _update_suporggroup_conn(self, sup, groups):
+        if not sup == None:
+            for some_group in groups:
+                if not some_group == None and not sup.org == None:
+                    suppliers_in_org = [sp.id for sp in Supplier.objects.filter(active=True, org=sup.org).all()]
+                    products_in_group = [pr.id for pr in Product.objects.filter(active=True, group=some_group).all()]
+                    if Lot.objects.filter(active=True, supplier__in=suppliers_in_org, product__in=products_in_group).exists():
+                        SupplierOrgGroupConn.objects.update_conn(sup.org, some_group)
+                    else:
+                        SupplierOrgGroupConn.objects.delete_conn(sup.org, some_group)
 
 
 class Lot(models.Model):
@@ -231,6 +244,7 @@ class Lot(models.Model):
     author = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
 
     objects = LotManager()
+    logger = logging.getLogger('advert.lot')
 
     def state_name(self):
         return "Новый" if self.new_prod_state == True else "б/у"
@@ -248,12 +262,20 @@ class Lot(models.Model):
         return lots
 
     def save(self, *args, **kwargs):
+        old_group = self._lot_current_group()
         super().save(*args, **kwargs)
-        Lot.objects.update_conn(self)
+        Lot.objects.update_conn(self, old_group)
 
     def delete(self, *args, **kwargs):
+        old_group = self._lot_current_group()
         super().delete(*args, **kwargs)
-        Lot.objects.update_conn(self)
+        Lot.objects.update_conn(self, old_group)
+
+    def _lot_current_group(self):
+        cur_group = None
+        if Lot.objects.filter(id=self.id).exists():
+            cur_group = Lot.objects.get(id=self.id).product.group
+        return cur_group
 
 
 class LotGalleryManager(models.Manager):
