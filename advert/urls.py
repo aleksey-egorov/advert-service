@@ -61,6 +61,7 @@ urlpatterns = [
 
     url(r'^acomp/', include('acomp.urls')),
     url(r'^sender/', include('sender.urls')),
+    url(r'^api/', include('api.urls')),
 
     path('admin/', admin.site.urls),
     path('', MainView.as_view()),

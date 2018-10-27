@@ -246,14 +246,34 @@ class Lot(models.Model):
     objects = LotManager()
     logger = logging.getLogger('advert.lot')
 
+    @property
     def state_name(self):
         return "Новый" if self.new_prod_state == True else "б/у"
 
+    @property
+    def product_name(self):
+        return self.product.name
+
+    @property
     def active_name(self):
         return "Да" if self.active == True else "Нет"
 
+    @property
     def price_formatted(self):
         return "{:,}".format(self.price).replace(",", " ") + " " + self.currency.name
+
+    @property
+    def currency_name(self):
+        return self.currency.name
+
+    @property
+    def supplier_name(self):
+        return self.supplier.main_name
+
+    @property
+    def region_name(self):
+        return self.region.name
+
 
     @staticmethod
     def get_recommended(id):
