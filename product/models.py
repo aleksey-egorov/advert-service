@@ -44,6 +44,31 @@ class Group(models.Model):
         return categories
 
 
+class ProductManager(models.Manager):
+
+    def update_conn(self, brand, new_group, old_group):
+        self._update_brandgroup_conn(brand, (new_group, old_group))
+        self._update_brandcategory_conn(brand, (new_group, old_group))
+
+    def _update_brandgroup_conn(self, brand, groups):
+        for some_group in groups:
+            if Product.objects.filter(active=True, brand=brand, group=some_group).exists():
+                BrandGroupConn.objects.update_conn(brand, some_group)
+            else:
+                BrandGroupConn.objects.delete_conn(brand, some_group)
+
+    def _update_brandcategory_conn(self, brand, groups):
+        for some_group in groups:
+            if not some_group == None:
+                categories = some_group.get_categories()
+                for categ_id in categories:
+                    categ = Category.objects.get(id=categ_id)
+                    if categ.has_products(brand):
+                        BrandCategoryConn.objects.update_conn(brand, categ)
+                    else:
+                        BrandCategoryConn.objects.delete_conn(brand, categ)
+
+
 class Product(models.Model):
     name = models.CharField('Название/Модель', max_length=120)
     brand = models.ForeignKey(Brand, on_delete=models.SET_NULL, null=True, blank=True)
@@ -55,38 +80,19 @@ class Product(models.Model):
     main_image = models.ImageField('Главное фото', null=True, blank=True, upload_to='products/')
     active = models.BooleanField('Активность', default=False, null=True, blank=True)
 
+    objects = ProductManager()
+
     def save(self, *args, **kwargs):
         old_group = None
         if Product.objects.filter(id=self.id).exists():
             old_group = Product.objects.get(id=self.id).group
         super().save(*args, **kwargs)
-        self._update_conns(old_group=old_group)
+        Product.objects.update_conn(self.brand, self.group, old_group)
 
     def delete(self, *args, **kwargs):
         old_group = None
         if Product.objects.filter(id=self.id).exists():
             old_group = Product.objects.get(id=self.id).group
         super().delete(*args, **kwargs)
-        self._update_conns(old_group=old_group)
+        Product.objects.update_conn(self.brand, self.group, old_group)
 
-    def _update_conns(self, old_group):
-        self._update_brandgroup_conn(old_group=old_group)
-        self._update_brandcategory_conn(old_group=old_group)
-
-    def _update_brandgroup_conn(self, old_group):
-        for some_group in (self.group, old_group):
-            if Product.objects.filter(active=True, brand=self.brand, group=some_group).exists():
-                BrandGroupConn.objects.update_conn(self.brand, some_group)
-            else:
-                BrandGroupConn.objects.delete_conn(self.brand, some_group)
-
-    def _update_brandcategory_conn(self, old_group):
-        for some_group in (self.group, old_group):
-            if not some_group == None:
-                categories = some_group.get_categories()
-                for categ_id in categories:
-                    categ = Category.objects.get(id=categ_id)
-                    if categ.has_products(self.brand):
-                        BrandCategoryConn.objects.update_conn(self.brand, categ)
-                    else:
-                        BrandCategoryConn.objects.delete_conn(self.brand, categ)

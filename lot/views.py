@@ -28,7 +28,7 @@ class CatalogLotsView(View):
             'category': FormHelper.get_option_id(categories, category),
             'group': FormHelper.get_option_id(groups, group),
         }
-        lot_list, msg = Lot.objects.make_search(params)
+        lot_list = Lot.objects.make_search(params)
 
         form = FilterForm(regions, categories, groups, brands)
         form.set_options(params)
@@ -57,7 +57,7 @@ class CatalogLotsListView(View):
         page = request.POST.get('page')
         params = FormHelper.get_params_from_post(self.params_keys, request)
 
-        lot_list, msg = Lot.objects.make_search(params)
+        lot_list = Lot.objects.make_search(params)
         paginator = Paginator(lot_list, 2)
 
         try:
@@ -69,7 +69,7 @@ class CatalogLotsListView(View):
 
         return render(request, "lot/list.html", {
             "lots": lots,
-            "message": str(request.POST) + "PARAMS={} ".format(params) + msg
+            "message": str(request.POST) + "PARAMS={} ".format(params)
         })
 
 class LotView(View):

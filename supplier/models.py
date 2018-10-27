@@ -1,4 +1,6 @@
-from django.db import models
+import logging
+from django.utils import timezone
+from django.db import models, transaction
 
 # Create your models here.
 
@@ -60,7 +62,36 @@ class SupplierOrg(models.Model):
     active = models.BooleanField('Активность', default=False, null=True, blank=True)
 
 
-class SupplierOrgGroupConn(models.Model):                                                        # Связи с группами определяются автоматически из принадлежащих организации-поставщику лотов
-    supplier_org = models.ManyToManyField(SupplierOrg)                                           # и нужны для облегчения поиска групп по поставщику
+# Intermediate models
+
+class SupplierOrgGroupConnManager(models.Manager):
+    logger = logging.getLogger('advert.supplier')
+
+    def update_conn(self, brand, group):
+        if self.filter(brand=brand).exists():
+            with transaction.atomic():
+                conn = self.get(brand=brand)
+                conn.group.add(group)
+                conn.last_update = timezone.now()
+                conn.save()
+        else:
+            with transaction.atomic():
+                conn = SupplierOrgGroupConn(brand=brand)
+                conn.last_update = timezone.now()
+                conn.save()
+                conn.group.add(group)
+
+    def delete_conn(self, brand, group):
+        if self.filter(brand=brand).exists():
+            with transaction.atomic():
+                conn = self.get(brand=brand)
+                conn.group.remove(group)
+                conn.last_update = timezone.now()
+                conn.save()
+
+class SupplierOrgGroupConn(models.Model):
+    '''Связи с группами определяются автоматически из принадлежащих организации-поставщику лотов'''
+    supplier_org = models.ForeignKey(SupplierOrg, on_delete=models.CASCADE, null=True, blank=True)
     group = models.ManyToManyField('product.Group')
     last_update = models.DateTimeField('Дата последнего обновления', default=None, null=True, blank=True)
+    objects = SupplierOrgGroupConnManager()

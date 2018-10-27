@@ -148,6 +148,64 @@ class LotManager(models.Manager):
         alias += '_' + num
         return alias, num
 
+    def update_conn(self, lot):
+        self._update_brand_conn(lot)
+        self._update_group_conn(lot)
+        self._update_category_conn(lot)
+
+    def _update_brand_conn(self, lot):
+        brand = lot.product.brand
+        if LotBrandConn.objects.filter(lot=lot).exists():
+            with transaction.atomic():
+                brand_conn = LotBrandConn.objects.get(lot=lot)
+                brand_conn.brand = brand
+                brand_conn.last_update = timezone.now()
+                brand_conn.save()
+        else:
+            with transaction.atomic():
+                brand_conn = LotBrandConn(
+                    lot=lot,
+                    brand=brand,
+                    last_update=timezone.now()
+                )
+                brand_conn.save()
+
+    def _update_group_conn(self, lot):
+        group = lot.product.group
+        if LotGroupConn.objects.filter(lot=lot).exists():
+            with transaction.atomic():
+                group_conn = LotGroupConn.objects.get(lot=lot)
+                group_conn.brand = group
+                group_conn.last_update = timezone.now()
+                group_conn.save()
+        else:
+            with transaction.atomic():
+                group_conn = LotGroupConn(
+                    lot=lot,
+                    group=group,
+                    last_update=timezone.now()
+                )
+                group_conn.save()
+
+    def _update_category_conn(self, lot):
+        categories = lot.product.group.get_categories()
+        if LotCategoryConn.objects.filter(lot=lot).exists():
+            with transaction.atomic():
+                cat_conn = LotCategoryConn.objects.get(lot=lot)
+                cat_conn.last_update = timezone.now()
+                cat_conn.save()
+                for ct in categories:
+                    cat_conn.category.add(ct)
+        else:
+            with transaction.atomic():
+                cat_conn = LotCategoryConn(
+                    lot=lot,
+                    last_update=timezone.now()
+                )
+                cat_conn.save()
+                for ct in categories:
+                    cat_conn.category.add(ct)
+
 
 class Lot(models.Model):
     num = models.CharField('Код лота', max_length=10, default=None, unique=True, null=True)
@@ -191,69 +249,11 @@ class Lot(models.Model):
 
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
-        self._update_conns()
+        Lot.objects.update_conn(self)
 
     def delete(self, *args, **kwargs):
         super().delete(*args, **kwargs)
-        self._update_conns()
-
-    def _update_conns(self):
-        self._update_brand_conn()
-        self._update_group_conn()
-        self._update_category_conn()
-
-    def _update_brand_conn(self):
-        brand = Brand.objects.get(id=self.product.brand.id)
-        if LotBrandConn.objects.filter(lot=self).exists():
-            with transaction.atomic():
-                brand_conn = LotBrandConn.objects.get(lot=self)
-                brand_conn.brand = brand
-                brand_conn.last_update = timezone.now()
-                brand_conn.save()
-        else:
-            with transaction.atomic():
-                brand_conn = LotBrandConn(
-                    lot=self,
-                    brand=brand,
-                    last_update=timezone.now()
-                )
-                brand_conn.save()
-
-    def _update_group_conn(self):
-        group = Group.objects.get(id=self.product.group.id)
-        if LotGroupConn.objects.filter(lot=self).exists():
-            with transaction.atomic():
-                group_conn = LotGroupConn.objects.get(lot=self)
-                group_conn.brand = group
-                group_conn.last_update = timezone.now()
-                group_conn.save()
-        else:
-            with transaction.atomic():
-                group_conn = LotGroupConn(
-                    lot=self,
-                    group=group,
-                    last_update=timezone.now()
-                )
-                group_conn.save()
-
-    def _update_category_conn(self):
-        categories = self.product.group.get_categories()
-        if LotCategoryConn.objects.filter(lot=self).exists():
-            with transaction.atomic():
-                cat_conn = LotCategoryConn.objects.get(lot=self)
-                cat_conn.last_update = timezone.now()
-                cat_conn.save()
-                for ct in categories:
-                    cat_conn.category.add(ct)
-        else:
-            with transaction.atomic():
-                cat_conn = LotCategoryConn(
-                    lot=self,
-                    last_update=timezone.now()
-                )
-                cat_conn.save()
-                for ct in categories:
-                    cat_conn.category.add(ct)
+        Lot.objects.update_conn(self)
 
 
 class LotGalleryManager(models.Manager):
