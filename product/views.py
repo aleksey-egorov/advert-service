@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.views.generic import View
 from django.core import serializers
 
-from product.models import Group
+from product.models import Group, ProductGallery, Product
 
 # Create your views here.
 

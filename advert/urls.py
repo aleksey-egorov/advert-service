@@ -35,6 +35,7 @@ urlpatterns = [
     path('catalog/lots/list/', CatalogLotsListView.as_view()),
     path('catalog/lots/<str:category>/', CatalogLotsView.as_view()),
     path('catalog/lots/<str:category>/<str:group>/', CatalogLotsView.as_view()),
+    path('catalog/lots/<str:category>/<str:pargroup>/<str:group>/', CatalogLotsView.as_view()),
     path('catalog/lots/', CatalogLotsView.as_view()),
     path('catalog/groups/list/', CatalogGroupsListView.as_view()),
     path('lot/<str:alias>/', LotView.as_view()),

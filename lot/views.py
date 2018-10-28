@@ -16,7 +16,7 @@ from utils.context import Context
 class CatalogLotsView(View):
     '''Основная страница каталога лотов'''
 
-    def get(self, request, category=-1, group=-1):
+    def get(self, request, category=-1, pargroup=-1, group=-1):
         categories = Category.objects.filter(active=True).order_by("sorting")
         groups = Group.objects.filter(active=True).order_by('name')
         brands = Brand.objects.filter(active=True).order_by('name')

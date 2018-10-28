@@ -1,4 +1,4 @@
-import datetime
+import os
 import logging
 from django.db import models
 from django.db import transaction
@@ -28,6 +28,7 @@ class Group(models.Model):
     category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, blank=True) # Группа-родитель всегда принадлежит одной категории
     parents = models.ManyToManyField('Group')                                                # Одна подгруппа может иметь несколько групп-родителей,
     alias = models.CharField('Алиас', max_length=120, unique=True)                           # а значит и несколько категорий
+    single_name = models.CharField('Название (в единичном числе)', max_length=120, null=True, blank=True)
     active = models.BooleanField('Активность', default=False, null=True, blank=True)
 
     def get_url(self):
@@ -74,11 +75,12 @@ class Product(models.Model):
     name = models.CharField('Название/Модель', max_length=120)
     brand = models.ForeignKey(Brand, on_delete=models.SET_NULL, null=True, blank=True)
     group = models.ForeignKey(Group, on_delete=models.SET_NULL, null=True, blank=True)
-    alias = models.CharField('Алиас', max_length=120, unique=True)
-    description = models.TextField('Описание')
-    pub_date = models.DateTimeField('Дата публикации', default=None)
-    upd_date = models.DateTimeField('Дата последнего обновления', default=None)
+    alias = models.CharField('Алиас', max_length=120, unique=False)
+    description = models.TextField('Описание', null=True, blank=True)
+    pub_date = models.DateTimeField('Дата публикации', default=None, null=True, blank=True)
+    upd_date = models.DateTimeField('Дата последнего обновления', default=None, null=True, blank=True)
     main_image = models.ImageField('Главное фото', null=True, blank=True, upload_to='products/')
+    tech_description = models.TextField('Техническое описание', null=True, blank=True)
     active = models.BooleanField('Активность', default=False, null=True, blank=True)
 
     objects = ProductManager()
@@ -99,7 +101,6 @@ class Product(models.Model):
             old_group = Product.objects.get(id=self.id).group
         super().save(*args, **kwargs)
         Product.objects.update_conn(self.brand, self.group, old_group)
-        self.logger.info("Update prod conn {} {} {} ".format(self.brand, self.group, old_group))
 
     def delete(self, *args, **kwargs):
         old_group = None
@@ -108,3 +109,28 @@ class Product(models.Model):
         super().delete(*args, **kwargs)
         Product.objects.update_conn(self.brand, self.group, old_group)
 
+
+class ProductGalleryManager(models.Manager):
+
+    def update_gallery(self, product, images):
+        self._update_main_image(product)
+
+    def _update_main_image(self, product):
+        if self.filter(product=product).exists():
+            first_image = self.filter(product=product).order_by('sorting')[0]
+            if first_image.num >= 0:
+                image = self.get(product=product, num=first_image.num)
+                product.main_image = os.path.join(image.directory, str(image.big_image))
+                product.save(update_fields=['main_image'])
+
+
+class ProductGallery(models.Model):
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, null=True, blank=True)
+    num = models.IntegerField('Номер изображения', null=True, blank=True)
+    directory = models.CharField('Папка', max_length=10, unique=False, null=True, blank=True)
+    big_image = models.ImageField('Большое изображение', null=True, blank=True, upload_to='products/')
+    small_image = models.ImageField('Малое изображение', null=True, blank=True, upload_to='products/')
+    sorting = models.IntegerField('Сортировка', null=True, blank=True)
+    active = models.BooleanField('Активность', default=True, null=True, blank=True)
+
+    objects = ProductGalleryManager()
