@@ -22,7 +22,7 @@
         <div id="left_container" class="left w75">
 
             <div id="lot_wrap">
-                <div class="unite_bg"  style="background-image: url('/media/{{ lot.main_image }}');
+                <div class="unite_bg"  style="background-image: url('/media/lots/{{ lot.main_image }}');
                                 background-size: cover; background-position: center center; background-repeat: no-repeat;">
                 </div>
                 <div class="unite_wrap_lot">
@@ -30,7 +30,7 @@
 
                                     <img alt="<?=$lot['group_single_name'];?> <?=$lot['lot_name'];?> - <?=$lot['myear_formatted'];?><?=$lot['location_formatted'];?>"
                                          src="/media/{{ lot.main_image }}"
-                                         data-image="/media/{{ lot.main_image }}"
+                                         data-image="/media/lots/{{ lot.main_image }}"
                                          data-description="<?=$lot['group_single_name'];?> <?=$lot['lot_name'];?> - <?=$lot['myear_formatted'];?><?=$lot['location_formatted'];?>"
                                     >
 

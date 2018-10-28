@@ -10,7 +10,7 @@ class Supplier(models.Model):
     alias = models.CharField('Алиас', max_length=255, unique=True, null=False, blank=False)
     org = models.ForeignKey('SupplierOrg', on_delete=models.SET_NULL, null=True, blank=True)
     address = models.TextField('Адрес', null=True, blank=True)
-    phone = models.CharField('Телефон', max_length=16, null=True, blank=True)
+    phone = models.CharField('Телефон', max_length=30, null=True, blank=True)
     description = models.TextField('Описание',  null=True, blank=True)
     email = models.CharField('E-mail', max_length=60, null=True, blank=True)
     url = models.CharField('Веб-сайт', max_length=120, null=True, blank=True)
@@ -28,7 +28,9 @@ class Supplier(models.Model):
 
     @property
     def stat_lots_total(self):
-        return self.stat_lots_new + self.stat_lots_used
+        if not self.stat_lots_new == None and not self.stat_lots_used == None:
+            return self.stat_lots_new + self.stat_lots_used
+        return 0
 
     def stat_lots_formatted(self):
         total = self.stat_lots_total
@@ -52,7 +54,7 @@ class SupplierOrg(models.Model):
     type = models.ForeignKey('SupplierType', on_delete=models.SET_NULL, null=True, blank=True)
     alias = models.CharField('Алиас', max_length=255, unique=True, null=False, blank=False)
     logo = models.FileField(null=True, blank=True, upload_to='orgs/')                           # Используем FileField т.к. ImageField не работает с svg
-    phone = models.CharField('Телефон', max_length=16,null=True, blank=True)                    # TODO image validation
+    phone = models.CharField('Телефон', max_length=30,null=True, blank=True)                    # TODO image validation
     url = models.CharField('Веб-сайт', max_length=120, null=True, blank=True)
     description = models.TextField('Описание', null=True, blank=True)
     email = models.CharField('E-mail', max_length=60, null=True, blank=True)

@@ -232,17 +232,17 @@ class Lot(models.Model):
     short_description = models.TextField('Краткое описание', default=None, null=True, blank=True)
     tech_description = models.TextField('Техническое описание', default=None, null=True, blank=True)
     alias = models.CharField('Алиас', max_length=255, default=None, unique=True, null=True)
-    active = models.BooleanField('Активность', default=False, null=True, blank=True)
     new_prod_state = models.BooleanField('Продукт новый или б/у', default=False, null=True, blank=True)
-    best = models.BooleanField('Рекомендованное предложение', default=False, null=True, blank=True)
     add_date = models.DateTimeField('Дата добавления', default=None, null=True, blank=True)
     pub_date = models.DateTimeField('Дата публикации', default=None, null=True, blank=True)
     upd_date = models.DateTimeField('Дата последнего обновления', default=None, null=True, blank=True)
     act_date = models.DateTimeField('Дата окончания активности', default=None, null=True, blank=True)
-    main_image = models.ImageField('Главное фото', null=True, blank=True, upload_to='lots/')
+    main_image = models.CharField('Главное фото', max_length=100, null=True, blank=True)
     manuf_year = models.IntegerField('Год выпуска', null=True, blank=True)
     tags = models.ManyToManyField('main.Tag')
     author = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
+    best = models.BooleanField('Рекомендованное предложение', default=False, null=True, blank=True)
+    active = models.BooleanField('Активность', default=False, null=True, blank=True)
 
     objects = LotManager()
     logger = logging.getLogger('advert.lot')
@@ -319,7 +319,7 @@ class LotGalleryManager(models.Manager):
             for im in gallery_images:
                 del_form = delete_form()
                 del_form.set_initial(num=im.num, status='old')
-                lot_gallery[im.num] = {'num': im.num, 'type':'real', 'image': im.image, 'form': del_form}
+                lot_gallery[im.num] = {'num': im.num, 'type':'real', 'image': os.path.join('lots', im.directory, str(im.big_image)), 'form': del_form}
 
         return lot_gallery
 
@@ -370,14 +370,16 @@ class LotGalleryManager(models.Manager):
             first_image = self.filter(lot=lot).order_by('sorting')[0]
             if first_image.num >= 0:
                 image = self.get(lot=lot, num=first_image.num)
-                lot.main_image = image.image
+                lot.main_image = os.path.join(image.directory, str(image.big_image))
                 lot.save(update_fields=['main_image'])
 
 
 class LotGallery(models.Model):
     lot = models.ForeignKey(Lot, on_delete=models.CASCADE, null=True, blank=True)
     num = models.IntegerField('Номер', null=True, blank=True)
-    image = models.ImageField('Фото', null=True, blank=True, upload_to='lots/')
+    directory = models.CharField('Папка', max_length=10, unique=False, null=True, blank=True)
+    big_image = models.ImageField('Большое изображение', null=True, blank=True, upload_to='lots/')
+    small_image = models.ImageField('Малое изображение', null=True, blank=True, upload_to='lots/')
     sorting = models.IntegerField('Сортировка', null=True, blank=True)
     active = models.BooleanField('Активность', default=True, null=True, blank=True)
 

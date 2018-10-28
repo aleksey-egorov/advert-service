@@ -81,6 +81,7 @@ class Product(models.Model):
     upd_date = models.DateTimeField('Дата последнего обновления', default=None, null=True, blank=True)
     main_image = models.ImageField('Главное фото', null=True, blank=True, upload_to='products/')
     tech_description = models.TextField('Техническое описание', null=True, blank=True)
+    popular = models.BooleanField('Популярный', null=True, blank=True)
     active = models.BooleanField('Активность', default=False, null=True, blank=True)
 
     objects = ProductManager()

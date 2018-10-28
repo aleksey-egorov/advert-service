@@ -1,3 +1,5 @@
+from django.conf import settings
+
 from product.models import Category, Group
 from geo.models import Region
 
@@ -20,12 +22,16 @@ def get_main_menu():
 
 def get_session_vals(request):
     vals = {}
+    region = Region.objects.get(id=settings.DEFAULT_REGION)
     if request:
-        if request.session['region'] > 0:
-            region = Region.objects.get(id=request.session['region'])
-        else:
-            region = request.user.region
-        vals['region'] = region
+        try:
+            if request.session['region'] > 0:
+                region = Region.objects.get(id=request.session['region'])
+            else:
+                region = request.user.region
+        except:
+            pass
+    vals['region'] = region
     return vals
 
 

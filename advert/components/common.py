@@ -168,4 +168,5 @@ LOGOUT_REDIRECT_URL = '/'
 LOGIN_REDIRECT_URL = '/'
 LOGIN_URL = '/login/'
 
-
+# Specific values
+DEFAULT_REGION = 77
