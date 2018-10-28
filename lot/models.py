@@ -241,6 +241,7 @@ class Lot(models.Model):
     act_date = models.DateTimeField('Дата окончания активности', default=None, null=True, blank=True)
     main_image = models.ImageField('Главное фото', null=True, blank=True, upload_to='lots/')
     manuf_year = models.IntegerField('Год выпуска', null=True, blank=True)
+    tags = models.ManyToManyField('main.Tag')
     author = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
 
     objects = LotManager()
@@ -273,6 +274,10 @@ class Lot(models.Model):
     @property
     def region_name(self):
         return self.region.name
+
+    @property
+    def tags_list(self):
+        return ', '.join([tag.name for tag in self.tags.all()])
 
 
     @staticmethod

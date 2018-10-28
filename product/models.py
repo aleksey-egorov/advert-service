@@ -84,6 +84,15 @@ class Product(models.Model):
     objects = ProductManager()
     logger = logging.getLogger('advert.product')
 
+    @property
+    def brand_name(self):
+        return self.brand.name
+
+    @property
+    def group_name(self):
+        return self.group.name
+
+
     def save(self, *args, **kwargs):
         old_group = None
         if Product.objects.filter(id=self.id).exists():

@@ -16,6 +16,10 @@ class Brand(models.Model):
     tags = models.ManyToManyField('main.Tag')
     active = models.BooleanField('Активность', default=False, null=True, blank=True)
 
+    @property
+    def tags_list(self):
+        return ', '.join([tag.name for tag in self.tags.all()])
+
 
 # Intermediate models
 
