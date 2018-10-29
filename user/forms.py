@@ -63,12 +63,12 @@ class LotAddForm(forms.Form):
     currency = forms.ChoiceField(label='Валюта', choices=FormHelper.make_options(currency_list, option_all=False))
 
     state = forms.ChoiceField(label='Новый или б/у', choices=[("new", "Новый"), ("used", "б/у")])
-    manuf_year = forms.IntegerField(label='Год выпуска')
+    manuf_year = forms.IntegerField(label='Год выпуска', required=False)
 
     region_list = Region.objects.filter(active=True).order_by('name').all()
     region = forms.ChoiceField(label='Регион', choices=FormHelper.make_options(region_list, option_all=False))
 
-    main_description = forms.CharField(label='Описание', widget=forms.Textarea)
+    main_description = forms.CharField(label='Описание', widget=forms.Textarea, required=False)
     image_filenames = forms.CharField(widget=forms.HiddenInput)
 
     #TODO: extra fields and form validation
@@ -118,12 +118,12 @@ class LotEditForm(forms.Form):
     currency = forms.ChoiceField(label='Валюта', choices=FormHelper.make_options(currency_list, option_all=False))
 
     state = forms.ChoiceField(label='Новый или б/у', choices=[("new", "Новый"), ("used", "б/у")])
-    manuf_year = forms.IntegerField(label='Год выпуска')
+    manuf_year = forms.IntegerField(label='Год выпуска', required=False)
 
     region_list = Region.objects.filter(active=True).order_by('name').all()
     region = forms.ChoiceField(label='Регион', choices=FormHelper.make_options(region_list, option_all=False))
 
-    main_description = forms.CharField(label='Описание', widget=forms.Textarea)
+    main_description = forms.CharField(label='Описание', widget=forms.Textarea, required=False)
     image_filenames = forms.CharField(widget=forms.HiddenInput)
 
     #TODO: extra fields and form validation

@@ -400,7 +400,7 @@ class LotGallery(models.Model):
 
     @property
     def big_image_path(self):
-        return self.objects.get_image_path(self.directory, str(self.big_image))
+        return LotGallery.objects.get_image_path(self.directory, str(self.big_image))
 
 
 # Intermediate models
