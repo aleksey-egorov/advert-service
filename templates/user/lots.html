@@ -11,20 +11,22 @@
         <table cellpadding="0" cellspacing="0" class="common w100" id="my_lots_table">
             <thead>
                 <tr>
+                    <td>Фото</td>
                     <td>Номер лота</td>
                     <td>Название</td>
-                    <td>Фото</td>
                     <td>Добавлен</td>
+                    <td>Отредактирован</td>
                     <td>Активен</td>
                     <td>Редактировать</td>
                 </tr>
             </thead>
             {% for lot in lots %}
                 <tr>
+                    <td class="foto_td"><div class="small_image" style="background-image:url('/media/lots/{{ lot.main_image }}');background-repeat:no-repeat;background-position:center center;background-size:cover;"></div></td>
                     <td>{{ lot.num }}</td>
                     <td>{{ lot.name }}</td>
-                    <td class="foto_td"><div class="small_image" style="background-image:url('/media/lots/{{ lot.main_image }}');background-repeat:no-repeat;background-position:center center;background-size:cover;"></div></td>
                     <td>{{ lot.add_date | date:"d-m-Y h:i:s" }}</td>
+                    <td>{{ lot.upd_date | date:"d-m-Y h:i:s" }}</td>
                     <td>{{ lot.active_name }}</td>
                     <td><a class=gray href="/user/lot/edit/{{ lot.id }}/">Изменить</a></td>
                 </tr>

@@ -7,11 +7,18 @@
     color:#666;
     margin-right:4px;
     padding: 10px 24px;
+    -webkit-transition: background .1s;
+    -o-transition: background .1s;
+    transition: background .1s;
+    font-size: 14px;
+    border: none;
+    cursor: pointer;
 }
 
 #filter_wrap button:nth-child(3) {
     margin-right:0px;
 }
+
 
 #filter_wrap button.active, #filter_wrap button:hover {
     background-color: #f87000;

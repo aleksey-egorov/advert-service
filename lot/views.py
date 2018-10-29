@@ -37,7 +37,7 @@ class CatalogLotsView(View):
             "form": form,
             "lots": lot_list,
             "context": context,
-            "message": "PARAMS={} ".format(params)
+            #"message": "PARAMS={} ".format(params)
         })
 
 class CatalogLotsListView(View):

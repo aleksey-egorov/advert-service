@@ -279,6 +279,11 @@ class Lot(models.Model):
     def tags_list(self):
         return ', '.join([tag.name for tag in self.tags.all()])
 
+    @property
+    def gallery_image_paths(self):
+        image_paths = [x.big_image_path for x in LotGallery.objects.filter(lot=self).order_by('num').all()]
+        return image_paths
+
 
     @staticmethod
     def get_recommended(id):
@@ -384,6 +389,10 @@ class LotGallery(models.Model):
     active = models.BooleanField('Активность', default=True, null=True, blank=True)
 
     objects = LotGalleryManager()
+
+    @property
+    def big_image_path(self):
+        return os.path.join(self.directory, str(self.big_image))
 
 
 

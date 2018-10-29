@@ -4,13 +4,12 @@
 
 {% load static %}
 <link rel="stylesheet" type="text/css" href="{% static 'css/lot/lot.css' %}" />
-
-<script type='text/javascript' src='/static/js/plugins/unitegallery/js/unitegallery.min.js'></script>
-<script type='text/javascript' src='/static/js/plugins/unitegallery/themes/grid/ug-theme-grid.js'></script>
-
 <link rel='stylesheet' href='/static/js/plugins/unitegallery/css/unite-gallery.css' type='text/css' />
 <script type='text/javascript' src='/static/js/plugins/unitegallery/themes/default/ug-theme-default.js'></script>
 <link rel='stylesheet' href='/static/js/plugins/unitegallery/themes/default/ug-theme-default.css' type='text/css' />
+
+<script type='text/javascript' src='/static/js/plugins/unitegallery/js/unitegallery.min.js'></script>
+<script type='text/javascript' src='/static/js/plugins/unitegallery/themes/grid/ug-theme-grid.js'></script>
 
 
 <div class="page_head">
@@ -27,13 +26,13 @@
                 </div>
                 <div class="unite_wrap_lot">
                             <div id="unite_gallery">
-
+                                {% for path in lot.gallery_image_paths %}
                                     <img alt="<?=$lot['group_single_name'];?> <?=$lot['lot_name'];?> - <?=$lot['myear_formatted'];?><?=$lot['location_formatted'];?>"
-                                         src="/media/{{ lot.main_image }}"
-                                         data-image="/media/lots/{{ lot.main_image }}"
+                                         src="/media/lots/{{ path }}"
+                                         data-image="/media/lots/{{ path }}"
                                          data-description="<?=$lot['group_single_name'];?> <?=$lot['lot_name'];?> - <?=$lot['myear_formatted'];?><?=$lot['location_formatted'];?>"
                                     >
-
+                                {% endfor %}
                             </div>
                 </div>
             </div>
@@ -45,9 +44,9 @@
             <div id="short_upper">
                 <div class="price">{{ lot.price_formatted }}</div>
                 <div class="buttons">
-                    <button>В кредит</button>
-                    <button>В лизинг</button>
-                    <button>Аренда</button>
+                    <button class="green">В кредит</button>
+                    <button class="green">В лизинг</button>
+                    <button class="green">Аренда</button>
                 </div>
             </div>
             <div id="tech_descr">
@@ -56,7 +55,7 @@
 
             <div id="contacts_wrap">
                 <div class="inline">
-                        <div class="button_wrap"  id="contacts-list"><button>Показать контакты</button></div>
+                        <div class="button_wrap"  id="contacts-list"><button class="green">Показать контакты</button></div>
 
                         <div class="pname_wrap">
                             <div class="wr"><a class="suppl_name" href="/supplier/office/{{ lot.supplier.alias }}/">{{ lot.supplier.main_name }}</a> <span class="lottext">({{ lot.supplier.stat_lots_formatted }})</span></div>
@@ -85,7 +84,7 @@
                         {{ form.as_ul }}
                      </ul>
                      <div class="btn">
-                         <button>Отправить</button>
+                         <button class="green">Отправить</button>
                      </div>
                  </form>
              </div>

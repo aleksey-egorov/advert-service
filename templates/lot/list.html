@@ -6,7 +6,7 @@
         {% for lot in lots %}
                         <li class="lot_li col4 mbottom">
                                 <a href="/lot/{{ lot.alias }}/">
-                                    <div class="lot_image" style="background-image:url('/media/{{ lot.main_image }}');background-repeat:no-repeat;background-position:center center;background-size:cover;"></div>
+                                    <div class="lot_image" style="background-image:url('/media/lots/{{ lot.main_image }}');background-repeat:no-repeat;background-position:center center;background-size:cover;"></div>
                                     <div class="lot_info">
                                         <div class="lot_title">{{ lot.name }}</div>
                                         <div class="lot_price_wrap">

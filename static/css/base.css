@@ -154,7 +154,7 @@ p.error-message {
     color: lightcoral;
 }
 
-button {
+button.green {
     background: #1fbd61;
     color: #fff;
     padding: 10px 20px;
@@ -165,7 +165,7 @@ button {
     border: none;
     cursor: pointer;
 }
-button:hover {
+button.green:hover {
     text-decoration: none;
     background: #23d36c;
 }
@@ -431,6 +431,7 @@ table.common td{
      background-color:#efefef;
     width:300px;
     display:none;
+    z-index:9999;
 }
 
 #menu_header li.active .submenu {
@@ -478,7 +479,7 @@ table.common td{
     right:0px;
     top:70px;
     display:none;
-    z-index:99999;
+    z-index:9999;
 }
 
 #user_menu.active {
