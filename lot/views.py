@@ -7,7 +7,8 @@ from lot.models import Lot
 from product.models import Category, Group
 from brand.models import Brand
 from geo.models import Region
-from lot.forms import FilterForm, ContactForm
+from lot.forms import FilterForm
+from supplier.forms import SupplierContactForm
 from utils.form import FormHelper
 from utils.context import Context
 
@@ -22,6 +23,7 @@ class CatalogLotsView(View):
         brands = Brand.objects.filter(active=True).order_by('name')
         regions = Region.objects.filter(active=True).order_by('name')
         context = Context.get(request)
+        page = request.POST.get('page')
 
         params = {
             'region': context['vals']['region'].id,
@@ -29,15 +31,22 @@ class CatalogLotsView(View):
             'group': FormHelper.get_option_id(groups, group),
         }
         lot_list = Lot.objects.make_search(params)
+        paginator = Paginator(lot_list, 2)
+
+        try:
+            lots = paginator.get_page(page)
+        except PageNotAnInteger:
+            lots = paginator.get_page(1)
+        except EmptyPage:
+            lots = paginator.get_page(page)
 
         form = FilterForm(regions, categories, groups, brands)
         form.set_options(params)
 
         return render(request, "lot/catalog.html", {
             "form": form,
-            "lots": lot_list,
-            "context": context,
-            #"message": "PARAMS={} ".format(params)
+            "lots": lots,
+            "context": context
         })
 
 class CatalogLotsListView(View):
@@ -77,7 +86,8 @@ class LotView(View):
 
     def get(self, request, alias):
         lot = get_object_or_404(Lot, alias=alias, active=True)
-        form = ContactForm()
+        form = SupplierContactForm()
+        form.set_initial(lot.supplier.id)
         recommended_lots = Lot.get_recommended(lot.id)
 
         return render(request, "lot/lot.html", {

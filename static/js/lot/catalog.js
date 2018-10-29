@@ -7,6 +7,7 @@ Catalog={
 
     activateFilter:function() {
          var params = Catalog.el.filter_form.serialize();
+         console.log("Params: " + params);
          $.ajax({
              url: '/catalog/lots/list/',
              type: 'post',
@@ -74,3 +75,5 @@ $("#filter_wrap select").change(function() {
 $("#filter_wrap #id_category").change(function() {
     Catalog.updateGroupsList($(this).val());
 });
+
+Catalog.initPaginator();

@@ -78,7 +78,7 @@
          <div  class="right w25">
              <div id="contact_form">
                  <h3>Сообщение продавцу</h3>
-                 <form action="/lot/{{ lot.alias }}/" method="post" class="common">
+                 <form action="/lot/{{ lot.alias }}/" method="post" class="common" id="supplier_form">
                      {% csrf_token %}
                      <ul class="form_ul full_width">
                         {{ form.as_ul }}
@@ -87,6 +87,7 @@
                          <button class="green">Отправить</button>
                      </div>
                  </form>
+                 <div class="result_div"></div>
              </div>
         </div>
 

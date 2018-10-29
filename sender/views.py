@@ -35,8 +35,8 @@ class SupplierOrgSendMessageView(View):
     def post(self, request):
         form = SupplierOrgContactForm(request.POST)
         if form.is_valid():
-            supplier_id = int(form.cleaned_data['id'])
-            supplier = SupplierOrg.objects.get(id=supplier_id)
+            suporg_id = int(form.cleaned_data['id'])
+            suporg = SupplierOrg.objects.get(id=suporg_id)
 
             message_context = {
                 'name': form.cleaned_data['name'],
@@ -45,7 +45,28 @@ class SupplierOrgSendMessageView(View):
                 'message': form.cleaned_data['message']
             }
 
-            subject = 'Cообщение для постащика ' + supplier.name
+            subject = 'Cообщение для постащика ' + suporg.name
+            result = Mailer().send_template_message([settings.EMAIL_TO], 'supplier_message',
+                                                    subject, message_context)
+            return JsonResponse({'result': result}, safe=False)
+
+
+class SupplierSendMessageView(View):
+    ''' '''
+    def post(self, request):
+        form = SupplierContactForm(request.POST)
+        if form.is_valid():
+            supplier_id = int(form.cleaned_data['id'])
+            supplier = Supplier.objects.get(id=supplier_id)
+
+            message_context = {
+                'name': form.cleaned_data['name'],
+                'phone': form.cleaned_data['phone'],
+                'email': form.cleaned_data['email'],
+                'message': form.cleaned_data['message']
+            }
+
+            subject = 'Cообщение для постащика ' + supplier.full_name
             result = Mailer().send_template_message([settings.EMAIL_TO], 'supplier_message',
                                                     subject, message_context)
             return JsonResponse({'result': result}, safe=False)

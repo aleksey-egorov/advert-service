@@ -57,23 +57,24 @@
                 </ul>
             </div>
 
-            <div class="pagination">
-                <span class="step-links">
-                    {% if questions.has_previous %}
-                        <a href="?page=1">&laquo; first</a>
-                        <a href="?page={{ questions.previous_page_number }}">previous</a>
-                    {% endif %}
+            <div class="pagination" >
+                <div class="step-links">
+                        {% if lots.has_previous %}
+                            <a data-id="1"><<</a>
+                            <a data-id="{{ lots.previous_page_number }}"><</a>
+                        {% endif %}
 
-                    <span class="current">
-                        Page {{ questions.number }} of {{ questions.paginator.num_pages }}
-                    </span>
+                        {% for page in lots.paginator.page_range %}
+                            <a data-id="{{ page }}" class="{% if page == lots.number %} active {% endif %}">{{ page }}</a>
+                        {% endfor %}
 
-                    {% if questions.has_next %}
-                        <a href="?page={{ questions.next_page_number }}">next</a>
-                        <a href="?page={{ questions.paginator.num_pages }}">last &raquo;</a>
-                    {% endif %}
-                </span>
+                        {% if lots.has_next %}
+                            <a data-id="{{ lots.next_page_number }}">></a>
+                            <a data-id="{{ lots.paginator.num_pages }}">>></a>
+                        {% endif %}
+                </div>
             </div>
+
 
         </div>
 </div>

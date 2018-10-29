@@ -21,9 +21,16 @@ class Supplier(models.Model):
     stat_lots_new = models.IntegerField('Статистика: новые лоты', null=True, blank=True)
     stat_lots_used = models.IntegerField('Статистика: б/у лоты', null=True, blank=True)
 
+    @property
     def main_name(self):
         if not self.org == None:
             return self.org.name
+        return self.name
+
+    @property
+    def full_name(self):
+        if not self.org == None:
+            return self.org.name + ' - ' + self.name
         return self.name
 
     @property
