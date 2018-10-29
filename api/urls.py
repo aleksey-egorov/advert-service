@@ -32,16 +32,6 @@ urlpatterns = [
     url(regex=r"(?P<version>(v1))/products/",
         view=ProductListAPIView.as_view(), name="product-list"),
 
-    #url(regex=r"^(?P<version>(v1|v2))/trending/",
-    #    view=TrendingAPIView.as_view(),
-    #    name="trending"),
-    #url(regex=r"^(?P<version>(v1|v2))/search/?$",
-    #    view=SearchAPIView.as_view(),
-    #    name="search"),
-    #url(regex=r"^(?P<version>(v1|v2))/questions/(?P<pk>[0-9]+)/answers/",
-    #    view=QuestionAnswersAPIView.as_view(),
-    #    name="answer"),
-
     url(regex=r'^', view=wrong_url),
 
 ]

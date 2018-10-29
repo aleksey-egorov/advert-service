@@ -4,6 +4,7 @@ from django.http import HttpResponseRedirect
 from django.views.generic import View
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import get_object_or_404
+from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 
 from lot.models import Lot, LotGallery
 from utils.mailer import Mailer
@@ -166,7 +167,17 @@ class LotEditDoneView(LoginRequiredMixin, View):
 
 class UserLotsView(LoginRequiredMixin, View):
     def get(self, request):
-        lots = Lot.objects.filter(author=request.user).order_by('-add_date')
+        page = request.GET.get('page')
+        lots_list = Lot.objects.filter(author=request.user).order_by('-upd_date')
+        paginator = Paginator(lots_list, 12)
+
+        try:
+            lots = paginator.get_page(page)
+        except PageNotAnInteger:
+            lots = paginator.get_page(1)
+        except EmptyPage:
+            lots = paginator.get_page(page)
+
         return render(request, "user/lots.html", {
             "lots": lots,
             "context": Context.get(request)

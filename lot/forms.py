@@ -30,11 +30,11 @@ class FilterForm(forms.Form):
 
     #TODO: add extra fields and validation
 
-    #def clean_login(self):
-    #    login = self.cleaned_data['login']
+    #def clean_field(self):
+    #    field = self.cleaned_data['login']
     #    if User.objects.filter(username=login).exists():
     #        raise forms.ValidationError('User with login "' + login+ '" already exists')
-    #    return login
+    #    return field
 
 
 

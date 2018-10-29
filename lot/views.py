@@ -31,7 +31,7 @@ class CatalogLotsView(View):
             'group': FormHelper.get_option_id(groups, group),
         }
         lot_list = Lot.objects.make_search(params)
-        paginator = Paginator(lot_list, 2)
+        paginator = Paginator(lot_list, 12)
 
         try:
             lots = paginator.get_page(page)
@@ -67,7 +67,7 @@ class CatalogLotsListView(View):
         params = FormHelper.get_params_from_post(self.params_keys, request)
 
         lot_list = Lot.objects.make_search(params)
-        paginator = Paginator(lot_list, 2)
+        paginator = Paginator(lot_list, 12)
 
         try:
             lots = paginator.get_page(page)

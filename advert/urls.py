@@ -18,8 +18,7 @@ from django.urls import path
 from django.contrib.auth import views as auth_views
 from django.conf.urls import url, include
 
-from user.views import RegisterView, RegisterDoneView, ProfileView, LotAddView, LotAddDoneView, UserLotsView
-from user.views import LotEditView, LotEditDoneView, LotImageAddView, LotImageDelView
+from user.views import RegisterView, RegisterDoneView
 from main.views import MainView, SearchView, TagView
 from lot.views import CatalogLotsView, CatalogLotsListView, LotView
 from product.views import CatalogGroupsListView
@@ -51,14 +50,7 @@ urlpatterns = [
     path('register/', RegisterView.as_view()),
     path('login/', auth_views.LoginView.as_view(template_name='user/login.html', extra_context={"context": Context.get()})),
     path('logout/', auth_views.LogoutView.as_view()),
-    path('user/profile/', ProfileView.as_view()),
-    path('user/lot/add/', LotAddView.as_view()),
-    path('user/lot/add/done/', LotAddDoneView.as_view()),
-    path('user/lot/edit/<int:id>/', LotEditView.as_view()),
-    path('user/lot/edit/done/', LotEditDoneView.as_view()),
-    path('user/lot/image/add/', LotImageAddView.as_view()),
-    path('user/lot/image/del/', LotImageDelView.as_view()),
-    path('user/lots/', UserLotsView.as_view()),
+    url(r'^user/', include('user.urls')),
 
     url(r'^acomp/', include('acomp.urls')),
     url(r'^sender/', include('sender.urls')),

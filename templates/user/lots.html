@@ -33,7 +33,30 @@
             {% endfor %}
         </table>
 
+</div>
+
+
+<div class="lots_wrap">
+    <div class="pagination" >
+                <div class="step-links">
+                        {% if lots.has_previous %}
+                            <a href="/user/lots/?page=1"><<</a>
+                            <a href="/user/lots/?page={{ lots.previous_page_number }}"><</a>
+                        {% endif %}
+
+                        {% for page in lots.paginator.page_range %}
+                            <a href="/user/lots/?page={{ page }}" class="{% if page == lots.number %} active {% endif %}">{{ page }}</a>
+                        {% endfor %}
+
+                        {% if lots.has_next %}
+                            <a href="/user/lots/?page={{ lots.next_page_number }}">></a>
+                            <a href="/user/lots/?page={{ lots.paginator.num_pages }}">>></a>
+                        {% endif %}
+                </div>
     </div>
+</div>
+
+
 
 
     {% if message %}
