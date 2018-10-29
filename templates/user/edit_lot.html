@@ -104,7 +104,7 @@
 
                             {% if image.type == 'real' %}
                             <div id="userphoto_{{ image.num }}" class="photo_wrap">
-                                  <div class="photo" data-type="real" style="background-image:url('/media/{{ image.image }}');background-repeat:no-repeat;background-position:center center;background-size:cover;">
+                                  <div class="photo" data-type="real" style="background-image:url('/media/lots/{{ image.image }}');background-repeat:no-repeat;background-position:center center;background-size:cover;">
                                         <div class="del-layer"><a href="/" class="colorbox"></a></div>
                                         <div class="del"><button class="delete" >Удалить</button></div>
                                         <form method="post" action="/user/lot/image/del/" class="del_form">

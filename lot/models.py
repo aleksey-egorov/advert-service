@@ -327,7 +327,7 @@ class LotGalleryManager(models.Manager):
             for im in gallery_images:
                 del_form = delete_form()
                 del_form.set_initial(num=im.num, status='old')
-                lot_gallery[im.num] = {'num': im.num, 'type':'real', 'image': os.path.join('lots', im.directory, str(im.big_image)), 'form': del_form}
+                lot_gallery[im.num] = {'num': im.num, 'type':'real', 'image': self.get_image_path(im.directory, im.big_image), 'form': del_form}
 
         return lot_gallery
 
@@ -346,18 +346,18 @@ class LotGalleryManager(models.Manager):
                 self._delete_image(lot, image['num'])
         self._update_main_image(lot)
 
-    def _update_image(self, lot, num, filename):
+    def _update_image(self, lot, num, filename):        # TODO: image saving path should be /lots/abc/ (abc - new subdirectory), not /lots/
         if self.filter(lot=lot, num=num).exists():
             with transaction.atomic():
                 gallery = self.get(lot=lot, num=num)
-                gallery.image = os.path.join('lots', filename)
-                gallery.save(update_fields=['image'])
+                gallery.big_image = str(filename)
+                gallery.save(update_fields=['big_image'])
         else:
             with transaction.atomic():
                 gallery = LotGallery(
                     lot=lot,
                     num=num,
-                    image=os.path.join('lots', filename),
+                    big_image=str(filename),
                     sorting=num,
                     active=True
                 )
@@ -375,11 +375,16 @@ class LotGalleryManager(models.Manager):
 
     def _update_main_image(self, lot):
         if self.filter(lot=lot).exists():
-            first_image = self.filter(lot=lot).order_by('sorting')[0]
+            first_image = self.filter(lot=lot).order_by('num')[0]
             if first_image.num >= 0:
                 image = self.get(lot=lot, num=first_image.num)
-                lot.main_image = os.path.join(image.directory, str(image.big_image))
+                lot.main_image = self.get_image_path(image.directory, image.big_image)
                 lot.save(update_fields=['main_image'])
+
+    def get_image_path(self, subdir, file):
+        if not subdir == None:
+            return os.path.join(str(subdir), str(file))
+        return str(file)
 
 
 class LotGallery(models.Model):
@@ -395,8 +400,7 @@ class LotGallery(models.Model):
 
     @property
     def big_image_path(self):
-        return os.path.join(self.directory, str(self.big_image))
-
+        return self.objects.get_image_path(self.directory, str(self.big_image))
 
 
 # Intermediate models
