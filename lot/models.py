@@ -284,6 +284,9 @@ class Lot(models.Model):
         image_paths = [x.big_image_path for x in LotGallery.objects.filter(lot=self).order_by('num').all()]
         return image_paths
 
+    @property
+    def full_name(self):
+        return str(self.product.group.single_name) + ' ' + self.name + ' - ' + str(self.manuf_year) + ', ' + str(self.region_name)
 
     @staticmethod
     def get_recommended(id):

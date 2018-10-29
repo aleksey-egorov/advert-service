@@ -126,12 +126,12 @@
 
 #slides .flex-direction-nav li .flex-prev{
 		left: 0;
-		background: #fff url("../images/arrow_left_transparent.png") no-repeat center center;
+		background: #fff url("/static/images/arrow_left_transparent.png") no-repeat center center;
 	}
 
 #slides .flex-direction-nav li .flex-next{
 		right: 0;
-		background: #fff url("../images/arrow_right_transparent.png") no-repeat center center;
+		background: #fff url("/static/images/arrow_right_transparent.png") no-repeat center center;
 	}
 
 #slides .flex-direction-nav li a:hover{

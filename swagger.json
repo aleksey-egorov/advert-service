@@ -1,0 +1,399 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "Advert API",
+    "description": "",
+    "version": ""
+  },
+  "host": "advert.daiteco.ru",
+  "schemes": [
+    "http"
+  ],
+  "paths": {
+    "/api/token-auth/": {
+      "post": {
+        "parameters": [
+          {
+            "schema": {
+              "properties": {
+                "username": {
+                  "description": "",
+                  "type": "string"
+                },
+                "password": {
+                  "description": "",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "username",
+                "password"
+              ],
+              "type": "object"
+            },
+            "in": "body",
+            "name": "data"
+          }
+        ],
+        "consumes": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Authorization passed"
+          },
+          "400": {
+            "description": "Wrong credentials provided"
+          }
+        },
+        "tags": [
+          "api"
+        ],
+        "summary": "API View that receives a POST with a user's username and password.",
+        "operationId": "token-auth_create",
+        "description": "API View that receives a POST with a user's username and password.\n\nReturns a JSON Web Token that can be used for authenticated requests."
+      }
+    },
+    "/api/{version}/brands/": {
+      "get": {
+        "parameters": [
+          {
+            "in": "path",
+            "description": "API version: \"v1\"",
+            "name": "version",
+            "type": "string",
+            "required": true
+          },
+          {
+            "in": "query",
+            "description": "A page number within the paginated result set.",
+            "name": "page",
+            "type": "integer",
+            "required": false
+          }
+        ],
+        "summary": "Brands list",
+        "description": "Brands list with pagination. JWT token should be provided with request.",
+        "responses": {
+          "200": {
+            "description": "Successful request"
+          },
+          "401": {
+            "description": "Wrong JWT provided, update your token"
+          }
+        },
+        "tags": [
+          "api"
+        ],
+        "operationId": "brands_list"
+      }
+    },
+    "/api/{version}/brands/search/": {
+      "get": {
+        "parameters": [
+          {
+            "in": "path",
+            "description": "API version: \"v1\"",
+            "name": "version",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "q",
+            "description": "Search query",
+            "in": "query",
+            "type": "string",
+            "required": true
+          },
+          {
+            "in": "query",
+            "description": "A page number within the paginated result set.",
+            "name": "page",
+            "type": "integer",
+            "required": false
+          }
+        ],
+        "summary": "Brands search",
+        "description": "Brands search with pagination, uses GET parameter \"q\". JWT token should be provided with request.",
+        "responses": {
+          "200": {
+            "description": "Successful request"
+          },
+          "401": {
+            "description": "Wrong JWT provided, update your token"
+          }
+        },
+        "tags": [
+          "api"
+        ],
+        "operationId": "brands_search_list"
+      }
+    },
+    "/api/{version}/brands/{id}/": {
+      "get": {
+        "parameters": [
+          {
+            "in": "path",
+            "description": "API version: \"v1\"",
+            "name": "version",
+            "type": "string",
+            "required": true
+          },
+          {
+            "in": "path",
+            "description": "A unique integer value identifying this brand.",
+            "name": "id",
+            "type": "integer",
+            "required": true
+          }
+        ],
+        "summary": "Brand details",
+        "description": "Brand details. JWT token should be provided with request.",
+        "responses": {
+          "200": {
+            "description": "Successful request"
+          },
+          "401": {
+            "description": "Wrong JWT provided, update your token"
+          },
+          "404": {
+            "description": "Brand not found, check brand id"
+          }
+        },
+        "tags": [
+          "api"
+        ],
+        "operationId": "brands_read"
+      }
+    },
+    "/api/{version}/lots/": {
+      "get": {
+        "parameters": [
+          {
+            "in": "path",
+            "description": "API version: \"v1\"",
+            "name": "version",
+            "type": "string",
+            "required": true
+          },
+          {
+            "in": "query",
+            "description": "A page number within the paginated result set.",
+            "name": "page",
+            "type": "integer",
+            "required": false
+          }
+        ],
+        "summary": "Lots list",
+        "description": "Lots list with pagination. JWT token should be provided with request.",
+        "responses": {
+          "200": {
+            "description": "Successful request"
+          },
+          "401": {
+            "description": "Wrong JWT provided, update your token"
+          }
+        },
+        "tags": [
+          "api"
+        ],
+        "operationId": "lots_list"
+      }
+    },
+    "/api/{version}/lots/search/": {
+      "get": {
+        "parameters": [
+          {
+            "in": "path",
+            "description": "API version: \"v1\"",
+            "name": "version",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "q",
+            "description": "Search query",
+            "in": "query",
+            "type": "string",
+            "required": true
+          },
+          {
+            "in": "query",
+            "description": "A page number within the paginated result set.",
+            "name": "page",
+            "type": "integer",
+            "required": false
+          }
+        ],
+        "summary": "Lots search",
+        "description": "Lots search with pagination, uses GET parameter \"q\". JWT token should be provided with request.",
+        "responses": {
+          "200": {
+            "description": "Successful request"
+          },
+          "401": {
+            "description": "Wrong JWT provided, update your token"
+          }
+        },
+        "tags": [
+          "api"
+        ],
+        "operationId": "lots_search_list"
+      }
+    },
+    "/api/{version}/lots/{id}/": {
+      "get": {
+        "parameters": [
+          {
+            "in": "path",
+            "description": "API version: \"v1\"",
+            "name": "version",
+            "type": "string",
+            "required": true
+          },
+          {
+            "in": "path",
+            "description": "A unique integer value identifying this lot.",
+            "name": "id",
+            "type": "integer",
+            "required": true
+          }
+        ],
+        "summary": "Lot details",
+        "description": "Lot details. JWT token should be provided with request.",
+        "responses": {
+          "200": {
+            "description": "Successful request"
+          },
+          "401": {
+            "description": "Wrong JWT provided, update your token"
+          },
+          "404": {
+            "description": "Lot not found, check lot id"
+          }
+        },
+        "tags": [
+          "api"
+        ],
+        "operationId": "lots_read"
+      }
+    },
+    "/api/{version}/products/": {
+      "get": {
+        "parameters": [
+          {
+            "in": "path",
+            "description": "API version: \"v1\"",
+            "name": "version",
+            "type": "string",
+            "required": true
+          },
+          {
+            "in": "query",
+            "description": "A page number within the paginated result set.",
+            "name": "page",
+            "type": "integer",
+            "required": false
+          }
+        ],
+        "summary": "Products list",
+        "description": "Products list with pagination. JWT token should be provided with request.",
+        "responses": {
+          "200": {
+            "description": "Successful request"
+          },
+          "401": {
+            "description": "Wrong JWT provided, update your token"
+          }
+        },
+        "tags": [
+          "api"
+        ],
+        "operationId": "products_list"
+      }
+    },
+    "/api/{version}/products/search/": {
+      "get": {
+        "parameters": [
+          {
+            "in": "path",
+            "description": "API version: \"v1\"",
+            "name": "version",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "q",
+            "description": "Search query",
+            "in": "query",
+            "type": "string",
+            "required": true
+          },
+          {
+            "in": "query",
+            "description": "A page number within the paginated result set.",
+            "name": "page",
+            "type": "integer",
+            "required": false
+          }
+        ],
+        "summary": "Product search",
+        "description": "Product search with pagination, uses GET parameter \"q\". JWT token should be provided with request.",
+        "responses": {
+          "200": {
+            "description": "Successful request"
+          },
+          "401": {
+            "description": "Wrong JWT provided, update your token"
+          }
+        },
+        "tags": [
+          "api"
+        ],
+        "operationId": "products_search_list"
+      }
+    },
+    "/api/{version}/products/{id}/": {
+      "get": {
+        "parameters": [
+          {
+            "in": "path",
+            "description": "API version: \"v1\"",
+            "name": "version",
+            "type": "string",
+            "required": true
+          },
+          {
+            "in": "path",
+            "description": "A unique integer value identifying this product.",
+            "name": "id",
+            "type": "integer",
+            "required": true
+          }
+        ],
+        "summary": "Product details",
+        "description": "Product details. JWT token should be provided with request.",
+        "responses": {
+          "200": {
+            "description": "Successful request"
+          },
+          "401": {
+            "description": "Wrong JWT provided, update your token"
+          },
+          "404": {
+            "description": "Product not found, check product id"
+          }
+        },
+        "tags": [
+          "api"
+        ],
+        "operationId": "products_read"
+      }
+    }
+  },
+  "securityDefinitions": {
+    "basic": {
+      "type": "basic"
+    }
+  }
+}

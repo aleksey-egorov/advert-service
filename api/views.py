@@ -1,5 +1,6 @@
 from django.conf import settings
 from django.db.models import Q
+from django.shortcuts import render
 from rest_framework.decorators import api_view, schema, renderer_classes
 from rest_framework.response import Response
 from rest_framework import generics
@@ -68,13 +69,8 @@ class ProductSearchAPIView(generics.ListAPIView):
         queryset = Product.objects.filter(active=True).filter(Q(name__icontains=query)).order_by('name')
         return queryset
 
-
-@api_view()
-@schema(None)
-@renderer_classes([SwaggerUIRenderer, OpenAPIRenderer])
 def schema_view(request):
-    generator = schemas.SchemaGenerator(title='Advert API')
-    return response.Response(generator.get_schema(request=request))
+    return render(request, "api/index.html", {})
 
 @api_view()
 @schema(None)

@@ -27,10 +27,10 @@
                 <div class="unite_wrap_lot">
                             <div id="unite_gallery">
                                 {% for path in lot.gallery_image_paths %}
-                                    <img alt="<?=$lot['group_single_name'];?> <?=$lot['lot_name'];?> - <?=$lot['myear_formatted'];?><?=$lot['location_formatted'];?>"
+                                    <img alt="{{ lot.full_name }}"
                                          src="/media/lots/{{ path }}"
                                          data-image="/media/lots/{{ path }}"
-                                         data-description="<?=$lot['group_single_name'];?> <?=$lot['lot_name'];?> - <?=$lot['myear_formatted'];?><?=$lot['location_formatted'];?>"
+                                         data-description="{{ lot.full_name }}"
                                     >
                                 {% endfor %}
                             </div>
