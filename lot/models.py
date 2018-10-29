@@ -368,6 +368,10 @@ class LotGalleryManager(models.Manager):
         realpath = os.path.join(settings.MEDIA_ROOT, 'lots', filename)
         os.rename(tmppath, realpath)
 
+    def _move_image_from_location(self, source_path, filename):
+        realpath = os.path.join(settings.MEDIA_ROOT, 'lots', filename)
+        os.rename(source_path, realpath)
+
     def _delete_image(self, lot, num):
         if self.filter(lot=lot, num=num).exists():
             gallery = self.get(lot=lot, num=num)
