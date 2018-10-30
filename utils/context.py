@@ -22,7 +22,10 @@ def get_main_menu():
 
 def get_session_vals(request):
     vals = {}
-    region = Region.objects.get(id=settings.DEFAULT_REGION)
+    try:
+        region = Region.objects.get(id=settings.DEFAULT_REGION)
+    except:
+        region = None
     if request:
         try:
             if request.session['region'] > 0:

@@ -26,6 +26,7 @@ class LotTestCase(TestCase):
         Currency.objects.create(id=1, name="RUR", course=1)
         Region.objects.create(id=1, name="Москва")
 
+
     def test_lots_search(self):
         Lot.objects.create(id=1, num="000001", name="КАМАЗ-6520", product=Product.objects.get(id=1), price=2000000,
                              currency=Currency.objects.get(id=1), supplier=Supplier.objects.get(id=1), active=True )

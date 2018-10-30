@@ -217,6 +217,9 @@ def add_lot(lot, filenames):
 
 
 def move_data(raw_names):
+    comp = os.path.join(PARSER_BASE_DIR, 'complete')
+    if not os.path.exists(comp):
+        os.mkdir(comp)
     for name in raw_names:
         oldpath = os.path.join(PARSER_BASE_DIR, 'data', name + '.xlsx')
         newpath = os.path.join(PARSER_BASE_DIR, 'complete', name + '.xlsx')
