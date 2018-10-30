@@ -25,9 +25,6 @@ from user.models import User
 
 PARSER_BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
-print (PARSER_BASE_DIR)
-
-
 
 def read_files(pattern):
     '''Чтение файлов с лотами и списка фотографий'''
@@ -198,7 +195,6 @@ def add_lot(lot, filenames):
             logging.exception("Error adding lot: {}".format(err))
             errors += 1
 
-        print("FNAMES: {}".format(lot['list_num']))
         try:
             num = 0
 
@@ -217,6 +213,7 @@ def add_lot(lot, filenames):
 
 
 def move_data(raw_names):
+    '''Перемещаем обработанные файлы'''
     comp = os.path.join(PARSER_BASE_DIR, 'complete')
     if not os.path.exists(comp):
         os.mkdir(comp)
