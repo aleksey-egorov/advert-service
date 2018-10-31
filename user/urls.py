@@ -1,7 +1,7 @@
 from django.conf.urls import url, include
 
 from user.views import (
-    ProfileView, LotAddView, LotAddDoneView, LotEditView, LotEditDoneView, LotImageAddView,  LotImageDelView, UserLotsView
+    ProfileView, LotAddView, LotAddDoneView, LotEditView, LotEditDoneView, LotDelView, LotDelDoneView, LotImageAddView,  LotImageDelView, UserLotsView
 )
 
 urlpatterns = [
@@ -10,6 +10,8 @@ urlpatterns = [
     url(regex=r'lot/add/', view=LotAddView.as_view()),
     url(regex=r"lot/edit/done/", view=LotEditDoneView.as_view()),
     url(regex=r"lot/edit/(?P<id>[0-9]+)/", view=LotEditView.as_view()),
+    url(regex=r"lot/del/done/", view=LotDelDoneView.as_view()),
+    url(regex=r"lot/del/", view=LotDelView.as_view()),
     url(regex=r"lot/image/add/", view=LotImageAddView.as_view()),
     url(regex=r"lot/image/del/", view=LotImageDelView.as_view()),
     url(regex=r"lots/?$", view=UserLotsView.as_view()),

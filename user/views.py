@@ -1,14 +1,16 @@
 import datetime
+import logging
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
 from django.views.generic import View
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import get_object_or_404
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
+from django.http import JsonResponse
 
 from lot.models import Lot, LotGallery
 from utils.mailer import Mailer
-from user.forms import RegisterForm, UserForm, LotAddForm, LotEditForm, LotImageUploadForm, LotImageDelForm
+from user.forms import RegisterForm, UserForm, LotAddForm, LotEditForm, LotDelForm, LotImageUploadForm, LotImageDelForm
 from user.models import User
 from utils.context import Context
 
@@ -109,7 +111,6 @@ class LotAddView(LoginRequiredMixin, View):
             "message": message,
         })
 
-
 class LotAddDoneView(LoginRequiredMixin, View):
 
     def get(self, request):
@@ -126,12 +127,16 @@ class LotEditView(LoginRequiredMixin, View):
             form_main = LotEditForm()
             form_main.set_options(id)
 
+            form_del = LotDelForm()
+            form_del.set_initial(id)
+
             lot_gallery = LotGallery.objects.get_images_forms(lot, LotImageUploadForm, LotImageDelForm)
 
             return render(request, "user/edit_lot.html", {
                 "lot_id": lot.id,
                 "lot_gallery": lot_gallery,
                 "form": form_main,
+                "form_del": form_del,
                 "context": Context.get(request)
             })
 
@@ -161,6 +166,30 @@ class LotEditView(LoginRequiredMixin, View):
 class LotEditDoneView(LoginRequiredMixin, View):
     def get(self, request):
         return render(request, "user/edit_lot_done.html", {
+            "context": Context.get(request)
+        })
+
+
+class LotDelView(LoginRequiredMixin, View):
+    logger = logging.getLogger('advert.user_view')
+
+    def post(self, request):
+        form = LotDelForm(request.POST)
+        if form.is_valid():
+            lot_id = form.cleaned_data['lot_id']
+            try:
+                lot = Lot.objects.get(id=lot_id)
+                if lot.author == request.user:
+                    lot.delete()
+                    return JsonResponse({"result": "deleted"}, safe=False)
+            except Exception as err:
+                self.logger.error(err)
+        return JsonResponse({"result": "error"}, safe=False)
+
+
+class LotDelDoneView(LoginRequiredMixin, View):
+    def get(self, request):
+        return render(request, "user/del_lot_done.html", {
             "context": Context.get(request)
         })
 

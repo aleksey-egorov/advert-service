@@ -11,7 +11,7 @@ from geo.models import Region
 
 class User(AbstractUser):
     '''Зарегистрированный пользователь'''
-    logger = logging.getLogger('advert.user')
+    logger = logging.getLogger('advert.user_model')
 
     email = models.EmailField(null=True, blank=True, default='')
     phone = models.CharField(null=True, blank=True, default='', max_length=20)

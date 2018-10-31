@@ -138,6 +138,22 @@
 </div>
 
 
+
+<div id="del_reveal" class="reveal_modal medium">
+    <div class="close_reveal_modal"></div>
+    <div class="main_head">Лот будет полностью удален. Вы уверены?</div>
+    <div class="reveal_content tbpad w50 mcenter">
+         <div class="reveal_inner_inline">
+             <button class="green delete" >Удалить</button>
+             <button class="green cancel">Отмена</button>
+             <form id="del_lot"  >
+                   {% csrf_token %}
+                   {{ form_del }}
+             </form>
+         </div>
+    </div>
+</div>
+
     {% if message %}
         <p><strong>
             {{ form.errors }}

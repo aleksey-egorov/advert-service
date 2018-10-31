@@ -276,6 +276,11 @@ class Lot(models.Model):
         return self.region.name
 
     @property
+    def categ_names_list(self):
+        categories = Category.objects.filter(lotcategoryconn__lot=self).all()
+        return ', '.join([x.name for x in categories])
+
+    @property
     def tags_list(self):
         return ', '.join([tag.name for tag in self.tags.all()])
 
@@ -302,7 +307,7 @@ class Lot(models.Model):
     def delete(self, *args, **kwargs):
         old_group = self._lot_current_group()
         super().delete(*args, **kwargs)
-        Lot.objects.update_conn(self, old_group)
+        #Lot.objects.update_conn(self, old_group)
 
     def _lot_current_group(self):
         cur_group = None

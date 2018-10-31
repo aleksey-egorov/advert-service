@@ -1,11 +1,5 @@
 UserLot.init();
 
-$("#delete_button").click(function(e) {
-     e.preventDefault();
-     //TODO: Lot delete confirmation
-});
-
-
 $("#edit_lot_form").submit(function(e) {
      $("#id_brand").val($("#id_brand").attr("data-id"));
      $("#id_product").val($("#id_product").attr("data-id"));
@@ -24,11 +18,37 @@ $("#edit_lot_container select").select2({
         placeholder: "Все"
     });
 
+// TODO: change to custom widgets
 $("#id_brand").attr('data-id', $("#id_brand_id").val());
 $("#id_product").attr('data-id', $("#id_product_id").val());
-
 $("#id_brand_id").val("");
 $("#id_product_id").val("");
+
+
+
+$("#delete_button").click(function(e) {
+     e.preventDefault();
+     $("#del_reveal").reveal();
+     //TODO: Lot delete confirmation
+});
+
+$("#del_reveal button.cancel").click(function() {
+     $('#del_reveal').trigger('reveal:close');
+});
+$("#del_reveal button.delete").click(function() {
+     var params = $("#del_lot").serialize();
+     $.ajax({
+            url: '/user/lot/del/',
+            type: 'post',
+            data: params,
+            success: function (data, textStatus) {
+                if (data.result == 'deleted') {
+                    location.href = '/user/lot/del/done/';
+                }
+            }
+        });
+});
+
 
 
 window.setTimeout(function() {

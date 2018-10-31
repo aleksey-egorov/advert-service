@@ -129,6 +129,15 @@ class LotEditForm(forms.Form):
     #TODO: extra fields and form validation
 
 
+
+class LotDelForm(forms.Form):
+
+    def set_initial(self, id):
+        self.fields['lot_id'].initial = id
+
+    lot_id = forms.IntegerField(widget=forms.HiddenInput)
+
+
 class LotImageUploadForm(forms.Form):
 
     def set_initial(self, status, num):
