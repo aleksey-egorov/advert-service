@@ -95,6 +95,17 @@ class Product(models.Model):
     def group_name(self):
         return self.group.name
 
+    @property
+    def gallery_image_paths(self):
+        image_paths = [x.big_image_path for x in ProductGallery.objects.filter(product=self).order_by('num').all()]
+        return image_paths
+
+    @staticmethod
+    def get_recommended(id):
+        # TODO: recommendation system
+        prod = Product.objects.get(id=id)
+        products = Product.objects.filter(active=True, group=prod.group).order_by('name')[:5]
+        return products
 
     def save(self, *args, **kwargs):
         old_group = None
@@ -124,6 +135,11 @@ class ProductGalleryManager(models.Manager):
                 product.main_image = os.path.join(image.directory, str(image.big_image))
                 product.save(update_fields=['main_image'])
 
+    def get_image_path(self, subdir, file):
+        if not subdir == None:
+            return os.path.join(str(subdir), str(file))
+        return str(file)
+
 
 class ProductGallery(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE, null=True, blank=True)
@@ -135,3 +151,7 @@ class ProductGallery(models.Model):
     active = models.BooleanField('Активность', default=True, null=True, blank=True)
 
     objects = ProductGalleryManager()
+
+    @property
+    def big_image_path(self):
+        return ProductGallery.objects.get_image_path(self.directory, str(self.big_image))

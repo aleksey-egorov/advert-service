@@ -21,7 +21,7 @@ from django.conf.urls import url, include
 from user.views import RegisterView, RegisterDoneView
 from main.views import MainView, SearchView, TagView
 from lot.views import CatalogLotsView, CatalogLotsListView, LotView
-from product.views import CatalogGroupsListView
+from product.views import CatalogGroupsListView, ProductView
 from brand.views import BrandView
 from supplier.views import SupplierOrgView, SupplierView
 from article.views import ArticleView
@@ -38,6 +38,7 @@ urlpatterns = [
     path('catalog/lots/', CatalogLotsView.as_view()),
     path('catalog/groups/list/', CatalogGroupsListView.as_view()),
     path('lot/<str:alias>/', LotView.as_view()),
+    path('product/<str:alias>/', ProductView.as_view()),
     path('brand/<str:alias>/', BrandView.as_view()),
     path('supplier/office/<str:alias>/', SupplierView.as_view()),
     path('supplier/<str:alias>/', SupplierOrgView.as_view()),

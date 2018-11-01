@@ -38,7 +38,7 @@
                 {% for prod in popular_prods %}
                     <li class="prod_li col5">
                             <a href="/product/{{ prod.alias }}/">
-                                <div class="prod_image" style="background-image:url('/media/{{ prod.main_image }}');background-repeat:no-repeat;background-position:center center;background-size:cover;"></div>
+                                <div class="prod_image" style="background-image:url('/media/products/{{ prod.main_image }}');background-repeat:no-repeat;background-position:center center;background-size:cover;"></div>
                                 <div class="prod_info">
                                     <div class="prod_title">{{ prod.name }}</div>
                                     <div class="prod_stats_wrap">
