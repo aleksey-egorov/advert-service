@@ -6,6 +6,8 @@ from brand.models import Brand
 from brand.forms import BrandForm
 from supplier.models import Supplier, SupplierOrg
 from supplier.forms import SupplierOrgContactForm, SupplierContactForm
+from lot.models import Lot
+from lot.forms import LotCreditForm, LotLeasingForm, LotRentForm
 from utils.mailer import Mailer
 
 # Create your views here.
@@ -68,5 +70,66 @@ class SupplierSendMessageView(View):
 
             subject = 'Cообщение для постащика ' + supplier.full_name
             result = Mailer().send_template_message([settings.EMAIL_TO], 'supplier_message',
+                                                    subject, message_context)
+            return JsonResponse({'result': result}, safe=False)
+
+
+class LotCreditMessageView(View):
+    ''' '''
+    def post(self, request):
+        form = LotCreditForm(request.POST)
+        if form.is_valid():
+            lot_id = int(form.cleaned_data['lot_id'])
+            lot = Lot.objects.get(id=lot_id)
+
+            message_context = {
+                'name': form.cleaned_data['name'],
+                'phone': form.cleaned_data['phone'],
+                'email': form.cleaned_data['email']
+            }
+
+            subject = 'Заявка на покупку в кредит, лот: ' + lot.name
+            result = Mailer().send_template_message([settings.EMAIL_TO], 'credit_message',
+                                                    subject, message_context)
+            return JsonResponse({'result': result}, safe=False)
+
+
+class LotLeasingMessageView(View):
+    ''' '''
+    def post(self, request):
+        form = LotLeasingForm(request.POST)
+        if form.is_valid():
+            lot_id = int(form.cleaned_data['lot_id'])
+            lot = Lot.objects.get(id=lot_id)
+
+            message_context = {
+                'name': form.cleaned_data['name'],
+                'phone': form.cleaned_data['phone'],
+                'email': form.cleaned_data['email'],
+                'prepayment': form.cleaned_data['prepayment']
+            }
+
+            subject = 'Заявка на лизинг, лот: ' + lot.name
+            result = Mailer().send_template_message([settings.EMAIL_TO], 'leasing_message',
+                                                    subject, message_context)
+            return JsonResponse({'result': result}, safe=False)
+
+
+class LotRentMessageView(View):
+    ''' '''
+    def post(self, request):
+        form = LotRentForm(request.POST)
+        if form.is_valid():
+            lot_id = int(form.cleaned_data['lot_id'])
+            lot = Lot.objects.get(id=lot_id)
+
+            message_context = {
+                'name': form.cleaned_data['name'],
+                'phone': form.cleaned_data['phone'],
+                'email': form.cleaned_data['email']
+            }
+
+            subject = 'Заявка на аренду, лот: ' + lot.name
+            result = Mailer().send_template_message([settings.EMAIL_TO], 'rent_message',
                                                     subject, message_context)
             return JsonResponse({'result': result}, safe=False)

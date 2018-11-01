@@ -74,6 +74,7 @@
 		float: left;
 		width: 100%;
 		font-size: 1em;
+		font-weight:bold;
 	}
 
         
@@ -110,6 +111,21 @@
 	.reveal_content .common {
 		padding-top:5px;
 	}
+
+	.reveal_content .form_ul {
+
+	}
+	.reveal_content .form_ul label.fixed {
+		width: 60px;
+	}
+	.reveal_content .form_ul label {
+		padding-bottom:4px;
+		padding-top:4px;
+	}
+	.reveal_content .form_ul .rcon {
+		padding-top:3px;
+	}
+
 
 	.reveal_inner_inline {
 		display:inline;

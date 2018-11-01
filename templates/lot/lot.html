@@ -44,9 +44,9 @@
             <div id="short_upper">
                 <div class="price">{{ lot.price_formatted }}</div>
                 <div class="buttons">
-                    <button class="green">В кредит</button>
-                    <button class="green">В лизинг</button>
-                    <button class="green">Аренда</button>
+                    <button class="green" id="credit_button">В кредит</button>
+                    <button class="green" id="leasing_button">В лизинг</button>
+                    <button class="green" id="rent_button">Аренда</button>
                 </div>
             </div>
             <div id="tech_descr">
@@ -78,10 +78,10 @@
          <div  class="right w25">
              <div id="contact_form">
                  <h3>Сообщение продавцу</h3>
-                 <form action="/lot/{{ lot.alias }}/" method="post" class="common" id="supplier_form">
+                 <form class="common" id="supplier_form">
                      {% csrf_token %}
                      <ul class="form_ul full_width">
-                        {{ form.as_ul }}
+                        {{ form_contact.as_ul }}
                      </ul>
                      <div class="btn">
                          <button class="green">Отправить</button>
@@ -120,6 +120,84 @@
     </div>
 </div>
 
+
+
+<div id="credit_reveal" class="reveal_modal medium">
+    <div class="close_reveal_modal"></div>
+    <div class="main_head">Лот {{ lot.num }}: купить в кредит</div>
+    <div class="reveal_content tbpad">
+         <form id="credit_lot"  class="common">
+             <ul class="form_ul full_width">
+                  <li>
+                      <label class="fixed">Лот:</label>
+                      <div class="rcon">{{ lot.name }}</div>
+                  </li>
+                  <li>
+                      <label class="fixed">Цена:</label>
+                      <div class="rcon">{{ lot.price_formatted }}</div>
+                  </li>
+                   {% csrf_token %}
+                   {{ form_credit.as_ul }}
+             </ul>
+             <div class="btn">
+                  <button class="green">Отправить</button>
+             </div>
+         </form>
+         <div class="result_div"></div>
+    </div>
+</div>
+
+
+<div id="leasing_reveal" class="reveal_modal medium">
+    <div class="close_reveal_modal"></div>
+    <div class="main_head">Лот {{ lot.num }}: взять в лизинг</div>
+    <div class="reveal_content tbpad">
+         <form id="leasing_lot"  class="common">
+             <ul class="form_ul full_width">
+                  <li>
+                      <label class="fixed">Лот:</label>
+                      <div class="rcon">{{ lot.name }}</div>
+                  </li>
+                  <li>
+                      <label class="fixed">Цена:</label>
+                      <div class="rcon">{{ lot.price_formatted }}</div>
+                  </li>
+                   {% csrf_token %}
+                   {{ form_leasing.as_ul }}
+             </ul>
+             <div class="btn">
+                  <button class="green">Отправить</button>
+             </div>
+         </form>
+         <div class="result_div"></div>
+    </div>
+</div>
+
+
+<div id="rent_reveal" class="reveal_modal medium">
+    <div class="close_reveal_modal"></div>
+    <div class="main_head">Лот {{ lot.num }}: аренда</div>
+    <div class="reveal_content tbpad">
+         <form id="rent_lot"  class="common">
+             <ul class="form_ul full_width">
+                  <li>
+                      <label class="fixed">Лот:</label>
+                      <div class="rcon">{{ lot.name }}</div>
+                  </li>
+                  <li>
+                      <label class="fixed">Цена:</label>
+                      <div class="rcon">{{ lot.price_formatted }}</div>
+                  </li>
+                   {% csrf_token %}
+                   {{ form_rent.as_ul }}
+             </ul>
+             <div class="btn">
+                  <button class="green">Отправить</button>
+             </div>
+         </form>
+         <div class="result_div"></div>
+    </div>
+</div>
 
 
 

@@ -7,7 +7,7 @@ from lot.models import Lot, LotCatalog
 from product.models import Category, Group
 from brand.models import Brand
 from geo.models import Region
-from lot.forms import FilterForm
+from lot.forms import FilterForm, LotCreditForm, LotLeasingForm, LotRentForm
 from supplier.forms import SupplierContactForm
 from utils.form import FormHelper
 from utils.context import Context
@@ -91,13 +91,23 @@ class LotView(View):
 
     def get(self, request, alias):
         lot = get_object_or_404(Lot, alias=alias, active=True)
-        form = SupplierContactForm()
-        form.set_initial(lot.supplier.id)
         recommended_lots = Lot.get_recommended(lot.id)
+
+        form_contact = SupplierContactForm()
+        form_contact.set_initial(lot.supplier.id)
+        form_credit = LotCreditForm()
+        form_credit.set_initial(lot.id)
+        form_leasing = LotLeasingForm()
+        form_leasing.set_initial(lot.id)
+        form_rent = LotRentForm()
+        form_rent.set_initial(lot.id)
 
         return render(request, "lot/lot.html", {
             "lot": lot,
-            "form": form,
+            "form_contact": form_contact,
+            "form_credit": form_credit,
+            "form_leasing": form_leasing,
+            "form_rent": form_rent,
             "recommended_lots": recommended_lots,
             "context": Context.get(request)
             #"message": "PARAMS={} ".format(params)
