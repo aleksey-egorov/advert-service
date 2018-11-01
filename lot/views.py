@@ -20,7 +20,7 @@ class CatalogLotsView(View):
     def get(self, request, category=-1, pargroup=-1, group=-1):
         categories = Category.objects.filter(active=True).order_by("sorting")
         groups = Group.objects.filter(active=True).order_by('name')
-        brands = Brand.objects.filter(active=True).order_by('name')
+        # brands = Brand.objects.filter(active=True).order_by('name')
         regions = Region.objects.filter(active=True).order_by('name')
         context = Context.get(request)
         page = request.POST.get('page')
@@ -40,7 +40,7 @@ class CatalogLotsView(View):
         except EmptyPage:
             lots = paginator.get_page(page)
 
-        form = FilterForm(regions, categories, groups, brands)
+        form = FilterForm(regions, categories, groups)
         form.set_options(params)
 
         return render(request, "lot/catalog.html", {

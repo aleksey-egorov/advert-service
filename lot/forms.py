@@ -5,18 +5,18 @@ from utils.form import FormHelper
 
 class FilterForm(forms.Form):
 
-    def __init__(self, regions, categories, groups, brands):
+    def __init__(self, regions, categories, groups):
         super().__init__()
         self.regions = regions
         self.categories = categories
         self.groups = groups
-        self.brands = brands
+        #self.brands = brands
 
     def set_options(self, params):
         self.fields['region'].choices = FormHelper.make_options(self.regions)
         self.fields['category'].choices = FormHelper.make_options(self.categories)
         self.fields['group'].choices = FormHelper.make_options(self.groups)
-        self.fields['brand'].choices = FormHelper.make_options(self.brands)
+        #self.fields['brand'].choices = FormHelper.make_options(self.brands)
 
         self.fields['region'].initial = params['region']
         self.fields['category'].initial = params['category']

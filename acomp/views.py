@@ -13,7 +13,9 @@ class BrandAcompView(View):
     ''' '''
     def get(self, request):
         q = request.GET.get('term')
-        ct = int(request.GET.get('category'))
+        ct = 0
+        if not request.GET.get('category') == None:
+            ct = int(request.GET.get('category'))
         brands = Brand.objects.filter(active=True, name__istartswith=q)
         if ct > 0:
             category = Category.objects.get(id=ct)

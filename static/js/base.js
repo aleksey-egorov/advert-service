@@ -288,4 +288,31 @@ Geo = {
 };
 
 
+Form = {
+    initSelect2Ajax: function(el, name) {
+        $(el).select2({
+            placeholder: "Все",
+            ajax: {
+                url: '/acomp/' + name + '/',
+                method: 'get',
+                dataType: 'json',
+                processResults: function (data) {
+                    return {
+                        results: data
+                    };
+                },
+                cache: true,
+                minimumInputLength: 2
+            }
+        });
+    },
+    initSelect2: function(el) {
+        $(el).select2({
+            minimumResultsForSearch: Infinity,
+            placeholder: "Все"
+        });
+    }
+};
+
+
 

@@ -30,5 +30,5 @@ class FormHelper():
     def make_acomp_options(model_items):
         options = []
         for item in model_items:
-            options.append({"id": item.id, "label": item.name})
+            options.append({"id": item.id, "text": item.name, "label": item.name})
         return options

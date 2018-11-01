@@ -1,10 +1,19 @@
 Catalog={
     el: {
         'group' : $('#id_group'),
+        'brand': $('#id_brand'),
+        'region': $('#id_region'),
+        'category': $('#id_category'),
         'lots_content' : $("#lots_content"),
         'filter_form': $('#filter_form')
     },
-
+    init: function() {
+        Form.initSelect2(Catalog.el.category);
+        Form.initSelect2(Catalog.el.group);
+        Form.initSelect2(Catalog.el.region);
+        Form.initSelect2Ajax(Catalog.el.brand, 'brand');
+        Catalog.initPaginator();
+    },
     activateFilter:function() {
          var params = Catalog.el.filter_form.serialize();
          console.log("Params: " + params);
@@ -62,11 +71,10 @@ $("#filter_wrap button").click(function() {
 });
 
 
-$("#filter_wrap select").select2({
-        minimumResultsForSearch: Infinity,
-        placeholder: "Все"
-    });
-
+//#$("#filter_wrap select").select2({
+//#        minimumResultsForSearch: Infinity,
+//#        placeholder: "Все"
+//    });
 
 $("#filter_wrap select").change(function() {
     Catalog.activateFilter();
@@ -76,4 +84,4 @@ $("#filter_wrap #id_category").change(function() {
     Catalog.updateGroupsList($(this).val());
 });
 
-Catalog.initPaginator();
+Catalog.init();
