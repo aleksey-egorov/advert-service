@@ -12,16 +12,18 @@ from utils.form import FormHelper
 class BrandAcompView(View):
     ''' '''
     def get(self, request):
-        q = request.GET.get('term')
-        ct = 0
-        if not request.GET.get('category') == None:
-            ct = int(request.GET.get('category'))
-        brands = Brand.objects.filter(active=True, name__istartswith=q)
-        if ct > 0:
-            category = Category.objects.get(id=ct)
-            brands = brands.filter(brandcategoryconn__category=category)
-        br_options = FormHelper.make_acomp_options(brands)
-        return JsonResponse(br_options, safe=False)
+        if not request.GET.get('term') == None:
+            q = request.GET.get('term')
+            ct = 0
+            if not request.GET.get('category') == None:
+                ct = int(request.GET.get('category'))
+            brands = Brand.objects.filter(active=True, name__istartswith=q)
+            if ct > 0:
+                category = Category.objects.get(id=ct)
+                brands = brands.filter(brandcategoryconn__category=category)
+            br_options = FormHelper.make_acomp_options(brands)
+            return JsonResponse(br_options, safe=False)
+        return JsonResponse({'result': 'error'}, safe=False)
 
 class ProductAcompView(View):
     ''' '''

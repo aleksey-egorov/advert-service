@@ -12,6 +12,7 @@ from brand.models import Brand
 from geo.models import Region
 from supplier.models import Supplier, SupplierOrgGroupConn
 from user.models import User
+from utils.form import FormHelper
 
 
 # Create your models here.
@@ -314,6 +315,18 @@ class Lot(models.Model):
         if Lot.objects.filter(id=self.id).exists():
             cur_group = Lot.objects.get(id=self.id).product.group
         return cur_group
+
+
+class LotCatalog():
+
+    @staticmethod
+    def prepare_params(initial, categories, groups):
+        params = {
+            'region': initial['region'],
+            'category': FormHelper.get_option_id(categories, initial['category']),
+            'group': FormHelper.get_option_id(groups, initial['group']),
+        }
+        return params
 
 
 class LotGalleryManager(models.Manager):

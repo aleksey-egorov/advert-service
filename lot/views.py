@@ -3,7 +3,7 @@ from django.views.generic import View
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from django.shortcuts import get_object_or_404
 
-from lot.models import Lot
+from lot.models import Lot, LotCatalog
 from product.models import Category, Group
 from brand.models import Brand
 from geo.models import Region
@@ -19,17 +19,22 @@ class CatalogLotsView(View):
 
     def get(self, request, category=-1, pargroup=-1, group=-1):
         categories = Category.objects.filter(active=True).order_by("sorting")
-        groups = Group.objects.filter(active=True).order_by('name')
-        # brands = Brand.objects.filter(active=True).order_by('name')
+        if Category.objects.filter(active=True, alias=category).exists():
+            groups = Group.objects.filter(active=True, category=Category.objects.get(alias=category)).order_by('name')
+        else:
+            groups = Group.objects.filter(active=True).order_by('name')
         regions = Region.objects.filter(active=True).order_by('name')
+
         context = Context.get(request)
         page = request.POST.get('page')
-
-        params = {
+        initial = {
             'region': context['vals']['region'].id,
-            'category': FormHelper.get_option_id(categories, category),
-            'group': FormHelper.get_option_id(groups, group),
+            'category': category,
+            'group': group,
+            #'brand': brand
         }
+
+        params = LotCatalog.prepare_params(initial, categories, groups)
         lot_list = Lot.objects.make_search(params)
         paginator = Paginator(lot_list, 12)
 
