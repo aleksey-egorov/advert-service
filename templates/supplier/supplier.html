@@ -27,7 +27,7 @@
             <li>{{ supplier.url }}</li>
         </ul>
         <div class="btn">
-            <button>Сообщение поставщику</button>
+            <button class="green">Сообщение поставщику</button>
         </div>
     </div>
 
@@ -44,7 +44,7 @@
                         {% for lot in best_lots %}
                         <li class="best_lot_li">
                             <a href="/lot/{{ lot.alias }}/">
-                                <div class="slide-image" style="background-image:url('/media/{{ lot.main_image }}');background-repeat:no-repeat;background-position:center center;background-size:cover;"></div>
+                                <div class="slide-image" style="background-image:url('/media/lots/{{ lot.main_image }}');background-repeat:no-repeat;background-position:center center;background-size:cover;"></div>
                                 <div class="slide-info">
                                     <h3>{{ lot.name }}</h3>
                                     <span class="state-tag">{{ lot.state_name }}</span>
@@ -65,7 +65,7 @@
                 {% for lot in lots %}
                     <li class="lot_li col4 mbottom">
                             <a href="/lot/{{ lot.alias }}/">
-                                <div class="lot_image" style="background-image:url('/media/{{ lot.main_image }}');background-repeat:no-repeat;background-position:center center;background-size:cover;"></div>
+                                <div class="lot_image" style="background-image:url('/media/lots/{{ lot.main_image }}');background-repeat:no-repeat;background-position:center center;background-size:cover;"></div>
                                 <div class="lot_info">
                                     <div class="lot_title">{{ lot.name }}</div>
                                     <div class="lot_price_wrap">
