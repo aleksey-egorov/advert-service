@@ -42,19 +42,19 @@ LOGGING = {
         'file_debug': {
             'level': 'DEBUG',
             'class': 'logging.FileHandler',
-            'filename': '/work/advert-service/debug.log',
+            'filename': '/home/work/advert-service/debug.log',
             'formatter': 'simple'
         },
         'file_error': {
             'level': 'ERROR',
             'class': 'logging.FileHandler',
-            'filename': '/work/advert-service/error.log',
+            'filename': '/home/work/advert-service/error.log',
             'formatter': 'verbose'
         },
         'file_info': {
             'level': 'INFO',
             'class': 'logging.FileHandler',
-            'filename': '/work/advert-service/info.log',
+            'filename': '/home/work/advert-service/info.log',
             'formatter': 'simple'
         },
     },
