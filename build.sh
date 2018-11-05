@@ -48,7 +48,7 @@ cat > /etc/uwsgi/apps-available/advert.ini << EOF
 uid = www-data
 gid = www-data
 
-chdir = /home/work/advert
+chdir = /home/work/advert-service
 module = advert.wsgi:application
 
 master = true
@@ -81,7 +81,7 @@ uwsgi_param  SERVER_PORT        \$server_port;
 uwsgi_param  SERVER_NAME        \$server_name;
 EOF
 
-chown -R www-data:www-data /home/work/advert/
+chown -R www-data:www-data /home/work/advert-service/
 
 
 
@@ -91,10 +91,8 @@ echo "Installing Python3 ... "
 apt-get -q -y install python3.6
 apt-get -q -y install python3-pip
 apt-get -q -y install uwsgi-plugin-python3
-pip3 install pipenv
-set -ex && pipenv install --deploy --system
 
-#pip3 install --exists-action=s -r /home/work/hasker/requirements.txt
+pip3 install --exists-action=s -r /home/work/advert-service/requirements.txt
 
 
 

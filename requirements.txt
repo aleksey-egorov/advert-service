@@ -1,0 +1,7 @@
+Django==2.1.2
+psycopg2==2.7.5
+Pillow==4.2.1
+django-split-settings
+djangorestframework
+djangorestframework_jwt
+django-rest-swagger
