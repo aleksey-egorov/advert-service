@@ -44,6 +44,6 @@ class Context():
     def get(request=None):
         context = {
             'menu': get_main_menu(),
-            'vals': get_session_vals(request)
+            #'vals': get_session_vals(request)
         }
         return context
