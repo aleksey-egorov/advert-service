@@ -17,7 +17,7 @@ class UserForm(forms.ModelForm):
 
     def set_initial(self, user):
         self.fields['phone'].initial = user.phone
-        self.fields['region'].initial = user.region
+        #self.fields['region'].initial = user.region
         self.fields['email'].initial = user.email
         self.fields['supplier'].initial = user.supplier.id
         #self.fields['avatar'].initial = user.avatar
@@ -26,8 +26,8 @@ class UserForm(forms.ModelForm):
     phone = forms.CharField(label='Телефон', max_length=16, required=False)
     avatar = forms.ImageField(label='Аватар', required=False)
 
-    region_list = Region.objects.filter(active=True).all()
-    region = forms.ChoiceField(label='Регион', choices=FormHelper.make_options(region_list, option_all=False))
+    #region_list = Region.objects.filter(active=True).all()
+    #region = forms.ChoiceField(label='Регион', choices=FormHelper.make_options(region_list, option_all=False))
 
     supplier_list = Supplier.objects.filter(active=True).all()
     supplier = forms.ChoiceField(label='Поставщик', choices=FormHelper.make_options(supplier_list, option_all=True))
