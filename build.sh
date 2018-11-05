@@ -1,0 +1,106 @@
+echo "*****"
+echo "Installing nginx ... "
+
+apt-get update
+apt -q -y install nginx
+
+cat > /etc/nginx/sites-available/advert << EOF
+
+upstream django {
+     server unix:///tmp/advert.sock;
+}
+
+server {
+    listen      80;
+    server_name     localhost;
+    charset     utf-8;
+
+    client_max_body_size 75M;
+
+    location /media  {
+        alias /home/work/advert/media;
+    }
+
+    location /static {
+        alias /home/work/advert/static;
+
+    }
+
+    location / {
+        uwsgi_pass  django;
+        include     /etc/uwsgi/uwsgi_params;
+    }
+}
+EOF
+
+cd /etc/nginx/sites-enabled/
+ln -fs /etc/nginx/sites-available/advert advert
+
+
+
+echo "*****"
+echo "Installing uWSGI ... "
+
+apt-get -q -y install uwsgi
+
+cat > /etc/uwsgi/apps-available/advert.ini << EOF
+[uwsgi]
+uid = www-data
+gid = www-data
+
+chdir = /home/work/advert
+module = advert.wsgi:application
+
+master = true
+processes = 1
+socket = /tmp/advert.sock
+chmod-socket = 664
+vacuum = true
+plugins = python36
+EOF
+
+cd /etc/uwsgi/apps-enabled/
+ln -fs /etc/uwsgi/apps-available/advert.ini hasker
+
+cat > /etc/uwsgi/uwsgi_params << EOF
+uwsgi_param  QUERY_STRING       \$query_string;
+uwsgi_param  REQUEST_METHOD     \$request_method;
+uwsgi_param  CONTENT_TYPE       \$content_type;
+uwsgi_param  CONTENT_LENGTH     \$content_length;
+
+uwsgi_param  REQUEST_URI        \$request_uri;
+uwsgi_param  PATH_INFO          \$document_uri;
+uwsgi_param  DOCUMENT_ROOT      \$document_root;
+uwsgi_param  SERVER_PROTOCOL    \$server_protocol;
+uwsgi_param  REQUEST_SCHEME     \$scheme;
+uwsgi_param  HTTPS              \$https if_not_empty;
+
+uwsgi_param  REMOTE_ADDR        \$remote_addr;
+uwsgi_param  REMOTE_PORT        \$remote_port;
+uwsgi_param  SERVER_PORT        \$server_port;
+uwsgi_param  SERVER_NAME        \$server_name;
+EOF
+
+chown -R www-data:www-data /home/work/advert/
+
+
+
+echo "*****"
+echo "Installing Python3 ... "
+
+apt-get -q -y install python3.6
+apt-get -q -y install python3-pip
+apt-get -q -y install uwsgi-plugin-python3
+pip3 install pipenv
+set -ex && pipenv install --deploy --system
+
+#pip3 install --exists-action=s -r /home/work/hasker/requirements.txt
+
+
+
+
+
+
+
+
+
