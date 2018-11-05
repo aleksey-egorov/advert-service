@@ -15,7 +15,7 @@ prod:
 	@make req
 	@echo "Starting server ... "
 	@service nginx start
-	@uwsgi --ini /etc/uwsgi/apps-available/hasker.ini
+	@uwsgi --ini /etc/uwsgi/apps-available/advert.ini
 
 test:
 	DJANGO_SETTINGS_MODULE=$(SETTINGS) ./manage.py test
