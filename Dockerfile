@@ -12,3 +12,5 @@ EXPOSE 8080
 
 WORKDIR /home/work
 
+ADD . /home/work
+
